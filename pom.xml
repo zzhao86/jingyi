@@ -7,9 +7,8 @@
 	<modules>
 		<module>common</module>
 		<module>webapi</module>
-		<module>service-notice</module>
-		<module>test</module>
 		<module>notice</module>
+		<module>dingtalk</module>
 	</modules>
 
 	<properties>
@@ -43,17 +42,40 @@
 			<artifactId>fastjson</artifactId>
 			<version>1.2.58</version>
 		</dependency>
+
+		<!-- spring boot -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+			<version>${boot.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-logging</artifactId>
+			<version>${boot.version}</version>
+		</dependency>
 	</dependencies>
 
 	<dependencyManagement>
 		<dependencies>
+			<!-- 内部应用 -->
+			<dependency>
+				<groupId>com.seglino</groupId>
+				<artifactId>common</artifactId>
+				<version>${app.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.seglino</groupId>
+				<artifactId>notice.service</artifactId>
+				<version>${app.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.seglino</groupId>
+				<artifactId>dingtalk</artifactId>
+				<version>${app.version}</version>
+			</dependency>
 
 			<!-- spring boot -->
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-starter</artifactId>
-				<version>${boot.version}</version>
-			</dependency>
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-web</artifactId>
@@ -73,6 +95,22 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-devtools</artifactId>
 				<version>${boot.version}</version>
+			</dependency>
+
+			<!-- 钉钉SDK -->
+			<dependency>
+				<groupId>com.taobao</groupId>
+				<artifactId>dingtalk-sdk</artifactId>
+				<version>1.0.0</version>
+				<scope>system</scope>
+				<systemPath>${project.basedir}/lib/taobao-sdk-java-auto.jar</systemPath>
+			</dependency>
+			<dependency>
+				<groupId>com.taobao</groupId>
+				<artifactId>lippi-oapi-encrpt</artifactId>
+				<version>1.0.0</version>
+				<scope>system</scope>
+				<systemPath>${project.basedir}/lib/lippi-oapi-encrpt.jar</systemPath>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

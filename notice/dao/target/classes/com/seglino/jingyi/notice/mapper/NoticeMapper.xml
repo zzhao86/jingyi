@@ -22,6 +22,7 @@
 		<if test="id != null"> and id = #{id}</if>
 		<if test="categoryId != null"> and categoryId = #{categoryId}</if>
 		<if test="title != null"> and title like '%${title}%'</if>
+		<if test="isDeleted != null"> and isDeleted = #{isDeleted}</if>
 	</sql>
 
 	<select id="list" resultType="com.seglino.jingyi.notice.pojo.Notice">

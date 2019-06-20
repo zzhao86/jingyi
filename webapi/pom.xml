@@ -10,10 +10,12 @@
 		<dependency>
 			<groupId>com.seglino</groupId>
 			<artifactId>notice.service</artifactId>
-			<version>${app.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.seglino</groupId>
+			<artifactId>dingtalk</artifactId>
 		</dependency>
 	
-		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>

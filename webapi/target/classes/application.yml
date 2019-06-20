@@ -1,6 +1,5 @@
 server:
   port: 5050
-  
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -8,11 +7,18 @@ spring:
     username: root
     password: root
   jackson:
-    date-format: yyyy-MM-dd HH:mm:ss 
-    time-zone: GMT+8 
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
     serialization:
       write-dates-as-timestamps: false
- 
 mybatis:
   mapper-locations: classpath*:com/seglino/jingyi/**/mapper/*.xml
   type-aliases-package: com.seglino.jingyi.*.pojo
+logging:
+  level:
+    root: info
+  path: log
+  file: webapi.log
+  pattern:
+    file: '%d{yyyy-MMM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{15} - %msg%n'
+    console: '%d{yyyy-MMM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{15} - %msg%n'
