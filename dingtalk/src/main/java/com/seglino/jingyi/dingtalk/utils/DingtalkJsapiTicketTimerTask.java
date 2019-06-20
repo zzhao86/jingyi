@@ -27,6 +27,8 @@ public class DingtalkJsapiTicketTimerTask extends TimerTask {
 
 					logger.info("获取JsapiTicket成功，ticket：{}", response.getTicket());
 					break;
+				} else {
+					Thread.sleep(60 * 1000);
 				}
 			} catch (Exception e) {
 				logger.error("{}", e);

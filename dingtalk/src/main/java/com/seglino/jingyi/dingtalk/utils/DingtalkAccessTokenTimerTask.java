@@ -21,6 +21,8 @@ public class DingtalkAccessTokenTimerTask extends TimerTask {
 
 					logger.info("获取AccessToken成功，token：{}", response.getAccessToken());
 					break;
+				} else {
+					Thread.sleep(60 * 1000);
 				}
 			} catch (Exception e) {
 				logger.error("{}", e);
