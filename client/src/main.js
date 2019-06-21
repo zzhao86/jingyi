@@ -60,6 +60,10 @@ new Vue({
     axios.defaults.baseURL = Global.baseUrl;
     axios.defaults.headers.get['Content-Type'] = 'application/x-www-form-urlencoded; charset=utf-8';
 
+    // 钉钉开发设置
+    Global.dev = process.env.NODE_ENV == 'development';
+    Global.isDingTalkClient = dd.env.platform != 'notInDingTalk';
+
     Vue.prototype.$http = axios;
     Vue.prototype.$global = Global;
     Vue.prototype.$dd = dd;

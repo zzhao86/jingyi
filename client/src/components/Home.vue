@@ -69,9 +69,6 @@
   export default {
     name: 'Home',
     created() {
-
-      console.log(Swiper);
-
       const vue = this;
       this.$nextTick(function() {
         // 初始化数据
@@ -139,7 +136,7 @@
         const vue = this;
         // 获取banner列表数据
         vue.$http.get('static/data/banners.json').then(res => {
-          vue.banners = res.data;
+          vue.banners = res;
           vue.$nextTick(function() {
             vue.bannerSwiper.init();
           });
@@ -147,7 +144,7 @@
 
         // 获取notice列表数据
         vue.$http.get('static/data/notices.json').then(res => {
-          vue.notices = res.data;
+          vue.notices = res;
           vue.$nextTick(function() {
             vue.noticeSwiper.init();
           });
@@ -155,7 +152,7 @@
 
         // 获取module列表数据
         vue.$http.get('static/data/modules.json').then(res => {
-          vue.modules = res.data;
+          vue.modules = res;
           if (vue.modules && vue.modules.length > 0) {
             vue.current.module = vue.modules[0];
           }
@@ -166,9 +163,9 @@
 
         // 获取Item列表数据
         vue.$http.get('static/data/items.json').then(res => {
-          vue.items = res.data;
-          if (res.data && res.data.length > 0) {
-            vue.current.items = res.data.filter(item => item.module == vue.current.module.id);
+          vue.items = res;
+          if (res && res.length > 0) {
+            vue.current.items = res.filter(item => item.module == vue.current.module.id);
           }
         });
       },
