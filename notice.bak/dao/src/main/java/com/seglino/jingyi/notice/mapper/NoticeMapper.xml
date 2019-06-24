@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seglino.jingyi.notice.dao.NoticeDao">
+	<sql id="tableName">tab_notice</sql>
+	<sql id="column">
+		id,
+		categoryId,
+		title,
+		content,
+		author,
+		readCount,
+		unreadCount,
+		createTime,
+		createUid,
+		modifyTime,
+		modifyUid,
+		deleteTime,
+		deleteUid,
+		isDeleted
+	</sql>
+	<sql id="condition">
+		<if test="id != null"> and id = #{id}</if>
+		<if test="categoryId != null"> and categoryId = #{categoryId}</if>
+		<if test="title != null"> and title like '%${title}%'</if>
+		<if test="isDeleted != null"> and isDeleted = #{isDeleted}</if>
+	</sql>
+
+	<select id="list" resultType="com.seglino.jingyi.notice.pojo.Notice">
+		SELECT
+		<include refid="column"></include>
+		FROM
+		<include refid="tableName"></include>
+		<where>
+			<include refid="condition"></include>
+		</where>
+		ORDER BY createTime DESC
+	</select>
+
+</mapper>

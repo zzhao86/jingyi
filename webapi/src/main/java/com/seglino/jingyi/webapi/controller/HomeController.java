@@ -24,4 +24,5 @@ public class HomeController {
 		aResult.setData(DingtalkBean.AccessToken);
 		return aResult;
 	}
+
 }

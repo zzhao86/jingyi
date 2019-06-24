@@ -6,12 +6,6 @@
 		<version>1.0.0</version>
 	</parent>
 	<artifactId>notice</artifactId>
-	<packaging>pom</packaging>
-	<modules>
-		<module>dao</module>
-		<module>service</module>
-		<module>pojo</module>
-	</modules>
 
 	<dependencies>
 		<dependency>

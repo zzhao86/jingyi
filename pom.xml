@@ -9,6 +9,7 @@
 		<module>webapi</module>
 		<module>notice</module>
 		<module>dingtalk</module>
+		<module>user</module>
 	</modules>
 
 	<properties>
@@ -66,7 +67,7 @@
 			</dependency>
 			<dependency>
 				<groupId>com.seglino</groupId>
-				<artifactId>notice.service</artifactId>
+				<artifactId>notice</artifactId>
 				<version>${app.version}</version>
 			</dependency>
 			<dependency>
@@ -79,6 +80,16 @@
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-web</artifactId>
+				<version>${boot.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-security</artifactId>
+				<version>${boot.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.security.oauth</groupId>
+				<artifactId>spring-security-oauth2</artifactId>
 				<version>${boot.version}</version>
 			</dependency>
 			<dependency>
