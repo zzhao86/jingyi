@@ -1,5 +1,7 @@
 package com.seglino.jingyi.dingtalk.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.dingtalk.api.DefaultDingTalkClient;
@@ -13,6 +15,8 @@ import com.taobao.api.ApiException;
 
 @Service
 public class AuthServiceImpl implements AuthService {
+	private Logger logger = LoggerFactory.getLogger(AuthServiceImpl.class);
+
 	/**
 	 * 用免登码获取用户信息
 	 * 
@@ -20,8 +24,8 @@ public class AuthServiceImpl implements AuthService {
 	 * @return
 	 */
 	@Override
-	public OapiUserGetuserinfoResponse getUserInfo(String code) {
-		DingTalkClient client = new DefaultDingTalkClient(DingtalkConfig.GetUserinfoByCode);
+	public OapiUserGetuserinfoResponse getUserDetail(String code) {
+		DingTalkClient client = new DefaultDingTalkClient(DingtalkConfig.GetUserDetailByCode);
 		OapiUserGetuserinfoRequest request = new OapiUserGetuserinfoRequest();
 		request.setCode(code);
 		request.setHttpMethod("GET");
@@ -29,6 +33,7 @@ public class AuthServiceImpl implements AuthService {
 		try {
 			response = client.execute(request, DingtalkBean.AccessToken);
 		} catch (ApiException e) {
+			logger.error("{}", e);
 			e.printStackTrace();
 		}
 		return response;

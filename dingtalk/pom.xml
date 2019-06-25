@@ -12,6 +12,10 @@
 			<groupId>com.seglino</groupId>
 			<artifactId>common</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.seglino</groupId>
+			<artifactId>user</artifactId>
+		</dependency>
 
 		<!-- 钉钉SDK -->
 		<dependency>

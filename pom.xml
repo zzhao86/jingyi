@@ -72,6 +72,11 @@
 			</dependency>
 			<dependency>
 				<groupId>com.seglino</groupId>
+				<artifactId>user</artifactId>
+				<version>${app.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.seglino</groupId>
 				<artifactId>dingtalk</artifactId>
 				<version>${app.version}</version>
 			</dependency>

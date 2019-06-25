@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.seglino.jingyi.notice.dao.NoticeDao">
+	<!-- 数据表名 -->
 	<sql id="tableName">tab_notice</sql>
+	
+	<!-- 数据字段 -->
 	<sql id="column">
 		id,
 		categoryId,
@@ -18,6 +21,8 @@
 		deleteUid,
 		isDeleted
 	</sql>
+	
+	<!-- 查询条件 -->
 	<sql id="condition">
 		<if test="id != null"> and id = #{id}</if>
 		<if test="categoryId != null"> and categoryId = #{categoryId}</if>
@@ -25,6 +30,7 @@
 		<if test="isDeleted != null"> and isDeleted = #{isDeleted}</if>
 	</sql>
 
+	<!-- 根据条件获取列表 -->
 	<select id="list" resultType="com.seglino.jingyi.notice.pojo.Notice">
 		SELECT
 		<include refid="column"></include>
@@ -36,4 +42,134 @@
 		ORDER BY createTime DESC
 	</select>
 
+	<!-- 根据条件获取详情 -->
+	<select id="detail" resultType="com.seglino.jingyi.user.pojo.User">
+		SELECT
+		<include refid="column"></include>
+		FROM
+		<include refid="tableName"></include>
+		<where>
+			<include refid="condition"></include>
+		</where>
+	</select>
+
+	<!-- 根据ID获取详情 -->
+	<select id="detailById" resultType="Object">
+		SELECT
+		<include refid="column"></include>
+		FROM
+		<include refid="tableName"></include>
+		<where>
+			id = #{id}
+		</where>
+	</select>
+	
+	<!-- 根据条件获取数据总数 -->
+	<select id="count" resultType="com.seglino.jingyi.user.pojo.User">
+		SELECT COUNT(*) FROM
+		<include refid="tableName"></include>
+		<where>
+			<include refid="condition"></include>
+		</where>
+	</select>
+
+	<!-- 插入 -->
+	<insert id="insert" parameterType="com.seglino.jingyi.user.pojo.User">
+		INSERT INTO
+		<include refid="tableName"></include>
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">id,</if>
+			<if test="categoryId != null">categoryId,</if>
+			<if test="title != null">title,</if>
+			<if test="content != null">content,</if>
+			<if test="author != null">author,</if>
+			<if test="readCount != null">readCount,</if>
+			<if test="unreadCount != null">unreadCount,</if>
+			<if test="createTime != null">createTime,</if>
+			<if test="createUid != null">createUid,</if>
+			<if test="modifyTime != null">modifyTime,</if>
+			<if test="modifyUid != null">modifyUid,</if>
+			<if test="deleteTime != null">deleteTime,</if>
+			<if test="deleteUid != null">deleteUid,</if>
+			<if test="isDeleted != null">isDeleted,</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">#{id},</if>
+			<if test="categoryId != null">#{categoryId},</if>
+			<if test="title != null">#{title},</if>
+			<if test="content != null">#{content},</if>
+			<if test="author != null">#{author},</if>
+			<if test="readCount != null">#{readCount},</if>
+			<if test="unreadCount != null">#{unreadCount},</if>
+			<if test="createTime != null">#{createTime},</if>
+			<if test="createUid != null">#{createUid},</if>
+			<if test="modifyTime != null">#{modifyTime},</if>
+			<if test="modifyUid != null">#{modifyUid},</if>
+			<if test="deleteTime != null">#{deleteTime},</if>
+			<if test="deleteUid != null">#{deleteUid},</if>
+			<if test="isDeleted != null">#{isDeleted},</if>
+		</trim>
+	</insert>
+
+	<!-- 修改 -->
+	<update id="update" parameterType="com.seglino.jingyi.user.pojo.User">
+		UPDATE
+		<include refid="tableName"></include>
+		<set>
+			<if test="categoryId != null">categoryId = #{categoryId},</if>
+			<if test="title != null">title = #{title},</if>
+			<if test="content != null">content = #{content},</if>
+			<if test="author != null">author = #{author},</if>
+			<if test="readCount != null">readCount = #{readCount},</if>
+			<if test="unreadCount != null">unreadCount = #{unreadCount},</if>
+			<if test="createTime != null">createTime = #{createTime},</if>
+			<if test="createUid != null">createUid = #{createUid},</if>
+			<if test="modifyTime != null">modifyTime = #{modifyTime},</if>
+			<if test="modifyUid != null">modifyUid = #{modifyUid},</if>
+			<if test="deleteTime != null">deleteTime = #{deleteTime},</if>
+			<if test="deleteUid != null">deleteUid = #{deleteUid},</if>
+			<if test="isDeleted != null">isDeleted = #{isDeleted},</if>
+		</set>
+		<where>
+			id = #{id}
+		</where>
+	</update>
+
+	<!-- 逻辑删除 -->
+	<update id="delete" parameterType="com.seglino.jingyi.common.core.po.BaseEntity">
+		UPDATE
+		<include refid="tableName"></include>
+		<set>
+			deleteTime = SYSDATE(),
+			deleteUid = #{deleteUid},
+			isDeleted = true,
+		</set>
+		<where>
+			id = #{id}
+		</where>
+	</update>
+
+	<!-- 恢复删除 -->
+	<update id="restore" parameterType="com.seglino.jingyi.common.core.po.BaseEntity">
+		UPDATE
+		<include refid="tableName"></include>
+		<set>
+			deleteTime = SYSDATE(),
+			deleteUid = #{deleteUid},
+			isDeleted = false,
+		</set>
+		<where>
+			id = #{id}
+		</where>
+	</update>
+	
+	<!-- 物理删除 -->
+	<delete id="deletePhysical" parameterType="Object">
+		DELETE FROM
+		<include refid="tableName" />
+		<where>
+			id = #{id}
+		</where>
+	</delete>
 </mapper>

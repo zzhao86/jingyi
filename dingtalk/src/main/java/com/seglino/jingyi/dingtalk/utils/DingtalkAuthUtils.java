@@ -19,7 +19,6 @@ import com.taobao.api.ApiException;
 
 public class DingtalkAuthUtils {
 	private static Logger logger = LoggerFactory.getLogger(DingtalkAuthUtils.class);
-
 	/**
 	 * 获取钉钉AccessToken
 	 * 

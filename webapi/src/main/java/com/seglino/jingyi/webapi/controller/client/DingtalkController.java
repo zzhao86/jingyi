@@ -39,11 +39,11 @@ public class DingtalkController {
 	 * @param code
 	 * @return
 	 */
-	@GetMapping("userinfo_code")
-	public ApiResult getUserinfoByCode(String code) {
+	@GetMapping("user_detail_code")
+	public ApiResult getUserDetailByCode(String code) {
 		ApiResult aResult = new ApiResult();
 
-		OapiUserGetuserinfoResponse response = authService.getUserInfo(code);
+		OapiUserGetuserinfoResponse response = authService.getUserDetail(code);
 		if (response.isSuccess()) {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("userid", response.getUserid());

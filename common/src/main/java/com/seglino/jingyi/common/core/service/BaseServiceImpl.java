@@ -2,15 +2,17 @@ package com.seglino.jingyi.common.core.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.seglino.jingyi.common.core.dao.BaseDao;
 import com.seglino.jingyi.common.core.po.BaseEntity;
+import com.seglino.jingyi.common.core.utils.DateUtils;
 
 @Service
-public class BaseServiceImpl<D extends BaseDao<T>, T extends BaseEntity> implements BaseService<T> {
+public abstract class BaseServiceImpl<D extends BaseDao<T>, T extends BaseEntity> implements BaseService<T> {
 
 	@Autowired
 	protected D dao;
@@ -23,6 +25,11 @@ public class BaseServiceImpl<D extends BaseDao<T>, T extends BaseEntity> impleme
 	 */
 	@Override
 	public int insert(T entity) {
+		if (null != entity) {
+			entity.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+			entity.setCreateTime(DateUtils.getNow());
+			entity.setCreateUid(null);
+		}
 		return dao.insert(entity);
 	}
 
@@ -45,6 +52,10 @@ public class BaseServiceImpl<D extends BaseDao<T>, T extends BaseEntity> impleme
 	 */
 	@Override
 	public int update(T entity) {
+		if (null != entity) {
+			entity.setModifyTime(DateUtils.getNow());
+			entity.setModifyUid(null);
+		}
 		return dao.update(entity);
 	}
 
@@ -56,6 +67,10 @@ public class BaseServiceImpl<D extends BaseDao<T>, T extends BaseEntity> impleme
 	 */
 	@Override
 	public int delete(T entity) {
+		if (null != entity) {
+			entity.setDeleteTime(DateUtils.getNow());
+			entity.setDeleteUid(null);
+		}
 		return dao.delete(entity);
 	}
 
@@ -77,8 +92,8 @@ public class BaseServiceImpl<D extends BaseDao<T>, T extends BaseEntity> impleme
 	 * @return
 	 */
 	@Override
-	public int deleteComplete(Object id) {
-		return dao.deleteComplete(id);
+	public int deletePhysical(Object id) {
+		return dao.deletePhysical(id);
 	}
 
 	/**

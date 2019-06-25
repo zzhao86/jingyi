@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seglino.jingyi.common.settings.dao.SettingsDao">
+	<!-- 数据表名 -->
+	<sql id="tableName">tab_sys_settings</sql>
+	
+	<!-- 数据字段 -->
+	<sql id="column">
+		id,
+		name,
+		code,
+		value,
+		type,
+		createTime,
+		createUid,
+		modifyTime,
+		modifyUid,
+		deleteTime,
+		deleteUid,
+		isDeleted
+	</sql>
+	
+	<!-- 查询条件 -->
+	<sql id="condition">
+		<if test="id != null"> and id = #{id}</if>
+		<if test="name != null"> and name like '%${name}%'</if>
+		<if test="isDeleted != null"> and isDeleted = #{isDeleted}</if>
+	</sql>
+
+	<!-- 根据条件获取列表 -->
+	<select id="list" resultType="com.seglino.jingyi.common.settings.pojo.Settings">
+		SELECT
+		<include refid="column"></include>
+		FROM
+		<include refid="tableName"></include>
+		<where>
+			<include refid="condition"></include>
+		</where>
+		ORDER BY createTime DESC
+	</select>
+
+	<!-- 根据条件获取详情 -->
+	<select id="detail" resultType="com.seglino.jingyi.common.settings.pojo.Settings">
+		SELECT
+		<include refid="column"></include>
+		FROM
+		<include refid="tableName"></include>
+		<where>
+			<include refid="condition"></include>
+		</where>
+	</select>
+
+	<!-- 根据Code获取详情 -->
+	<select id="detailByCode" resultType="String">
+		SELECT
+		<include refid="column"></include>
+		FROM
+		<include refid="tableName"></include>
+		<where>
+			code = #{code}
+		</where>
+	</select>
+	
+	<!-- 修改 -->
+	<update id="update" parameterType="com.seglino.jingyi.common.settings.pojo.Settings">
+		UPDATE
+		<include refid="tableName"></include>
+		<set>
+			<if test="name != null">name = #{name},</if>
+			<if test="mobile != null">mobile = #{mobile},</if>
+			<if test="tel != null">tel = #{tel},</if>
+			<if test="avatar != null">avatar = #{avatar},</if>
+			<if test="position != null">position = #{position},</if>
+			<if test="ddUserId != null">ddUserId = #{ddUserId},</if>
+			<if test="openid != null">openid = #{openid},</if>
+			<if test="createTime != null">createTime = #{createTime},</if>
+			<if test="createUid != null">createUid = #{createUid},</if>
+			<if test="modifyTime != null">modifyTime = #{modifyTime},</if>
+			<if test="modifyUid != null">modifyUid = #{modifyUid},</if>
+			<if test="deleteTime != null">deleteTime = #{deleteTime},</if>
+			<if test="deleteUid != null">deleteUid = #{deleteUid},</if>
+			<if test="isDeleted != null">isDeleted = #{isDeleted},</if>
+		</set>
+		<where>
+			id = #{id}
+		</where>
+	</update>
+</mapper>

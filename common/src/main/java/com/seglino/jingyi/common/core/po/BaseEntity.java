@@ -2,7 +2,7 @@ package com.seglino.jingyi.common.core.po;
 
 import java.util.Date;
 
-public class BaseEntity {
+public abstract class BaseEntity {
 	/**
 	 * 主键
 	 */

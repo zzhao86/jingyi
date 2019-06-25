@@ -53,7 +53,7 @@ public interface BaseDao<T> {
 	 * @param id
 	 * @return
 	 */
-	public int deleteComplete (Object id);
+	public int deletePhysical (Object id);
 
 	/**
 	 * 获取符合条件的数据列表
