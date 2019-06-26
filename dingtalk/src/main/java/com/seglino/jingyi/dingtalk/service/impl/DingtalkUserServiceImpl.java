@@ -16,7 +16,7 @@ import com.dingtalk.api.response.OapiUserGetAdminResponse.AdminList;
 import com.dingtalk.api.response.OapiUserGetResponse;
 import com.seglino.jingyi.dingtalk.config.DingtalkConfig;
 import com.seglino.jingyi.dingtalk.service.DingtalkUserService;
-import com.seglino.jingyi.dingtalk.utils.DingtalkBean;
+import com.seglino.jingyi.dingtalk.utils.DingtalkGlobal;
 import com.seglino.jingyi.user.pojo.User;
 import com.seglino.jingyi.user.service.UserService;
 import com.taobao.api.ApiException;
@@ -42,7 +42,7 @@ public class DingtalkUserServiceImpl implements DingtalkUserService {
 		request.setHttpMethod("GET");
 		OapiUserGetResponse response = null;
 		try {
-			response = client.execute(request, DingtalkBean.AccessToken);
+			response = client.execute(request, DingtalkGlobal.AccessToken);
 		} catch (ApiException e) {
 			logger.error("获取用户详情失败：{}", e);
 			e.printStackTrace();
@@ -63,7 +63,7 @@ public class DingtalkUserServiceImpl implements DingtalkUserService {
 
 		OapiUserGetAdminResponse response = null;
 		try {
-			response = client.execute(request, DingtalkBean.AccessToken);
+			response = client.execute(request, DingtalkGlobal.AccessToken);
 		} catch (ApiException e) {
 			logger.error("获取管理员列表失败：{}", e);
 			e.printStackTrace();

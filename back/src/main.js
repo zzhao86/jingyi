@@ -3,25 +3,31 @@ import App from './App';
 import router from './router';
 
 import axios from 'axios';
+//钉钉jsapi
 import * as dd from 'dingtalk-jsapi';
+// Element UI
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
 
 //全局变量
 import Global from './Global.vue';
 
 Vue.config.productionTip = false;
+Vue.use(ElementUI);
 
 /**
  * axios异步请求拦截处理
  */
 axios.interceptors.request.use(
   function(config) {
+    console.log(config);
     // vue.$vux.loading.show({
     //   text: 'Loading'
     // });
     return config;
   },
   function(error) {
-    vue.$vux.loading.hide();
+    // vue.$vux.loading.hide();
     return Promise.reject(error);
   }
 );
@@ -55,9 +61,9 @@ new Vue({
   components: { App },
   template: '<App/>',
   created() {
-    var self = this;
     axios.defaults.baseURL = Global.baseUrl;
-    axios.defaults.headers.get['Content-Type'] = 'application/x-www-form-urlencoded; charset=utf-8';
+    axios.defaults.headers.get['Content-Type'] = 'application/x-www-form-urlencoded; charset=utf-8;';
+    axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded; charset=utf-8;';
 
     // 钉钉开发设置
     Global.dev = process.env.NODE_ENV == 'development';
@@ -66,8 +72,6 @@ new Vue({
     Vue.prototype.$http = axios;
     Vue.prototype.$global = Global;
     Vue.prototype.$dd = dd;
-
-    
   },
   data() {
     return {

@@ -24,6 +24,7 @@
 	<sql id="condition">
 		<if test="id != null"> and id = #{id}</if>
 		<if test="name != null"> and name like '%${name}%'</if>
+		<if test="code != null"> and code = #{code}</if>
 		<if test="isDeleted != null"> and isDeleted = #{isDeleted}</if>
 	</sql>
 
@@ -51,7 +52,7 @@
 	</select>
 
 	<!-- 根据Code获取详情 -->
-	<select id="detailByCode" resultType="String">
+	<select id="detailByCode" parameterType="java.lang.String" resultType="com.seglino.jingyi.common.settings.pojo.Settings">
 		SELECT
 		<include refid="column"></include>
 		FROM

@@ -11,11 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dingtalk.api.response.OapiUserGetuserinfoResponse;
 import com.seglino.jingyi.common.response.ApiResult;
 import com.seglino.jingyi.dingtalk.service.AuthService;
-import com.seglino.jingyi.dingtalk.utils.DingtalkAuthUtils;
 
 @RestController
 @RequestMapping("client/dingtalk")
-public class DingtalkController {
+public class DingtalkClientController {
 
 	@Autowired
 	private AuthService authService;
@@ -29,7 +28,11 @@ public class DingtalkController {
 	@GetMapping("jsapi_config")
 	public ApiResult jsapiTicket(String url) {
 		ApiResult aResult = new ApiResult();
-		aResult.setData(DingtalkAuthUtils.getConfig(url));
+		try {
+			aResult.setData(authService.getJsapiConfig(url));
+		} catch (Exception e) {
+			aResult.AddError(e);
+		}
 		return aResult;
 	}
 
@@ -42,13 +45,16 @@ public class DingtalkController {
 	@GetMapping("user_detail_code")
 	public ApiResult getUserDetailByCode(String code) {
 		ApiResult aResult = new ApiResult();
-
-		OapiUserGetuserinfoResponse response = authService.getUserDetail(code);
-		if (response.isSuccess()) {
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("userid", response.getUserid());
-			map.put("isSys", response.getIsSys());
-			aResult.setData(map);
+		try {
+			OapiUserGetuserinfoResponse response = authService.getUserDetail(code);
+			if (response.isSuccess()) {
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("userid", response.getUserid());
+				map.put("isSys", response.getIsSys());
+				aResult.setData(map);
+			}
+		} catch (Exception e) {
+			aResult.AddError(e);
 		}
 		return aResult;
 	}

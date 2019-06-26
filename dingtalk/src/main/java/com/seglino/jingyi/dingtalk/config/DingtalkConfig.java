@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,22 +14,25 @@ import com.seglino.jingyi.common.settings.service.SettingsService;
 @Component
 public class DingtalkConfig {
 	private static Properties prop;
-	private static InputStream inputStream;
 
 	@Autowired
-	private static SettingsService settingsService;
+	private SettingsService settingsService;
+
+	@PostConstruct
+	public void init() {
+		CorpId = settingsService.getValue("DINGTALK_CORPID");
+		AppKey = settingsService.getValue("DINGTALK_APPKEY");
+		AppSecret = settingsService.getValue("DINGTALK_APPSECRET");
+		AgentId = settingsService.getValue("DINGTALK_AGENTID");
+		SSOSecret = settingsService.getValue("DINGTALK_SSOSECRET");
+	}
 
 	static {
+		InputStream inputStream = null;
 		try {
 			inputStream = ClassLoader.getSystemResourceAsStream("config.properties");
 			prop = new Properties();
 			prop.load(inputStream);
-
-			CorpId = settingsService.getValue("DINGTALK_CORPID");
-			AppKey = settingsService.getValue("DINGTALK_APPKEY");
-			AppSecret = settingsService.getValue("DINGTALK_APPSECRET");
-			AgentId = settingsService.getValue("DINGTALK_AGENTID");
-			SSOSecret = settingsService.getValue("DINGTALK_SSOSECRET");			
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -76,6 +81,15 @@ public class DingtalkConfig {
 	 * 获取jsapi_ticket接口
 	 */
 	public final static String GetJsapiTicket = ApiBaseUrl + prop.getProperty("GetJsapiTicket");
+
+	/**
+	 * 获取应用管理后台免登的access_token接口
+	 */
+	public final static String GetSsoAccessToken = ApiBaseUrl + prop.getProperty("GetSsoAccessToken");
+	/**
+	 * 获取应用管理后台免登的管理员信息
+	 */
+	public final static String GetUserDetailBySSO = ApiBaseUrl + prop.getProperty("GetUserDetailBySSO");
 	/**
 	 * 通过免登授权码获取用户的userid接口
 	 */
@@ -86,4 +100,5 @@ public class DingtalkConfig {
 	 * 获取钉钉管理员列表接口
 	 */
 	public final static String GetAdminList = ApiBaseUrl + prop.getProperty("GetAdminList");
+
 }
