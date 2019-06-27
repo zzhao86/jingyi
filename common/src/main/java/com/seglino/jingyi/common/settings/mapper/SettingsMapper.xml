@@ -68,12 +68,9 @@
 		<include refid="tableName"></include>
 		<set>
 			<if test="name != null">name = #{name},</if>
-			<if test="mobile != null">mobile = #{mobile},</if>
-			<if test="tel != null">tel = #{tel},</if>
-			<if test="avatar != null">avatar = #{avatar},</if>
-			<if test="position != null">position = #{position},</if>
-			<if test="ddUserId != null">ddUserId = #{ddUserId},</if>
-			<if test="openid != null">openid = #{openid},</if>
+			<if test="code != null">code = #{code},</if>
+			<if test="value != null">value = #{value},</if>
+			<if test="type != null">type = #{type},</if>
 			<if test="createTime != null">createTime = #{createTime},</if>
 			<if test="createUid != null">createUid = #{createUid},</if>
 			<if test="modifyTime != null">modifyTime = #{modifyTime},</if>

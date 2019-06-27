@@ -15,12 +15,15 @@ import Global from './Global.vue';
 Vue.config.productionTip = false;
 Vue.use(ElementUI);
 
+axios.defaults.baseURL = Global.baseUrl;
+axios.defaults.headers.get['Content-Type'] = 'application/x-www-form-urlencoded; charset=utf-8;';
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded; charset=utf-8;';
+
 /**
  * axios异步请求拦截处理
  */
 axios.interceptors.request.use(
   function(config) {
-    console.log(config);
     // vue.$vux.loading.show({
     //   text: 'Loading'
     // });
@@ -41,7 +44,7 @@ axios.interceptors.response.use(
     if (response.status >= 200 && response.status < 300) {
       let data = response.data;
       if (data.isSuccess) {
-        return Promise.resolve(data.data);
+        return Promise.resolve(data);
       } else {
         return Promise.reject(data);
       }
@@ -61,10 +64,6 @@ new Vue({
   components: { App },
   template: '<App/>',
   created() {
-    axios.defaults.baseURL = Global.baseUrl;
-    axios.defaults.headers.get['Content-Type'] = 'application/x-www-form-urlencoded; charset=utf-8;';
-    axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded; charset=utf-8;';
-
     // 钉钉开发设置
     Global.dev = process.env.NODE_ENV == 'development';
     Global.isDingTalkClient = dd.env.platform != 'notInDingTalk';
@@ -72,6 +71,12 @@ new Vue({
     Vue.prototype.$http = axios;
     Vue.prototype.$global = Global;
     Vue.prototype.$dd = dd;
+    Vue.prototype.$success = function(message) {
+      this.$message({
+        message: message,
+        type: 'success'
+      });
+    };
   },
   data() {
     return {

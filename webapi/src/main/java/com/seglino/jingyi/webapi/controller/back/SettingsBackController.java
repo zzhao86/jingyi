@@ -8,10 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSONObject;
 import com.seglino.jingyi.common.response.ApiResult;
 import com.seglino.jingyi.common.settings.pojo.Settings;
 import com.seglino.jingyi.common.settings.service.SettingsService;
@@ -28,9 +29,9 @@ public class SettingsBackController {
 		ApiResult aResult = new ApiResult();
 		try {
 			Map<String, Object> param = new HashMap<String, Object>();
-			if(!StringUtils.isEmpty(type)) {
+			if (!StringUtils.isEmpty(type)) {
 				param.put("type", type);
-			}			
+			}
 			List<Settings> list = settingsService.list(param);
 			aResult.setData(list);
 		} catch (Exception e) {
@@ -38,11 +39,19 @@ public class SettingsBackController {
 		}
 		return aResult;
 	}
-	
+
 	@PostMapping("save")
-	public ApiResult save(@RequestBody List<?> list) {
+	public ApiResult save(@RequestParam String settings) {
 		ApiResult aResult = new ApiResult();
-		
+		if (!StringUtils.isEmpty(settings)) {
+			List<Settings> list = JSONObject.parseArray(settings, Settings.class);
+			int count = settingsService.update(list);
+			if (count == 0) {
+				aResult.AddError("更新失败");
+			}
+		} else {
+			aResult.AddError("参数错误");
+		}
 		return aResult;
 	}
 }
