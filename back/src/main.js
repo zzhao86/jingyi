@@ -22,15 +22,18 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 /**
  * axios异步请求拦截处理
  */
+var loadingInstance;
 axios.interceptors.request.use(
   function(config) {
-    // vue.$vux.loading.show({
-    //   text: 'Loading'
-    // });
+    loadingInstance = vue.$loading({
+      lock: true,
+      text: '加载中……',
+      background: 'rgba(255, 255, 2550, 0.9)'
+    });
     return config;
   },
   function(error) {
-    // vue.$vux.loading.hide();
+    loadingInstance.close();
     return Promise.reject(error);
   }
 );
@@ -40,12 +43,13 @@ axios.interceptors.request.use(
  */
 axios.interceptors.response.use(
   function(response) {
-    // vue.$vux.loading.hide();
+    loadingInstance.close();
     if (response.status >= 200 && response.status < 300) {
       let data = response.data;
       if (data.isSuccess) {
         return Promise.resolve(data);
       } else {
+        vue.$error(data.message);
         return Promise.reject(data);
       }
     } else {
@@ -53,12 +57,12 @@ axios.interceptors.response.use(
     }
   },
   function(error) {
-    // vue.$vux.loading.hide();
+    loadingInstance.close();
     return Promise.reject(error);
   }
 );
 
-new Vue({
+var vue = new Vue({
   el: '#app',
   router,
   components: { App },
@@ -71,6 +75,20 @@ new Vue({
     Vue.prototype.$http = axios;
     Vue.prototype.$global = Global;
     Vue.prototype.$dd = dd;
+    Vue.prototype.$alert = function(message) {
+      this.$msgbox({
+        message: message,
+        title: '提示',
+        type: info
+      });
+    };
+    Vue.prototype.$error = function(message) {
+      this.$msgbox({
+        message: message,
+        title: '出错了',
+        type: error
+      });
+    };
     Vue.prototype.$success = function(message) {
       this.$message({
         message: message,

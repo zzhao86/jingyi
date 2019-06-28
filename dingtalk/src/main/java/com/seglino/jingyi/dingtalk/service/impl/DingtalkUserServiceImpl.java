@@ -100,6 +100,7 @@ public class DingtalkUserServiceImpl implements DingtalkUserService {
 				user.setPosition(userDetail.getPosition());
 				user.setDdUserId(userDetail.getUserid());
 				user.setOpenid(userDetail.getOpenId());
+				user.setType(1);
 
 				return userService.insert(user);
 			}

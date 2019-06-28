@@ -40,9 +40,9 @@ public class DingtalkInit {
 
 			// 从第一次定时任务有效期过后，开始循环执行定时任务
 			Timer timer = new Timer();
-			timer.scheduleAtFixedRate(accessTokenTimerTask, accessTokenExpiresIn, accessTokenExpiresIn);
-			timer.scheduleAtFixedRate(ssoAccessTokenTimerTask, ssoAccessTokenExpiresIn, ssoAccessTokenExpiresIn);
-			timer.scheduleAtFixedRate(jsapiTicketTimerTask, jsapiTicketExpiresIn, jsapiTicketExpiresIn);
+			timer.schedule(accessTokenTimerTask, accessTokenExpiresIn, accessTokenExpiresIn);
+			timer.schedule(ssoAccessTokenTimerTask, ssoAccessTokenExpiresIn, ssoAccessTokenExpiresIn);
+			timer.schedule(jsapiTicketTimerTask, jsapiTicketExpiresIn, jsapiTicketExpiresIn);
 		} catch (Exception e) {
 			logger.error("{}", e);
 		}
@@ -94,7 +94,7 @@ public class DingtalkInit {
 					OapiSsoGettokenResponse response = authService.getSsoAccessToken();
 					if (response.isSuccess()) {
 						DingtalkGlobal.SsoAccessToken = response.getAccessToken();
-						DingtalkGlobal.SsoAccessTokenExpiresIn = 6900;
+						DingtalkGlobal.SsoAccessTokenExpiresIn = 7200;
 
 						logger.info("获取SsoAccessToken成功，token：{}", response.getAccessToken());
 						break;

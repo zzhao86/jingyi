@@ -14,6 +14,7 @@
 		position,
 		ddUserId,
 		openid,
+		type,
 		createTime,
 		createUid,
 		modifyTime,
@@ -32,6 +33,7 @@
 		<if test="position != null"> and position like '%${position}%'</if>
 		<if test="ddUserId != null"> and ddUserId = #{ddUserId}</if>
 		<if test="openid != null"> and openid = #{openid}</if>
+		<if test="type != null"> and type = #{type}</if>
 		<if test="isDeleted != null"> and isDeleted = #{isDeleted}</if>
 	</sql>
 
@@ -91,6 +93,7 @@
 			<if test="position != null">position,</if>
 			<if test="ddUserId != null">ddUserId,</if>
 			<if test="openid != null">openid,</if>
+			<if test="type != null">type,</if>
 			<if test="createTime != null">createTime,</if>
 			<if test="createUid != null">createUid,</if>
 			<if test="modifyTime != null">modifyTime,</if>
@@ -109,6 +112,7 @@
 			<if test="position != null">#{position},</if>
 			<if test="ddUserId != null">#{ddUserId},</if>
 			<if test="openid != null">#{openid},</if>
+			<if test="type != null">#{type},</if>
 			<if test="createTime != null">#{createTime},</if>
 			<if test="createUid != null">#{createUid},</if>
 			<if test="modifyTime != null">#{modifyTime},</if>
@@ -131,6 +135,7 @@
 			<if test="position != null">position = #{position},</if>
 			<if test="ddUserId != null">ddUserId = #{ddUserId},</if>
 			<if test="openid != null">openid = #{openid},</if>
+			<if test="type != null">type = #{type},</if>
 			<if test="createTime != null">createTime = #{createTime},</if>
 			<if test="createUid != null">createUid = #{createUid},</if>
 			<if test="modifyTime != null">modifyTime = #{modifyTime},</if>

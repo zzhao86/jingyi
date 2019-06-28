@@ -33,7 +33,7 @@
   export default {
     name: 'Home',
     created() {
-      this.initTableData();
+      this.loadFormData();
     },
     data() {
       return {
@@ -55,7 +55,7 @@
       };
     },
     methods: {
-      initTableData: function() {
+      loadFormData: function() {
         this.$http
           .get('back/settings/list', {
             params: {

@@ -11,6 +11,7 @@ public class User extends BaseEntity {
 	private String position;
 	private String ddUserId;
 	private String openid;
+	private Integer type;
 	
 	public String getName() {
 		return name;
@@ -53,5 +54,11 @@ public class User extends BaseEntity {
 	}
 	public void setOpenid(String openid) {
 		this.openid = openid;
+	}
+	public Integer getType() {
+		return type;
+	}
+	public void setType(Integer type) {
+		this.type = type;
 	}
 }

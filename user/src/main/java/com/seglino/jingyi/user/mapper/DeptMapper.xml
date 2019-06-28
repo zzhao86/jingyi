@@ -1,20 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.seglino.jingyi.user.dao.UserDao">
+<mapper namespace="com.seglino.jingyi.user.dao.DeptDao">
 	<!-- 数据表名 -->
 	<sql id="tableName">tab_user</sql>
 	
 	<!-- 数据字段 -->
 	<sql id="column">
 		id,
+		parentId,
 		name,
-		mobile,
-		tel,
-		avatar,
-		position,
-		ddUserId,
-		openid,
-		type,
+		ddDeptId,
 		createTime,
 		createUid,
 		modifyTime,
@@ -28,17 +23,13 @@
 	<sql id="condition">
 		<if test="id != null"> and id = #{id}</if>
 		<if test="name != null"> and name like '%${name}%'</if>
-		<if test="mobile != null"> and mobile like '%${mobile}%'</if>
-		<if test="tel != null"> and tel like '%${tel}%'</if>
-		<if test="position != null"> and position like '%${position}%'</if>
-		<if test="ddUserId != null"> and ddUserId = #{ddUserId}</if>
-		<if test="openid != null"> and openid = #{openid}</if>
+		<if test="parentId != null"> and parentId = #{parentId}</if>
 		<if test="type != null"> and type = #{type}</if>
 		<if test="isDeleted != null"> and isDeleted = #{isDeleted}</if>
 	</sql>
 
 	<!-- 根据条件获取列表 -->
-	<select id="list" resultType="com.seglino.jingyi.user.pojo.User">
+	<select id="list" resultType="com.seglino.jingyi.user.pojo.Dept">
 		SELECT
 		<include refid="column"></include>
 		FROM
@@ -48,9 +39,23 @@
 		</where>
 		ORDER BY createTime DESC
 	</select>
+	
+	<!-- 根据条件获取Tree列表 -->
+	<select id="tree" resultType="com.seglino.jingyi.user.pojo.DeptTreeDto">
+		SELECT id,
+			   parentId,
+			   name,
+			   ddDeptId,
+			   (SELECT COUNT(1) FROM tab_dept WHERE parentId = a.id)
+		  FROM tab_dept a
+		<where>
+			<include refid="condition"></include>
+		</where>
+		ORDER BY ddDeptId ASC
+	</select>
 
 	<!-- 根据条件获取详情 -->
-	<select id="detail" resultType="com.seglino.jingyi.user.pojo.User">
+	<select id="detail" resultType="com.seglino.jingyi.user.pojo.Dept">
 		SELECT
 		<include refid="column"></include>
 		FROM
@@ -72,7 +77,7 @@
 	</select>
 	
 	<!-- 根据条件获取数据总数 -->
-	<select id="count" resultType="com.seglino.jingyi.user.pojo.User">
+	<select id="count" resultType="com.seglino.jingyi.user.pojo.Dept">
 		SELECT COUNT(*) FROM
 		<include refid="tableName"></include>
 		<where>
@@ -81,19 +86,14 @@
 	</select>
 
 	<!-- 插入 -->
-	<insert id="insert" parameterType="com.seglino.jingyi.user.pojo.User">
+	<insert id="insert" parameterType="com.seglino.jingyi.user.pojo.Dept">
 		INSERT INTO
 		<include refid="tableName"></include>
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="id != null">id,</if>
+			<if test="parentId, != null">parentId,</if>
 			<if test="name != null">name,</if>
-			<if test="mobile != null">mobile,</if>
-			<if test="tel != null">tel,</if>
-			<if test="avatar != null">avatar,</if>
-			<if test="position != null">position,</if>
-			<if test="ddUserId != null">ddUserId,</if>
-			<if test="openid != null">openid,</if>
-			<if test="type != null">type,</if>
+			<if test="ddDeptId != null">ddDeptId,</if>
 			<if test="createTime != null">createTime,</if>
 			<if test="createUid != null">createUid,</if>
 			<if test="modifyTime != null">modifyTime,</if>
@@ -105,14 +105,9 @@
 		VALUES
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="id != null">#{id},</if>
+			<if test="parentId != null">#{parentId},</if>
 			<if test="name != null">#{name},</if>
-			<if test="mobile != null">#{mobile},</if>
-			<if test="tel != null">#{tel},</if>
-			<if test="avatar != null">#{avatar},</if>
-			<if test="position != null">#{position},</if>
-			<if test="ddUserId != null">#{ddUserId},</if>
-			<if test="openid != null">#{openid},</if>
-			<if test="type != null">#{type},</if>
+			<if test="ddDeptId != null">#{ddDeptId},</if>
 			<if test="createTime != null">#{createTime},</if>
 			<if test="createUid != null">#{createUid},</if>
 			<if test="modifyTime != null">#{modifyTime},</if>
@@ -124,18 +119,13 @@
 	</insert>
 
 	<!-- 修改 -->
-	<update id="update" parameterType="com.seglino.jingyi.user.pojo.User">
+	<update id="update" parameterType="com.seglino.jingyi.user.pojo.Dept">
 		UPDATE
 		<include refid="tableName"></include>
 		<set>
+			<if test="parentId != null">parentId = #{parentId},</if>
 			<if test="name != null">name = #{name},</if>
-			<if test="mobile != null">mobile = #{mobile},</if>
-			<if test="tel != null">tel = #{tel},</if>
-			<if test="avatar != null">avatar = #{avatar},</if>
-			<if test="position != null">position = #{position},</if>
-			<if test="ddUserId != null">ddUserId = #{ddUserId},</if>
-			<if test="openid != null">openid = #{openid},</if>
-			<if test="type != null">type = #{type},</if>
+			<if test="ddDeptId != null">ddDeptId = #{ddDeptId},</if>
 			<if test="createTime != null">createTime = #{createTime},</if>
 			<if test="createUid != null">createUid = #{createUid},</if>
 			<if test="modifyTime != null">modifyTime = #{modifyTime},</if>

@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/Home'
 import DingtalkSettings from '@/components/DingtalkSettings'
+import DeptIndex from '@/components/dept/index'
+import UserIndex from '@/components/user/index'
 
 Vue.use(Router)
 
@@ -16,6 +18,16 @@ export default new Router({
       path: '/dingtalk/settings',
       name: 'DingtalkSettings',
       component: DingtalkSettings
+    },
+    {
+      path: '/dept',
+      name: 'DeptIndex',
+      component: DeptIndex
+    },
+    {
+      path: '/user',
+      name: 'UserIndex',
+      component: UserIndex
     }
   ]
 })

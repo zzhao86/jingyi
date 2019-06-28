@@ -9,16 +9,17 @@
         </div>
       </el-header>
       <el-container>
-        <el-aside class="left-side ">
-          <el-menu :default-openeds="['3']">
-            <el-menu-item index="1"><i class="el-icon-message"></i>通知公告</el-menu-item>
-            <el-menu-item index="2"><i class="el-icon-message"></i>资产管理</el-menu-item>
+        <el-aside class="left-side">
+          <el-menu :default-openeds="['3']" :router="true">
+            <el-menu-item index="1" route="/notice"><i class="el-icon-bell"></i>通知公告</el-menu-item>
+            <el-menu-item index="2" route="/assets"><i class="el-icon-mobile"></i>资产管理</el-menu-item>
             <el-submenu index="3">
-              <template slot="title"><i class="el-icon-message"></i>系统管理</template>
-              <el-menu-item-group>
-                  <el-menu-item index="3-1">成员管理</el-menu-item>
-                  <el-menu-item index="3-2">系统设置</el-menu-item>
-              </el-menu-item-group>
+              <template slot="title"
+                ><i class="el-icon-setting"></i>系统管理</template
+              >
+              <el-menu-item index="3-1" route="/dept">部门管理</el-menu-item>
+              <el-menu-item index="3-2" route="/user">成员管理</el-menu-item>
+              <el-menu-item index="3-3" route="/setting">系统设置</el-menu-item>
             </el-submenu>
           </el-menu>
         </el-aside>
@@ -45,7 +46,7 @@
   #app {
     width: 100vw;
     height: 100vh;
-    background-color: #fdfdfd;
+    background-color: #fff;
   }
 
   .app-container {
@@ -79,11 +80,7 @@
 
   .app-container .left-side {
     width: 200px !important;
-    border-right: solid 1px #e6e6e6;
-    background-color: #f5f7fa;
-  }
-  .app-container .left-side .el-menu {
-    border-right: none;
+    background-color: #f7f7f7;
   }
 
   .main-header {
