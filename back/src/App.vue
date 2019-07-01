@@ -8,7 +8,7 @@
           <div class="corpname">美办公服务中心</div>
         </div>
       </el-header>
-      <el-container>
+      <el-container style="overflow-y: auto;">
         <el-aside class="left-side">
           <el-menu :default-openeds="['3']" :router="true">
             <el-menu-item index="1" route="/notice"><i class="el-icon-bell"></i>通知公告</el-menu-item>
@@ -41,6 +41,7 @@
   body {
     padding: 0;
     margin: 0;
+    overflow: hidden;
   }
 
   #app {
@@ -81,6 +82,7 @@
   .app-container .left-side {
     width: 200px !important;
     background-color: #f7f7f7;
+    overflow-y: auto;
   }
 
   .main-header {

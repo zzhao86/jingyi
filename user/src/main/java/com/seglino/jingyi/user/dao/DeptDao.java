@@ -1,6 +1,7 @@
 package com.seglino.jingyi.user.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -17,5 +18,5 @@ public interface DeptDao extends BaseDao<Dept> {
 	 * @param pid 父部门ID
 	 * @return
 	 */
-	public List<DeptTreeDto> tree(String pid);
+	public List<DeptTreeDto> tree(Map<String, Object> param);
 }

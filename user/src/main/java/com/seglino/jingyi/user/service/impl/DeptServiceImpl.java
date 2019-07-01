@@ -1,6 +1,7 @@
 package com.seglino.jingyi.user.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,7 @@ public class DeptServiceImpl extends BaseServiceImpl<DeptDao, Dept> implements D
 	 * @param pid 父部门ID
 	 * @return
 	 */
-	public List<DeptTreeDto> tree(String pid){
-		return dao.tree(pid);
+	public List<DeptTreeDto> tree(Map<String, Object> param){
+		return dao.tree(param);
 	}
 }

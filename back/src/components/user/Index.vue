@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="app-main">
     <div class="main-header">
       <div class="title">成员管理</div>
     </div>

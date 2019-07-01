@@ -95,6 +95,17 @@ var vue = new Vue({
         type: 'success'
       });
     };
+    Vue.prototype.$confirm = function(message, callback) {
+      this.$msgbox({
+        message: message,
+        title: '确认提示',
+        type: 'warning',
+        callback: callback,
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        showCancelButton: true
+      });
+    };
   },
   data() {
     return {

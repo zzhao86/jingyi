@@ -1,6 +1,7 @@
 package com.seglino.jingyi.user.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.seglino.jingyi.common.core.dao.BaseDao;
 import com.seglino.jingyi.user.dto.DeptTreeDto;
@@ -14,5 +15,5 @@ public interface DeptService extends BaseDao<Dept> {
 	 * @param pid 父部门ID
 	 * @return
 	 */
-	public List<DeptTreeDto> tree(String pid);
+	public List<DeptTreeDto> tree(Map<String, Object> param);
 }

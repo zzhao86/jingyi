@@ -6,8 +6,7 @@
   export default {
     name: 'Home',
     created() {
-      console.log('router', this.$router);
-      console.log('router', this.$route);
+      
     },
     data() {
       return {};

@@ -105,4 +105,8 @@ public class DingtalkConfig {
 	 * 获取部门列表
 	 */
 	public final static String GetDeptList = ApiBaseUrl + prop.getProperty("GetDeptList");
+	/**
+	 * 获取部门详情
+	 */
+	public final static String GetDeptDetail = ApiBaseUrl + prop.getProperty("GetDeptDetail");
 }

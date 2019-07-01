@@ -2,14 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.seglino.jingyi.user.dao.DeptDao">
 	<!-- 数据表名 -->
-	<sql id="tableName">tab_user</sql>
+	<sql id="tableName">tab_dept</sql>
 	
 	<!-- 数据字段 -->
 	<sql id="column">
 		id,
 		parentId,
 		name,
+		sortNo,
 		ddDeptId,
+		ddDeptPid,
 		createTime,
 		createUid,
 		modifyTime,
@@ -24,7 +26,8 @@
 		<if test="id != null"> and id = #{id}</if>
 		<if test="name != null"> and name like '%${name}%'</if>
 		<if test="parentId != null"> and parentId = #{parentId}</if>
-		<if test="type != null"> and type = #{type}</if>
+		<if test="ddDeptId != null"> and ddDeptId = #{ddDeptId}</if>
+		<if test="ddDeptPid != null"> and ddDeptPid = #{ddDeptPid}</if>
 		<if test="isDeleted != null"> and isDeleted = #{isDeleted}</if>
 	</sql>
 
@@ -41,12 +44,11 @@
 	</select>
 	
 	<!-- 根据条件获取Tree列表 -->
-	<select id="tree" resultType="com.seglino.jingyi.user.pojo.DeptTreeDto">
+	<select id="tree" resultType="com.seglino.jingyi.user.dto.DeptTreeDto">
 		SELECT id,
 			   parentId,
 			   name,
-			   ddDeptId,
-			   (SELECT COUNT(1) FROM tab_dept WHERE parentId = a.id)
+			   (SELECT COUNT(1) FROM tab_dept WHERE parentId = a.id) as childCount
 		  FROM tab_dept a
 		<where>
 			<include refid="condition"></include>
@@ -91,9 +93,11 @@
 		<include refid="tableName"></include>
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="id != null">id,</if>
-			<if test="parentId, != null">parentId,</if>
+			<if test="parentId != null">parentId,</if>
 			<if test="name != null">name,</if>
+			<if test="sortNo != null">sortNo,</if>
 			<if test="ddDeptId != null">ddDeptId,</if>
+			<if test="ddDeptPid != null">ddDeptPid,</if>
 			<if test="createTime != null">createTime,</if>
 			<if test="createUid != null">createUid,</if>
 			<if test="modifyTime != null">modifyTime,</if>
@@ -107,7 +111,9 @@
 			<if test="id != null">#{id},</if>
 			<if test="parentId != null">#{parentId},</if>
 			<if test="name != null">#{name},</if>
+			<if test="sortNo != null">#{sortNo},</if>
 			<if test="ddDeptId != null">#{ddDeptId},</if>
+			<if test="ddDeptPid != null">#{ddDeptPid},</if>
 			<if test="createTime != null">#{createTime},</if>
 			<if test="createUid != null">#{createUid},</if>
 			<if test="modifyTime != null">#{modifyTime},</if>
@@ -125,6 +131,7 @@
 		<set>
 			<if test="parentId != null">parentId = #{parentId},</if>
 			<if test="name != null">name = #{name},</if>
+			<if test="sortNo != null">sortNo = #{sortNo},</if>
 			<if test="ddDeptId != null">ddDeptId = #{ddDeptId},</if>
 			<if test="createTime != null">createTime = #{createTime},</if>
 			<if test="createUid != null">createUid = #{createUid},</if>
