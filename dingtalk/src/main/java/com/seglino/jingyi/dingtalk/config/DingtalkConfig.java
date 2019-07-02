@@ -95,6 +95,13 @@ public class DingtalkConfig {
 	 */
 	public final static String GetUserDetailByCode = ApiBaseUrl + prop.getProperty("GetUserDetailByCode");
 
+	/**
+	 * 获取部门用户userid列表接口
+	 */
+	public final static String GetUserIds = ApiBaseUrl + prop.getProperty("GetUserIds");
+	/**
+	 * 获取用户详情接口
+	 */
 	public final static String GetUserDetail = ApiBaseUrl + prop.getProperty("GetUserDetail");
 	/**
 	 * 获取钉钉管理员列表接口

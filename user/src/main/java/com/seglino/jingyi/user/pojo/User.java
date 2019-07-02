@@ -1,8 +1,11 @@
 package com.seglino.jingyi.user.pojo;
 
+import java.io.Serializable;
+
 import com.seglino.jingyi.common.core.po.BaseEntity;
 
-public class User extends BaseEntity {
+public class User extends BaseEntity implements Serializable {
+	private static final long serialVersionUID = -5722258210735686372L;
 	
 	private String name;
 	private String mobile;
@@ -12,6 +15,7 @@ public class User extends BaseEntity {
 	private String ddUserId;
 	private String openid;
 	private Integer type;
+	private String json;
 	
 	public String getName() {
 		return name;
@@ -60,5 +64,11 @@ public class User extends BaseEntity {
 	}
 	public void setType(Integer type) {
 		this.type = type;
+	}
+	public String getJson() {
+		return json;
+	}
+	public void setJson(String json) {
+		this.json = json;
 	}
 }

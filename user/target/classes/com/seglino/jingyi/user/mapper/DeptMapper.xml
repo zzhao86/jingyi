@@ -53,7 +53,7 @@
 		<where>
 			<include refid="condition"></include>
 		</where>
-		ORDER BY ddDeptId ASC
+		ORDER BY sortNo ASC
 	</select>
 
 	<!-- 根据条件获取详情 -->

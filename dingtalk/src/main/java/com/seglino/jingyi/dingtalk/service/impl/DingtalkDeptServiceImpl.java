@@ -35,14 +35,15 @@ public class DingtalkDeptServiceImpl implements DingtalkDeptService {
 	 * 获取部门列表
 	 * 
 	 * @param pid 钉钉父部门ID
+	 * @param fetchChild 是否递归部门的全部子部门
 	 * @return
 	 */
 	@Override
-	public OapiDepartmentListResponse getDeptList(String pid) {
+	public OapiDepartmentListResponse getDeptList(String pid, boolean fetchChild) {
 		DingTalkClient client = new DefaultDingTalkClient(DingtalkConfig.GetDeptList);
 		OapiDepartmentListRequest request = new OapiDepartmentListRequest();
 		request.setId(pid);
-		request.setFetchChild(false);
+		request.setFetchChild(fetchChild);
 		request.setHttpMethod("GET");
 		OapiDepartmentListResponse response = null;
 		try {
@@ -52,6 +53,17 @@ public class DingtalkDeptServiceImpl implements DingtalkDeptService {
 			e.printStackTrace();
 		}
 		return response;
+	}
+
+	/**
+	 * 获取部门列表
+	 * 
+	 * @param pid 钉钉父部门ID
+	 * @return
+	 */
+	@Override
+	public OapiDepartmentListResponse getDeptList(String pid) {
+		return getDeptList(pid, false);
 	}
 
 	/**
@@ -109,16 +121,16 @@ public class DingtalkDeptServiceImpl implements DingtalkDeptService {
 			}
 		}
 
-		OapiDepartmentListResponse response = getDeptList(ddpid);
+		OapiDepartmentListResponse response = getDeptList(ddpid, false);
 		if (response.isSuccess() && response.getDepartment().size() > 0) {
 			List<Department> list = response.getDepartment();
 			for (Department department : list) {
 				Map<String, Object> param = new HashMap<String, Object>();
 				param.put("ddDeptId", department.getId());
 				Dept dept = deptServcie.detail(param);
-				if (dept == null) {
-					OapiDepartmentGetResponse deptDetail = getDeptDetail(department.getId().toString());
-					if (deptDetail.isSuccess()) {
+				OapiDepartmentGetResponse deptDetail = getDeptDetail(department.getId().toString());
+				if (deptDetail.isSuccess()) {
+					if (dept == null) {
 						// 添加部门数据到数据库部门表中
 						dept = new Dept();
 						dept.setParentId(pid);
@@ -132,11 +144,6 @@ public class DingtalkDeptServiceImpl implements DingtalkDeptService {
 							logger.error("部门添加失败，{}", response.getErrmsg());
 						}
 					} else {
-						logger.error("部门添加失败，{}", response.getErrmsg());
-					}
-				} else {
-					OapiDepartmentGetResponse deptDetail = getDeptDetail(department.getId().toString());
-					if (deptDetail.isSuccess()) {
 						// 更新部门数据到数据库部门表中
 						param.replace("ddDeptId", deptDetail.getParentid());
 						Dept parentDept = deptServcie.detail(param);
@@ -154,9 +161,9 @@ public class DingtalkDeptServiceImpl implements DingtalkDeptService {
 						} else {
 							logger.error("未找到父部门，{}", dept.getId());
 						}
-					} else {
-						logger.error("部门修改失败，{}", response.getErrmsg());
 					}
+				} else {
+					logger.error("部门详情获取失败，{}", response.getErrmsg());
 				}
 				initDeptData(dept.getId().toString(), department.getId().toString());
 			}

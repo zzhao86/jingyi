@@ -15,6 +15,7 @@
 		ddUserId,
 		openid,
 		type,
+		json,
 		createTime,
 		createUid,
 		modifyTime,
@@ -46,7 +47,7 @@
 		<where>
 			<include refid="condition"></include>
 		</where>
-		ORDER BY createTime DESC
+		ORDER BY createTime ASC
 	</select>
 
 	<!-- 根据条件获取详情 -->
@@ -79,6 +80,12 @@
 			<include refid="condition"></include>
 		</where>
 	</select>
+	
+	<select id="listUserDept" resultType="com.seglino.jingyi.user.dto.UserDeptListDto">
+	SELECT id, name, mobile, tel, position, type, 
+		   (SELECT GROUP_CONCAT() FROM tab_user_dept where userId = a.id) as dept
+	  FROM tab_user a
+	</select>
 
 	<!-- 插入 -->
 	<insert id="insert" parameterType="com.seglino.jingyi.user.pojo.User">
@@ -94,6 +101,7 @@
 			<if test="ddUserId != null">ddUserId,</if>
 			<if test="openid != null">openid,</if>
 			<if test="type != null">type,</if>
+			<if test="json != null">json,</if>
 			<if test="createTime != null">createTime,</if>
 			<if test="createUid != null">createUid,</if>
 			<if test="modifyTime != null">modifyTime,</if>
@@ -113,6 +121,7 @@
 			<if test="ddUserId != null">#{ddUserId},</if>
 			<if test="openid != null">#{openid},</if>
 			<if test="type != null">#{type},</if>
+			<if test="json != null">#{json},</if>
 			<if test="createTime != null">#{createTime},</if>
 			<if test="createUid != null">#{createUid},</if>
 			<if test="modifyTime != null">#{modifyTime},</if>
@@ -136,6 +145,7 @@
 			<if test="ddUserId != null">ddUserId = #{ddUserId},</if>
 			<if test="openid != null">openid = #{openid},</if>
 			<if test="type != null">type = #{type},</if>
+			<if test="json != null">json = #{json},</if>
 			<if test="createTime != null">createTime = #{createTime},</if>
 			<if test="createUid != null">createUid = #{createUid},</if>
 			<if test="modifyTime != null">modifyTime = #{modifyTime},</if>

@@ -9,6 +9,15 @@ public interface DingtalkDeptService {
 	 * 获取部门列表
 	 * 
 	 * @param pid 钉钉父部门ID
+	 * @param fetchChild 是否递归部门的全部子部门
+	 * @return
+	 */
+	public OapiDepartmentListResponse getDeptList(String pid, boolean fetchChild);
+
+	/**
+	 * 获取部门列表
+	 * 
+	 * @param pid 钉钉父部门ID
 	 * @return
 	 */
 	public OapiDepartmentListResponse getDeptList(String pid);

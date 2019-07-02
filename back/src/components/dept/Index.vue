@@ -17,7 +17,6 @@
     },
     data() {
       return {
-        keywords: '',
         treeData: [],
         props: {
           id: 'id',
