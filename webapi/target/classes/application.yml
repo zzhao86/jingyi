@@ -24,6 +24,14 @@ spring:
 mybatis:
   mapper-locations: classpath*:com/seglino/jingyi/**/mapper/*Mapper.xml
   type-aliases-package: com.seglino.jingyi.**.pojo
+  
+# 分页配置
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
+  
     
 # 日志配置
 logging:

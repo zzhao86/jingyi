@@ -42,6 +42,18 @@
 		</where>
 		ORDER BY createTime DESC
 	</select>
+
+	<!-- 分页获取列表 -->
+	<select id="page" resultType="com.seglino.jingyi.user.pojo.Dept">
+		SELECT
+		<include refid="column"></include>
+		FROM
+		<include refid="tableName"></include>
+		<where>
+			<include refid="condition"></include>
+		</where>
+		ORDER BY createTime DESC
+	</select>
 	
 	<!-- 根据条件获取Tree列表 -->
 	<select id="tree" resultType="com.seglino.jingyi.user.dto.DeptTreeDto">

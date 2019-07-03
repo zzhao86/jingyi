@@ -107,4 +107,7 @@
   .el-form {
     max-width: 800px;
   }
+  .el-pagination{
+    margin-top: 20px;
+  }
 </style>

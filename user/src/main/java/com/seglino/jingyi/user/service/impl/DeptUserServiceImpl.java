@@ -10,4 +10,12 @@ import com.seglino.jingyi.user.service.DeptUserService;
 @Service
 public class DeptUserServiceImpl extends BaseServiceImpl<DeptUserDao, DeptUser> implements DeptUserService {
 
+	/**
+	 * 删除所有数据
+	 * 
+	 * @return
+	 */
+	public int deleteAll() {
+		return dao.deleteAll();
+	}
 }

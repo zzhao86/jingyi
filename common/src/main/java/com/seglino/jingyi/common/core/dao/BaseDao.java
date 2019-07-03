@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.github.pagehelper.Page;
+
 @Mapper
 public interface BaseDao<T> {
 
@@ -39,21 +41,22 @@ public interface BaseDao<T> {
 	 * @return
 	 */
 	public int delete(T entity);
-	
+
 	/**
 	 * 根据ID恢复删除（未彻底删除）的数据
+	 * 
 	 * @param entity
 	 * @return
 	 */
 	public int restore(T entity);
-	
+
 	/**
 	 * 根据ID彻底删除数据
 	 * 
 	 * @param id
 	 * @return
 	 */
-	public int deletePhysical (Object id);
+	public int deletePhysical(Object id);
 
 	/**
 	 * 获取符合条件的数据列表
@@ -86,4 +89,11 @@ public interface BaseDao<T> {
 	 * @return
 	 */
 	public int count(Map<String, Object> param);
+
+	/**
+	 * 分页获取数据
+	 * @param param
+	 * @return
+	 */
+	public Page<T> page(Map<String, Object> param);
 }

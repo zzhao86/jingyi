@@ -20,6 +20,7 @@ public class DeptServiceImpl extends BaseServiceImpl<DeptDao, Dept> implements D
 	 * @param pid 父部门ID
 	 * @return
 	 */
+	@Override
 	public List<DeptTreeDto> tree(Map<String, Object> param){
 		return dao.tree(param);
 	}

@@ -3,6 +3,9 @@ package com.seglino.jingyi.common.core.service;
 import java.util.List;
 import java.util.Map;
 
+import com.github.pagehelper.Page;
+import com.seglino.jingyi.common.request.PageParams;
+
 public interface BaseService<T> {
 
 	/**
@@ -82,5 +85,12 @@ public interface BaseService<T> {
 	 * @return
 	 */
 	public int count(Map<String, Object> param);
+	
+	/**
+	 * 分页获取数据
+	 * @param params 分页参数
+	 * @return
+	 */
+	public Page<T> page(PageParams params);
 }
 

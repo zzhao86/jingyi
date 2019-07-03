@@ -8,4 +8,10 @@ import com.seglino.jingyi.user.pojo.DeptUser;
 @Mapper
 public interface DeptUserDao extends BaseDao<DeptUser> {
 
+	/**
+	 * 删除所有数据
+	 * 
+	 * @return
+	 */
+	public int deleteAll();
 }

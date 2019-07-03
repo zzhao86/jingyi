@@ -158,4 +158,9 @@
 			id = #{id}
 		</where>
 	</delete>
+	
+	<delete id="deleteAll">
+		DELETE FROM
+		<include refid="tableName" />
+	</delete>
 </mapper>

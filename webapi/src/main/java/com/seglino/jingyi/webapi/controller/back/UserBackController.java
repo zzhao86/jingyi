@@ -1,14 +1,14 @@
 package com.seglino.jingyi.webapi.controller.back;
 
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.github.pagehelper.Page;
+import com.seglino.jingyi.common.request.PageParams;
+import com.seglino.jingyi.common.response.ApiPageResult;
 import com.seglino.jingyi.common.response.ApiResult;
 import com.seglino.jingyi.dingtalk.service.DingtalkUserService;
 import com.seglino.jingyi.user.pojo.User;
@@ -24,10 +24,11 @@ public class UserBackController {
 	private DingtalkUserService dingtalkuserService;
 
 	@GetMapping("list")
-	public ApiResult list(@RequestParam Map<String, Object> param) {
-		ApiResult aResult = new ApiResult();
+	public ApiPageResult list(PageParams params) {
+		ApiPageResult aResult = new ApiPageResult();
 		try {
-			List<User> list = userService.list(param);
+			Page<User> list = userService.page(params);
+			aResult.setTotal(list.getTotal());
 			aResult.setData(list);
 		} catch (Exception e) {
 			aResult.AddError(e);

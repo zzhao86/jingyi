@@ -3,11 +3,11 @@ package com.seglino.jingyi.user.service;
 import java.util.List;
 import java.util.Map;
 
-import com.seglino.jingyi.common.core.dao.BaseDao;
+import com.seglino.jingyi.common.core.service.BaseService;
 import com.seglino.jingyi.user.dto.DeptTreeDto;
 import com.seglino.jingyi.user.pojo.Dept;
 
-public interface DeptService extends BaseDao<Dept> {
+public interface DeptService extends BaseService<Dept> {
 
 	/**
 	 * 根据父部门ID获取部门列表

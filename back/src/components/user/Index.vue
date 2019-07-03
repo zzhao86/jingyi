@@ -20,26 +20,33 @@
           @node-click="treeNodeClick"
         ></el-tree>
       </div>
-      <el-table :data="tableData" stripe :border="true" size="small">
-        <el-table-column prop="name" label="姓名"></el-table-column>
-        <el-table-column prop="position" label="职位" width="150"></el-table-column>
-        <el-table-column prop="mobile" label="手机号" width="150"></el-table-column>
-        <el-table-column prop="tel" label="办公电话" width="150"></el-table-column>
-        <el-table-column prop="type" label="用户类型" width="150">
-          <template slot-scope="scope">
-            <span v-show="scope.row.type == 1" class="el-link el-link--danger">主管理员</span>
-            <span v-show="scope.row.type == 2" class="el-link el-link--warning">子管理员</span>
-            <span v-show="scope.row.type == 99">普通用户</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" width="75">
-          <template slot-scope="scope">
-            <el-button-group>
-              <el-button type="success" size="mini">查看</el-button>
-            </el-button-group>
-          </template>
-        </el-table-column>
-      </el-table>
+      <div class="main-table">
+        <el-table :data="tableData" stripe :border="true">
+          <el-table-column align="center" label="序号" width="50">
+            <template slot-scope="scope">{{ scope.$index + (params.pageNum - 1) * params.pageSize + 1 }}</template>
+          </el-table-column>
+          <el-table-column prop="name" label="姓名"></el-table-column>
+          <el-table-column prop="mobile" label="手机号" width="150"></el-table-column>
+          <el-table-column prop="tel" label="办公电话" width="150"></el-table-column>
+          <el-table-column prop="position" label="职位" width="150"></el-table-column>
+          <el-table-column prop="type" label="用户类型" width="80">
+            <template slot-scope="scope">
+              <span v-show="scope.row.type == 1" class="el-link el-link--danger">主管理员</span>
+              <span v-show="scope.row.type == 2" class="el-link el-link--warning">子管理员</span>
+              <span v-show="scope.row.type == 99">普通用户</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" width="75">
+            <template slot-scope="scope">
+              <el-button-group>
+                <el-button type="success" size="mini">查看</el-button>
+              </el-button-group>
+            </template>
+          </el-table-column>
+        </el-table>
+        <el-pagination background @current-change="PageChange" :current-page="params.pageNum" :page-size="params.pageSize" layout="total, prev, pager, next, jumper" :total="params.total">
+        </el-pagination>
+      </div>
     </div>
   </div>
 </template>
@@ -52,6 +59,14 @@
     },
     data() {
       return {
+        params: {
+          pageNum: 1,
+          pageSize: 10,
+          total: 0,
+          condition: {
+            name: '张'
+          }
+        },
         tableData: [],
         treeData: [],
         props: {
@@ -71,11 +86,16 @@
       loadTableData: function() {
         this.$http
           .get('back/user/list', {
-            params: {}
+            params: this.params,
           })
           .then(res => {
             this.tableData = res.data;
+            this.params.total = res.total;
           });
+      },
+      PageChange: function(index) {
+        this.params.pageNum = index;
+        this.loadTableData();
       },
       // 加载Tree数据
       loadTreeData: function(pid, node) {
@@ -169,5 +189,8 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     font-size: 13px;
+  }
+  .main-table {
+    flex: 1;
   }
 </style>
