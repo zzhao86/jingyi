@@ -12,6 +12,12 @@ import 'element-ui/lib/theme-chalk/index.css';
 //全局变量
 import Global from './Global.vue';
 
+import '../static/main.css';
+
+import tableAutoHeight from './components/utils/directive/table-auto-height';
+
+Vue.directive('auto-height', tableAutoHeight);
+
 Vue.config.productionTip = false;
 Vue.use(ElementUI);
 
@@ -28,7 +34,8 @@ axios.interceptors.request.use(
     loadingInstance = vue.$loading({
       lock: true,
       text: '加载中……',
-      background: 'rgba(255, 255, 2550, 0.9)'
+      background: 'rgba(255, 255, 2550, 0.5)',
+      body: true
     });
     return config;
   },

@@ -8,22 +8,12 @@
     </div>
     <div class="main-container">
       <div class="tree-container">
-        <el-tree
-          ref="tree"
-          :props="props"
-          lazy
-          :data="treeData"
-          node-key="id"
-          highlight-current
-          :render-content="treeRenderContent"
-          @node-expand="treeNodeExpand"
-          @node-click="treeNodeClick"
-        ></el-tree>
+        <el-tree ref="tree" :props="props" lazy :data="treeData" highlight-current :render-content="treeRenderContent" @node-expand="treeNodeExpand" @node-click="treeNodeClick"></el-tree>
       </div>
       <div class="main-table">
-        <el-table :data="tableData" stripe :border="true">
+        <el-table :data="tableData" ref="table" stripe border v-auto-height :max-height="maxHeight">
           <el-table-column align="center" label="序号" width="50">
-            <template slot-scope="scope">{{ scope.$index + (params.pageNum - 1) * params.pageSize + 1 }}</template>
+            <template slot-scope="scope">{{ scope.$index + (params.index - 1) * params.size + 1 }}</template>
           </el-table-column>
           <el-table-column prop="name" label="姓名"></el-table-column>
           <el-table-column prop="mobile" label="手机号" width="150"></el-table-column>
@@ -44,15 +34,18 @@
             </template>
           </el-table-column>
         </el-table>
-        <el-pagination background @current-change="PageChange" :current-page="params.pageNum" :page-size="params.pageSize" layout="total, prev, pager, next, jumper" :total="params.total">
-        </el-pagination>
+        <pagination :params="params" :total="total" @page-change="onPageChange" @size-change="onSizeChange"></pagination>
       </div>
     </div>
   </div>
 </template>
 <script>
+  import pagination from '../utils/components/pagination';
   export default {
     name: 'UserIndex',
+    components: {
+      pagination
+    },
     created() {
       this.loadTableData();
       this.loadTreeData();
@@ -60,13 +53,13 @@
     data() {
       return {
         params: {
-          pageNum: 1,
-          pageSize: 10,
-          total: 0,
-          condition: {
-            name: '张'
+          index: 1,
+          size: 20,
+          query: {
+            name: ''
           }
         },
+        total: 0,
         tableData: [],
         treeData: [],
         props: {
@@ -78,7 +71,8 @@
             }
             return !data.childCount > 0;
           }
-        }
+        },
+        maxHeight: 500
       };
     },
     methods: {
@@ -86,15 +80,19 @@
       loadTableData: function() {
         this.$http
           .get('back/user/list', {
-            params: this.params,
+            params: this.params
           })
           .then(res => {
             this.tableData = res.data;
-            this.params.total = res.total;
+            this.total = res.total;
           });
       },
-      PageChange: function(index) {
-        this.params.pageNum = index;
+      onPageChange: function(index) {
+        this.params.index = index;
+        this.loadTableData();
+      },
+      onSizeChange: function(size) {
+        this.params.size = size;
         this.loadTableData();
       },
       // 加载Tree数据
@@ -179,7 +177,7 @@
   }
   .tree-container {
     width: 200px;
-    height: calc(100vh - 170px);
+    height: calc(100vh - 164px);
     margin-right: 20px;
     border: solid 1px #ebeef5;
   }
@@ -192,5 +190,7 @@
   }
   .main-table {
     flex: 1;
+    overflow-x: auto;
+    overflow-y: hidden;
   }
 </style>

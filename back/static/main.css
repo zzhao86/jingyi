@@ -1,0 +1,99 @@
+body {
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  background-color: #f6f6f6;
+}
+
+.el-menu {
+  border-right: none;
+}
+
+.el-form {
+  max-width: 800px;
+}
+.app-container {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 1;
+}
+
+.app-container .app-header {
+  position: relative;
+  height: 60px;
+  border-bottom: solid 1px #ddd;
+  background-color: #1890ff;
+  display: flex;
+  padding: 0 20px;
+  color: rgba(255, 255, 255, 0.9);
+}
+.app-container .app-header .app-name {
+  width: 200px;
+  height: 60px;
+  line-height: 60px;
+  font-size: 20px;
+}
+
+.app-container .app-header .user-info {
+  flex: 1;
+  height: 60px;
+  line-height: 60px;
+  text-align: right;
+  font-size: 14px;
+}
+
+.app-container .app-side {
+  position: absolute;
+  left: 0;
+  top: 60px;
+  bottom: 0;
+  width: 200px;
+  background-color: #ececec;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.app-container .app-content {
+  position: absolute;
+  left: 200px;
+  top: 60px;
+  right: 0;
+  bottom: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.main-header {
+  margin-bottom: 20px;
+  height: 40px;
+  border-bottom: solid 1px #ddd;
+  display: flex;
+}
+.main-header .title {
+  line-height: 40px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #888;
+  width: 300px;
+  margin-left: 10px;
+}
+.main-header .buttons {
+  flex: 1;
+  padding-right: 20px;
+  padding-bottom: 10px;
+  text-align: right;
+}
+
+.app-main {
+  margin: 10px;
+  padding: 10px;
+  background-color: #fff;
+}
+
+.table-page {
+  position: fixed;
+  bottom: 20px;
+  background-color: #fff;
+}

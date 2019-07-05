@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.github.pagehelper.Page;
-import com.seglino.jingyi.common.request.PageParams;
+import com.seglino.jingyi.common.request.RequestListParams;
 
 public interface BaseService<T> {
 
@@ -88,9 +88,9 @@ public interface BaseService<T> {
 	
 	/**
 	 * 分页获取数据
-	 * @param params 分页参数
+	 * @param params 列表请求参数
 	 * @return
 	 */
-	public Page<T> page(PageParams params);
+	public Page<T> page(RequestListParams params);
 }
 

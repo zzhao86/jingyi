@@ -12,7 +12,7 @@ import com.github.pagehelper.PageHelper;
 import com.seglino.jingyi.common.core.dao.BaseDao;
 import com.seglino.jingyi.common.core.po.BaseEntity;
 import com.seglino.jingyi.common.core.utils.DateUtils;
-import com.seglino.jingyi.common.request.PageParams;
+import com.seglino.jingyi.common.request.RequestListParams;
 
 @Service
 public abstract class BaseServiceImpl<D extends BaseDao<T>, T extends BaseEntity> implements BaseService<T> {
@@ -146,12 +146,12 @@ public abstract class BaseServiceImpl<D extends BaseDao<T>, T extends BaseEntity
 	/**
 	 * 分页获取数据
 	 * 
-	 * @param params 分页参数
+	 * @param params 列表请求参数
 	 * @return
 	 */
 	@Override
-	public Page<T> page(PageParams params) {
-		PageHelper.startPage(params.getPageNum(), params.getPageSize());
-		return dao.page(params.getParams());
+	public Page<T> page(RequestListParams params) {
+		PageHelper.startPage(params.getIndex(), params.getSize());
+		return dao.page(params.getCondition());
 	}
 }

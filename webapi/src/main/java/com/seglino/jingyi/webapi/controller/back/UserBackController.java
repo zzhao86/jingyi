@@ -2,12 +2,11 @@ package com.seglino.jingyi.webapi.controller.back;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pagehelper.Page;
-import com.seglino.jingyi.common.request.PageParams;
+import com.seglino.jingyi.common.request.RequestListParams;
 import com.seglino.jingyi.common.response.ApiPageResult;
 import com.seglino.jingyi.common.response.ApiResult;
 import com.seglino.jingyi.dingtalk.service.DingtalkUserService;
@@ -24,7 +23,7 @@ public class UserBackController {
 	private DingtalkUserService dingtalkuserService;
 
 	@GetMapping("list")
-	public ApiPageResult list(PageParams params) {
+	public ApiPageResult list(RequestListParams params) {
 		ApiPageResult aResult = new ApiPageResult();
 		try {
 			Page<User> list = userService.page(params);
