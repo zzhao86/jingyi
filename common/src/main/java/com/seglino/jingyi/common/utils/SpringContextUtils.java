@@ -1,4 +1,4 @@
-package com.seglino.jingyi.common.core.utils;
+package com.seglino.jingyi.common.utils;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

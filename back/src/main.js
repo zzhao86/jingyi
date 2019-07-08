@@ -12,7 +12,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 //全局变量
 import Global from './Global.vue';
 
-import '../static/main.css';
+import '../static/css/main.css';
 
 import tableAutoHeight from './components/utils/directive/table-auto-height';
 
@@ -107,10 +107,14 @@ var vue = new Vue({
         message: message,
         title: '确认提示',
         type: 'warning',
-        callback: callback,
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        showCancelButton: true
+        showCancelButton: true,
+        callback: function(action, instance) {
+          if (action === 'confirm') {
+            callback();
+          }
+        }
       });
     };
   },

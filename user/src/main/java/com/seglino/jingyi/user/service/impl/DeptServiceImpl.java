@@ -1,5 +1,6 @@
 package com.seglino.jingyi.user.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,13 +16,24 @@ import com.seglino.jingyi.user.service.DeptService;
 public class DeptServiceImpl extends BaseServiceImpl<DeptDao, Dept> implements DeptService {
 
 	/**
-	 * 根据父部门ID获取部门列表
+	 * 获取部门Tree数据
 	 * 
-	 * @param pid 父部门ID
 	 * @return
 	 */
 	@Override
-	public List<DeptTreeDto> tree(Map<String, Object> param){
-		return dao.tree(param);
+	public List<DeptTreeDto> tree() {
+		return this.tree("0");
+	}
+
+	private List<DeptTreeDto> tree(String pid) {
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("parentId", pid);
+		List<DeptTreeDto> list = dao.tree(param);
+		for (DeptTreeDto dept : list) {
+			if (dept.getChildCount() > 0) {
+				dept.setChildren(tree(dept.getId()));;
+			}
+		}
+		return list;
 	}
 }

@@ -4,8 +4,9 @@
       background
       :current-page="params.index"
       :page-size="params.size"
-      layout="total, prev, pager, next, jumper, sizes"
       :total="total"
+      layout="sizes, total, prev, pager, next, jumper"
+      :page-sizes="[10,20,50,100]"
       @current-change="onPageChange"
       @size-change="onSizeChange"
     >
@@ -20,7 +21,14 @@
       return {};
     },
     props: {
-      params: Object,
+      params: {
+        type: Object,
+        default: {
+          index: 1,
+          page: 10,
+          total: 0
+        }
+      },
       total: Number
     },
     methods: {
@@ -28,6 +36,7 @@
         this.$emit('page-change', index);
       },
       onSizeChange: function(size) {
+        this.$global.pageSize = size;
         this.$emit('size-change', size);
       }
     }

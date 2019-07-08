@@ -1,5 +1,6 @@
 package com.seglino.jingyi.common.core.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -11,8 +12,8 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.seglino.jingyi.common.core.dao.BaseDao;
 import com.seglino.jingyi.common.core.po.BaseEntity;
-import com.seglino.jingyi.common.core.utils.DateUtils;
 import com.seglino.jingyi.common.request.RequestListParams;
+import com.seglino.jingyi.common.utils.DateUtils;
 
 @Service
 public abstract class BaseServiceImpl<D extends BaseDao<T>, T extends BaseEntity> implements BaseService<T> {
@@ -129,7 +130,9 @@ public abstract class BaseServiceImpl<D extends BaseDao<T>, T extends BaseEntity
 	 */
 	@Override
 	public T detailById(Object id) {
-		return dao.detailById(id);
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("id", id);
+		return dao.detail(param);
 	}
 
 	/**

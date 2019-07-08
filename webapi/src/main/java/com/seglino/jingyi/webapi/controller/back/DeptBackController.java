@@ -22,7 +22,7 @@ public class DeptBackController {
 
 	@Autowired
 	private DeptService deptService;
-	
+
 	@Autowired
 	private DingtalkDeptService dingtalkDeptService;
 
@@ -39,19 +39,17 @@ public class DeptBackController {
 	}
 
 	@GetMapping("tree")
-	public ApiResult tree(String pid) {
+	public ApiResult tree() {
 		ApiResult aResult = new ApiResult();
 		try {
-			Map<String, Object> param =new HashMap<String, Object>();
-			param.put("parentId", pid);
-			List<DeptTreeDto> list = deptService.tree(param);
+			List<DeptTreeDto> list = deptService.tree();
 			aResult.setData(list);
 		} catch (Exception e) {
 			aResult.AddError(e);
 		}
 		return aResult;
 	}
-	
+
 	@GetMapping("init_dd")
 	public ApiResult initFromDingtalk(String id) {
 		ApiResult aResult = new ApiResult();

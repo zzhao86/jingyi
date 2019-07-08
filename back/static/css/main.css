@@ -12,6 +12,13 @@ body {
 .el-form {
   max-width: 800px;
 }
+
+.el-radio-button.is-disabled input:checked + .el-radio-button__inner {
+  background-color: #409eff;
+  color: #fff;
+  opacity: 0.6;
+}
+
 .app-container {
   position: fixed;
   left: 0;
@@ -81,7 +88,6 @@ body {
 }
 .main-header .buttons {
   flex: 1;
-  padding-right: 20px;
   padding-bottom: 10px;
   text-align: right;
 }

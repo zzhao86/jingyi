@@ -75,14 +75,6 @@ public interface BaseDao<T> {
 	public T detail(Map<String, Object> param);
 
 	/**
-	 * 根据ID获取详细数据
-	 * 
-	 * @param param
-	 * @return
-	 */
-	public T detailById(Object id);
-
-	/**
 	 * 获取符合条件的数据总数
 	 * 
 	 * @param param

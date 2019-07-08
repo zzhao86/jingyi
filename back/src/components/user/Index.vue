@@ -1,17 +1,30 @@
 <template>
   <div class="app-main">
     <div class="main-header">
-      <div class="title">成员管理</div>
+      <div class="title">用户管理</div>
       <div class="buttons">
-        <el-button type="primary" size="small" @click="onSyncUserClick">同步成员</el-button>
+        <el-button type="primary" size="small" @click="onSyncUserClick">从钉钉同步用户</el-button>
       </div>
     </div>
     <div class="main-container">
       <div class="tree-container">
-        <el-tree ref="tree" :props="props" lazy :data="treeData" highlight-current :render-content="treeRenderContent" @node-expand="treeNodeExpand" @node-click="treeNodeClick"></el-tree>
+        <div class="tree-button">
+          <el-button type="primary" size="small" @click="onSyncDeptClick">从钉钉同步部门</el-button>
+        </div>
+        <el-tree
+          ref="tree"
+          :props="props"
+          :data="treeData"
+          node-key="id"
+          :expand-on-click-node="false"
+          :default-expanded-keys="treeExpandedKey"
+          highlight-current
+          :render-content="treeRenderContent"
+          @node-click="treeNodeClick"
+        ></el-tree>
       </div>
       <div class="main-table">
-        <el-table :data="tableData" ref="table" stripe border v-auto-height :max-height="maxHeight">
+        <el-table :data="tableData" ref="table" stripe border v-auto-height :max-height="maxHeight" empty-text="当前部门暂无人员">
           <el-table-column align="center" label="序号" width="50">
             <template slot-scope="scope">{{ scope.$index + (params.index - 1) * params.size + 1 }}</template>
           </el-table-column>
@@ -23,13 +36,13 @@
             <template slot-scope="scope">
               <span v-show="scope.row.type == 1" class="el-link el-link--danger">主管理员</span>
               <span v-show="scope.row.type == 2" class="el-link el-link--warning">子管理员</span>
-              <span v-show="scope.row.type == 99">普通用户</span>
+              <span v-show="scope.row.type == 99" class="el-link el-link--info">系统用户</span>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="75">
             <template slot-scope="scope">
               <el-button-group>
-                <el-button type="success" size="mini">查看</el-button>
+                <el-button type="success" size="mini" @click="onViewClick(scope.row)">查看</el-button>
               </el-button-group>
             </template>
           </el-table-column>
@@ -47,16 +60,16 @@
       pagination
     },
     created() {
-      this.loadTableData();
       this.loadTreeData();
     },
     data() {
       return {
         params: {
           index: 1,
-          size: 20,
+          size: this.$global.pageSize,
           query: {
-            name: ''
+            name: '',
+            deptId: ''
           }
         },
         total: 0,
@@ -65,13 +78,9 @@
         props: {
           id: 'id',
           label: 'name',
-          isLeaf: function(data, node) {
-            if (!data.childCount) {
-              return true;
-            }
-            return !data.childCount > 0;
-          }
+          children: 'children'
         },
+        treeExpandedKey: [],
         maxHeight: 500
       };
     },
@@ -96,45 +105,19 @@
         this.loadTableData();
       },
       // 加载Tree数据
-      loadTreeData: function(pid, node) {
-        this.$http
-          .get('back/dept/tree', {
-            params: {
-              pid: pid
-            }
-          })
-          .then(res => {
-            var tree = this.$refs['tree'];
-            if (!res.data || res.data.length == 0) {
-              return;
-            }
-            if (!node) {
-              // 当tree无任何节点时，添加data数组的方式添加根节点。
-              if (this.treeData.length == 0) {
-                this.treeData.push(res.data[0]);
-              }
-            } else {
-              //当tree存在根节点时，用append的方式添加子节点。
-              for (let i = 0; i < res.data.length; i++) {
-                var isExists = false;
-                var data = res.data[i];
-                for (let j = 0; j < node.childNodes.length; j++) {
-                  let childNode = node.childNodes[j];
-                  if (childNode.data.id == data.id) {
-                    isExists = true;
-                    break;
-                  }
-                }
-                if (!isExists) {
-                  tree.append(data, node);
-                }
-              }
-            }
-          });
-      },
-      // 展开Tree节点事件
-      treeNodeExpand: function(data, node, store) {
-        this.loadTreeData(data.id, node);
+      loadTreeData: function() {
+        this.$http.get('back/dept/tree').then(res => {
+          if (res.data) {
+            // 添加Tree数据
+            this.treeData = res.data;
+            // 设置默认展开的Tree节点
+            var id = res.data[0].id;
+            this.treeExpandedKey.push(id);
+            // 设置Table查询的部门条件
+            this.params.query.deptId = id;
+            this.loadTableData();
+          }
+        });
       },
       // 重新渲染Tree节点文本
       treeRenderContent: function(h, { node, data, store }) {
@@ -147,14 +130,31 @@
       },
       // Tree节点点击事件
       treeNodeClick: function(data, node, store) {
-        console.log(data);
-        console.log(node);
+        this.params.index = 1;
+        this.params.query.deptId = data.id;
+        this.loadTableData();
+      },
+      // 同步部门按钮点击事件
+      onSyncDeptClick: function() {
+        const vue = this;
+        this.$confirm('确定要从钉钉同步部门数据吗？', function() {
+          var tree = vue.$refs['tree'];
+          vue.$http
+            .get('back/dept/init_dd', {
+              params: {
+                id: 1
+              }
+            })
+            .then(res => {
+              vue.$success('同步成功');
+              vue.loadTreeData(0, null);
+            });
+        });
       },
       // 同步成员按钮点击事件
       onSyncUserClick: function() {
         const vue = this;
-        this.$confirm('确定要同步吗？', function() {
-          var tree = vue.$refs['tree'];
+        this.$confirm('确定要从钉钉同步用户数据吗？', function() {
           vue.$http
             .get('back/user/init_dd', {
               params: {
@@ -162,10 +162,13 @@
               }
             })
             .then(res => {
-              vue.$success('同步成功');
+              vue.$success(res.data);
               vue.loadTableData();
             });
         });
+      },
+      onViewClick: function(row) {
+				this.$router.push('/user/detail/view?id=' + row.id);
       }
     }
   };
@@ -180,6 +183,12 @@
     height: calc(100vh - 164px);
     margin-right: 20px;
     border: solid 1px #ebeef5;
+  }
+  .tree-container .tree-button {
+    margin: 10px auto;
+    text-align: center;
+    padding-bottom: 10px;
+    border-bottom: solid 1px #ebeef5;
   }
   .dept-tree-node {
     width: 180px;

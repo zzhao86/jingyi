@@ -135,16 +135,11 @@ public class DingtalkUserServiceImpl implements DingtalkUserService {
 					}
 				}
 				OapiUserGetResponse userDetail = getUserDetail(adminUserid);
-				User user = new User();
-				user.setName(userDetail.getName());
-				user.setMobile(userDetail.getMobile());
-				user.setTel(userDetail.getTel());
-				user.setAvatar(userDetail.getAvatar());
-				user.setPosition(userDetail.getPosition());
-				user.setDdUserId(userDetail.getUserid());
-				user.setOpenid(userDetail.getOpenId());
+				Map<String, Object> param = new HashMap<String, Object>();
+				param.put("ddUserId", userDetail.getUserid());
+				User user = userService.detail(param);
 				user.setType(1);
-				return userService.insert(user);
+				return userService.update(user);
 			}
 		} catch (Exception e) {
 			logger.error("初始化管理员失败：{}", e);
@@ -163,7 +158,7 @@ public class DingtalkUserServiceImpl implements DingtalkUserService {
 	public int initUserData(String deptId) {
 		int count = 0;
 
-		// 清空用户部门表数据
+		// 清空部门用户表数据
 		deptUserService.deleteAll();
 
 		// 插入根部门所有用户数据
@@ -250,6 +245,7 @@ public class DingtalkUserServiceImpl implements DingtalkUserService {
 
 	/**
 	 * 插入用户部门数据
+	 * 
 	 * @param deptId
 	 * @param userId
 	 * @param userDetail

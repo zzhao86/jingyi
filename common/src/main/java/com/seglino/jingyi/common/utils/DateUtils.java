@@ -1,4 +1,4 @@
-package com.seglino.jingyi.common.core.utils;
+package com.seglino.jingyi.common.utils;
 
 import java.text.ParseException;
 import java.text.ParsePosition;

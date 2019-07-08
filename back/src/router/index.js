@@ -4,6 +4,7 @@ import Home from '@/components/Home'
 import DingtalkSettings from '@/components/DingtalkSettings'
 import DeptIndex from '@/components/dept/index'
 import UserIndex from '@/components/user/index'
+import UserDetail from '@/components/user/Detail'
 
 Vue.use(Router)
 
@@ -28,6 +29,11 @@ export default new Router({
       path: '/user',
       name: 'UserIndex',
       component: UserIndex
+    },
+    {
+      path: '/user/detail/:mode',
+      name: 'UserDetail',
+      component: UserDetail
     }
   ]
 })

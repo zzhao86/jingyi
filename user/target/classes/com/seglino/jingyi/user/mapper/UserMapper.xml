@@ -6,36 +6,38 @@
 	
 	<!-- 数据字段 -->
 	<sql id="column">
-		id,
-		name,
-		mobile,
-		tel,
-		avatar,
-		position,
-		ddUserId,
-		openid,
-		type,
-		json,
-		createTime,
-		createUid,
-		modifyTime,
-		modifyUid,
-		deleteTime,
-		deleteUid,
-		isDeleted
+		a.id,
+		a.name,
+		a.mobile,
+		a.tel,
+		a.email,
+		a.avatar,
+		a.position,
+		a.ddUserId,
+		a.openid,
+		a.type,
+		a.json,
+		a.createTime,
+		a.createUid,
+		a.modifyTime,
+		a.modifyUid,
+		a.deleteTime,
+		a.deleteUid,
+		a.isDeleted
 	</sql>
 	
 	<!-- 查询条件 -->
 	<sql id="condition">
-		<if test="id != null"> and id = #{id}</if>
-		<if test="name != null"> and name like '%${name}%'</if>
-		<if test="mobile != null"> and mobile like '%${mobile}%'</if>
-		<if test="tel != null"> and tel like '%${tel}%'</if>
-		<if test="position != null"> and position like '%${position}%'</if>
-		<if test="ddUserId != null"> and ddUserId = #{ddUserId}</if>
-		<if test="openid != null"> and openid = #{openid}</if>
-		<if test="type != null"> and type = #{type}</if>
-		<if test="isDeleted != null"> and isDeleted = #{isDeleted}</if>
+		<if test="id != null"> and a.id = #{id}</if>
+		<if test="name != null and name != ''"> and a.name like '%${name}%'</if>
+		<if test="mobile != null"> and a.mobile like '%${mobile}%'</if>
+		<if test="tel != null"> and a.tel like '%${tel}%'</if>
+		<if test="position != null"> and a.position like '%${position}%'</if>
+		<if test="ddUserId != null"> and a.ddUserId = #{ddUserId}</if>
+		<if test="openid != null"> and a.openid = #{openid}</if>
+		<if test="type != null"> and a.type = #{type}</if>
+		<if test="isDeleted != null"> and a.isDeleted = #{isDeleted}</if>
+		<if test="deptId != null"> and b.deptId = #{deptId}</if>
 	</sql>
 
 	<!-- 根据条件获取列表 -->
@@ -43,7 +45,7 @@
 		SELECT
 		<include refid="column"></include>
 		FROM
-		<include refid="tableName"></include>
+		<include refid="tableName"></include> a
 		<where>
 			<include refid="condition"></include>
 		</where>
@@ -52,14 +54,14 @@
 	
 	<!-- 分页获取列表 -->
 	<select id="page" resultType="com.seglino.jingyi.user.pojo.User">
-	SELECT
+		SELECT
 		<include refid="column"></include>
-		FROM
-		<include refid="tableName"></include>
+		FROM <include refid="tableName"></include> a
+		JOIN tab_dept_user b ON a.id = b.userId
 		<where>
 			<include refid="condition"></include>
 		</where>
-		ORDER BY createTime ASC
+		ORDER BY sortNo DESC
 	</select>
 
 	<!-- 根据条件获取详情 -->
@@ -67,20 +69,21 @@
 		SELECT
 		<include refid="column"></include>
 		FROM
-		<include refid="tableName"></include>
+		<include refid="tableName"></include> a
 		<where>
 			<include refid="condition"></include>
 		</where>
 	</select>
 
-	<!-- 根据ID获取详情 -->
-	<select id="detailById" resultType="Object">
+	<!-- 根据条件获取详情 -->
+	<select id="detailForDept" resultType="com.seglino.jingyi.user.dto.UserDetailDto">
 		SELECT
-		<include refid="column"></include>
+		<include refid="column"></include>,
+		(SELECT GROUP_CONCAT(`name` SEPARATOR '，') FROM tab_dept b JOIN tab_dept_user c ON b.id = c.deptId WHERE c.userId = a.id GROUP BY c.userid) as deptNames
 		FROM
-		<include refid="tableName"></include>
+		<include refid="tableName"></include> a
 		<where>
-			id = #{id}
+			<include refid="condition"></include>
 		</where>
 	</select>
 	
@@ -92,12 +95,6 @@
 			<include refid="condition"></include>
 		</where>
 	</select>
-	
-	<select id="listUserDept" resultType="com.seglino.jingyi.user.dto.UserDeptListDto">
-	SELECT id, name, mobile, tel, position, type, 
-		   (SELECT GROUP_CONCAT() FROM tab_user_dept where userId = a.id) as dept
-	  FROM tab_user a
-	</select>
 
 	<!-- 插入 -->
 	<insert id="insert" parameterType="com.seglino.jingyi.user.pojo.User">
@@ -108,6 +105,7 @@
 			<if test="name != null">name,</if>
 			<if test="mobile != null">mobile,</if>
 			<if test="tel != null">tel,</if>
+			<if test="email != null">email,</if>
 			<if test="avatar != null">avatar,</if>
 			<if test="position != null">position,</if>
 			<if test="ddUserId != null">ddUserId,</if>
@@ -128,6 +126,7 @@
 			<if test="name != null">#{name},</if>
 			<if test="mobile != null">#{mobile},</if>
 			<if test="tel != null">#{tel},</if>
+			<if test="email != null">#{email},</if>
 			<if test="avatar != null">#{avatar},</if>
 			<if test="position != null">#{position},</if>
 			<if test="ddUserId != null">#{ddUserId},</if>
@@ -152,6 +151,7 @@
 			<if test="name != null">name = #{name},</if>
 			<if test="mobile != null">mobile = #{mobile},</if>
 			<if test="tel != null">tel = #{tel},</if>
+			<if test="email != null">email = #{email},</if>
 			<if test="avatar != null">avatar = #{avatar},</if>
 			<if test="position != null">position = #{position},</if>
 			<if test="ddUserId != null">ddUserId = #{ddUserId},</if>
