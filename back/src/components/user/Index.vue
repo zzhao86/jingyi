@@ -53,7 +53,7 @@
   </div>
 </template>
 <script>
-  import pagination from '../utils/components/pagination';
+  import pagination from '../utils/components/Pagination';
   export default {
     name: 'UserIndex',
     components: {

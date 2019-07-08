@@ -16,8 +16,8 @@ spring:
     time-zone: GMT+8
     serialization:
       write-dates-as-timestamps: false
-#  resources:
-#    static-locations: classpath:/static/
+  resources:
+    static-locations: classpath:/static/
 
       
 # mapper配置

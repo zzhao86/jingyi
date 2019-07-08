@@ -17,8 +17,8 @@ import com.seglino.jingyi.dingtalk.service.DingtalkUserService;
 import com.seglino.jingyi.user.dto.UserDetailDto;
 import com.seglino.jingyi.user.pojo.User;
 import com.seglino.jingyi.user.service.UserService;
-import com.seglino.jingyi.vo.back.UserDetailVo;
-import com.seglino.jingyi.vo.back.UserListVo;
+import com.seglino.jingyi.webapi.vo.back.UserDetailVo;
+import com.seglino.jingyi.webapi.vo.back.UserListVo;
 
 @RestController
 @RequestMapping("back/user")

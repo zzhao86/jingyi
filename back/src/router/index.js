@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/Home'
+import Login from '@/components/Login'
 import DingtalkSettings from '@/components/DingtalkSettings'
 import DeptIndex from '@/components/dept/index'
 import UserIndex from '@/components/user/index'
@@ -14,6 +15,11 @@ export default new Router({
       path: '/',
       name: 'Home',
       component: Home
+    },
+    {
+      path:'/login',
+      name: 'Login',
+      component: Login
     },
     {
       path: '/dingtalk/settings',

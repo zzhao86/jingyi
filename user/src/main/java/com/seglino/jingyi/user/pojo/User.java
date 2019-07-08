@@ -10,6 +10,7 @@ public class User extends BaseEntity implements Serializable {
 	private String name;
 	private String mobile;
 	private String tel;
+	private String email;
 	private String avatar;
 	private String position;
 	private String ddUserId;
@@ -34,6 +35,12 @@ public class User extends BaseEntity implements Serializable {
 	}
 	public void setTel(String tel) {
 		this.tel = tel;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
 	}
 	public String getAvatar() {
 		return avatar;

@@ -38,8 +38,8 @@ public class AuthServiceImpl implements AuthService {
 	public OapiGettokenResponse getAccessToken() {
 		DingTalkClient client = new DefaultDingTalkClient(DingtalkConfig.GetAccessToken);
 		OapiGettokenRequest request = new OapiGettokenRequest();
-		request.setCorpid(DingtalkConfig.AppKey);
-		request.setCorpsecret(DingtalkConfig.AppSecret);
+//		request.setCorpid(DingtalkConfig.AppKey);
+//		request.setCorpsecret(DingtalkConfig.AppSecret);
 		request.setAppkey(DingtalkConfig.AppKey);
 		request.setAppsecret(DingtalkConfig.AppSecret);
 		request.setTopHttpMethod("GET");
