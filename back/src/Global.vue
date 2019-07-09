@@ -1,6 +1,6 @@
 <script>
   // 接口基础地址
-  const baseUrl = 'http://192.168.0.220:5050/';
+  const baseUrl = 'http://192.168.0.238:5050/';
   Object.defineProperties(this, {
     baseUrl: {
       get: () => {

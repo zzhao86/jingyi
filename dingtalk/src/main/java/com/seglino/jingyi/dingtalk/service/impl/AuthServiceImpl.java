@@ -11,11 +11,13 @@ import com.dingtalk.api.DefaultDingTalkClient;
 import com.dingtalk.api.DingTalkClient;
 import com.dingtalk.api.request.OapiGetJsapiTicketRequest;
 import com.dingtalk.api.request.OapiGettokenRequest;
+import com.dingtalk.api.request.OapiSnsGetuserinfoBycodeRequest;
 import com.dingtalk.api.request.OapiSsoGettokenRequest;
 import com.dingtalk.api.request.OapiSsoGetuserinfoRequest;
 import com.dingtalk.api.request.OapiUserGetuserinfoRequest;
 import com.dingtalk.api.response.OapiGetJsapiTicketResponse;
 import com.dingtalk.api.response.OapiGettokenResponse;
+import com.dingtalk.api.response.OapiSnsGetuserinfoBycodeResponse;
 import com.dingtalk.api.response.OapiSsoGettokenResponse;
 import com.dingtalk.api.response.OapiSsoGetuserinfoResponse;
 import com.dingtalk.api.response.OapiUserGetuserinfoResponse;
@@ -38,8 +40,8 @@ public class AuthServiceImpl implements AuthService {
 	public OapiGettokenResponse getAccessToken() {
 		DingTalkClient client = new DefaultDingTalkClient(DingtalkConfig.GetAccessToken);
 		OapiGettokenRequest request = new OapiGettokenRequest();
-//		request.setCorpid(DingtalkConfig.AppKey);
-//		request.setCorpsecret(DingtalkConfig.AppSecret);
+		// request.setCorpid(DingtalkConfig.AppKey);
+		// request.setCorpsecret(DingtalkConfig.AppSecret);
 		request.setAppkey(DingtalkConfig.AppKey);
 		request.setAppsecret(DingtalkConfig.AppSecret);
 		request.setTopHttpMethod("GET");
@@ -110,9 +112,30 @@ public class AuthServiceImpl implements AuthService {
 		OapiSsoGetuserinfoResponse response = null;
 		try {
 			response = client.execute(request, DingtalkGlobal.SsoAccessToken);
-			if(!response.isSuccess()) {
+			if (!response.isSuccess()) {
 				logger.error(response.getErrmsg());
 			}
+		} catch (ApiException e) {
+			logger.error("{}", e);
+			e.printStackTrace();
+		}
+		return response;
+	}
+
+	/**
+	 * 用扫码后的临时授权码获取用户信息
+	 * 
+	 * @param code
+	 * @return
+	 */
+	public OapiSnsGetuserinfoBycodeResponse getUserDetailByQrCode(String code) {
+		DefaultDingTalkClient client = new DefaultDingTalkClient(DingtalkConfig.GetUserDetailByQrCode);
+		OapiSnsGetuserinfoBycodeRequest request = new OapiSnsGetuserinfoBycodeRequest();
+		request.setTmpAuthCode(code);
+		request.setHttpMethod("POST");
+		OapiSnsGetuserinfoBycodeResponse response = null;
+		try {
+			response = client.execute(request, DingtalkConfig.QrCodeId, DingtalkConfig.QrCodeSecret);
 		} catch (ApiException e) {
 			logger.error("{}", e);
 			e.printStackTrace();

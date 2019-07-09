@@ -25,6 +25,8 @@ public class DingtalkConfig {
 		AppSecret = settingsService.getValue("DINGTALK_APPSECRET");
 		AgentId = settingsService.getValue("DINGTALK_AGENTID");
 		SSOSecret = settingsService.getValue("DINGTALK_SSOSECRET");
+		QrCodeId = settingsService.getValue("DINGTALK_QRCODE_ID");
+		QrCodeSecret = settingsService.getValue("DINGTALK_QRCODE_SECRET");
 	}
 
 	static {
@@ -67,6 +69,14 @@ public class DingtalkConfig {
 	 * 钉钉SSOSecret
 	 */
 	public static String SSOSecret = "";
+	/**
+	 * 钉钉扫码登录AppId
+	 */
+	public static String QrCodeId = "";
+	/**
+	 * 钉钉扫码登录AppSecret
+	 */
+	public static String QrCodeSecret = "";
 
 	/**
 	 * 钉钉接口基础URL
@@ -94,6 +104,11 @@ public class DingtalkConfig {
 	 * 通过免登授权码获取用户的userid接口
 	 */
 	public final static String GetUserDetailByCode = ApiBaseUrl + prop.getProperty("GetUserDetailByCode");
+
+	/**
+	 * 通过二维码临时授权码获取用户信息接口
+	 */
+	public final static String GetUserDetailByQrCode = ApiBaseUrl + prop.getProperty("GetUserDetailByQrCode");
 
 	/**
 	 * 获取部门用户userid列表接口

@@ -52,11 +52,16 @@ body {
   font-size: 14px;
 }
 
-.app-container .app-side {
+.app-container .app-content-container {
   position: absolute;
-  left: 0;
   top: 60px;
   bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+}
+
+.app-container .app-side {
   width: 200px;
   background-color: #ececec;
   overflow-y: auto;
@@ -64,11 +69,7 @@ body {
 }
 
 .app-container .app-content {
-  position: absolute;
-  left: 200px;
-  top: 60px;
-  right: 0;
-  bottom: 0;
+  flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
 }

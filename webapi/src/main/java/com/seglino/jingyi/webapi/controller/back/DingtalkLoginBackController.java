@@ -13,11 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.dingtalk.api.response.OapiSnsGetuserinfoBycodeResponse;
 import com.dingtalk.api.response.OapiSsoGetuserinfoResponse;
 import com.seglino.jingyi.common.response.ApiResult;
 import com.seglino.jingyi.common.settings.pojo.Settings;
 import com.seglino.jingyi.common.settings.service.SettingsService;
 import com.seglino.jingyi.dingtalk.service.AuthService;
+import com.seglino.jingyi.user.service.UserService;
 
 @RestController
 @RequestMapping("back/dingtalk/login")
@@ -27,8 +29,11 @@ public class DingtalkLoginBackController {
 
 	@Autowired
 	private SettingsService settingsService;
+	
+	@Autowired
+	private UserService userService;
 
-	private String backBaseUrl = "http://192.168.0.218:5052/#/";
+	private String backBaseUrl = "http://192.168.0.238:5052/#/";
 
 	/**
 	 * 钉钉
@@ -56,6 +61,21 @@ public class DingtalkLoginBackController {
 				map.put("userInfo", response.getUserInfo());
 				aResult.setData(map);
 			}
+		} catch (Exception e) {
+			aResult.AddError(e);
+		}
+		return aResult;
+	}
+
+	@GetMapping("qrcode")
+	public ApiResult qrcodeLogin(String code) {
+		ApiResult aResult = new ApiResult();
+		try {
+			OapiSnsGetuserinfoBycodeResponse response = authService.getUserDetailByQrCode(code);
+			String unionid = response.getUserInfo().getUnionid();
+			Map<String, Object> param = new HashMap<String, Object>();
+			param.put("unionid", unionid);
+			aResult.setData(userService.detail(param));
 		} catch (Exception e) {
 			aResult.AddError(e);
 		}

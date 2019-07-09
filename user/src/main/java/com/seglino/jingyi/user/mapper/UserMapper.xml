@@ -15,6 +15,7 @@
 		a.position,
 		a.ddUserId,
 		a.openid,
+		a.unionid,
 		a.type,
 		a.json,
 		a.createTime,
@@ -35,6 +36,7 @@
 		<if test="position != null"> and a.position like '%${position}%'</if>
 		<if test="ddUserId != null"> and a.ddUserId = #{ddUserId}</if>
 		<if test="openid != null"> and a.openid = #{openid}</if>
+		<if test="unionid != null"> and a.unionid = #{unionid}</if>
 		<if test="type != null"> and a.type = #{type}</if>
 		<if test="isDeleted != null"> and a.isDeleted = #{isDeleted}</if>
 		<if test="deptId != null"> and b.deptId = #{deptId}</if>
@@ -110,6 +112,7 @@
 			<if test="position != null">position,</if>
 			<if test="ddUserId != null">ddUserId,</if>
 			<if test="openid != null">openid,</if>
+			<if test="unionid != null">unionid,</if>
 			<if test="type != null">type,</if>
 			<if test="json != null">json,</if>
 			<if test="createTime != null">createTime,</if>
@@ -131,6 +134,7 @@
 			<if test="position != null">#{position},</if>
 			<if test="ddUserId != null">#{ddUserId},</if>
 			<if test="openid != null">#{openid},</if>
+			<if test="unionid != null">#{unionid},</if>
 			<if test="type != null">#{type},</if>
 			<if test="json != null">#{json},</if>
 			<if test="createTime != null">#{createTime},</if>
@@ -156,6 +160,7 @@
 			<if test="position != null">position = #{position},</if>
 			<if test="ddUserId != null">ddUserId = #{ddUserId},</if>
 			<if test="openid != null">openid = #{openid},</if>
+			<if test="unionid != null">unionid = #{unionid},</if>
 			<if test="type != null">type = #{type},</if>
 			<if test="json != null">json = #{json},</if>
 			<if test="createTime != null">createTime = #{createTime},</if>

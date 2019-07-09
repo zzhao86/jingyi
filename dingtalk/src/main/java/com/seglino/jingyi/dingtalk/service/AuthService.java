@@ -4,6 +4,7 @@ import java.util.Map;
 
 import com.dingtalk.api.response.OapiGetJsapiTicketResponse;
 import com.dingtalk.api.response.OapiGettokenResponse;
+import com.dingtalk.api.response.OapiSnsGetuserinfoBycodeResponse;
 import com.dingtalk.api.response.OapiSsoGettokenResponse;
 import com.dingtalk.api.response.OapiSsoGetuserinfoResponse;
 import com.dingtalk.api.response.OapiUserGetuserinfoResponse;
@@ -39,6 +40,14 @@ public interface AuthService {
 	 * @return
 	 */
 	public OapiSsoGettokenResponse getSsoAccessToken();
+
+	/**
+	 * 用扫码后的临时授权码获取用户信息
+	 * 
+	 * @param code
+	 * @return
+	 */
+	public OapiSnsGetuserinfoBycodeResponse getUserDetailByQrCode(String code);
 
 	/**
 	 * 获取钉钉js鉴权票据

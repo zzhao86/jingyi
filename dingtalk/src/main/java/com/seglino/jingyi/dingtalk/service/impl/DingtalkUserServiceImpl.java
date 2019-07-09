@@ -201,10 +201,13 @@ public class DingtalkUserServiceImpl implements DingtalkUserService {
 					user.setName(userDetail.getName());
 					user.setMobile(userDetail.getMobile());
 					user.setTel(userDetail.getTel());
+					user.setEmail(userDetail.getEmail());
 					user.setAvatar(userDetail.getAvatar());
 					user.setPosition(userDetail.getPosition());
 					user.setOpenid(userDetail.getOpenId());
+					user.setUnionid(userDetail.getUnionid());
 					user.setDdUserId(userDetail.getUserid());
+					user.setJson(userDetail.getBody());
 					if (userDetail.getIsAdmin()) {
 						user.setType(2);
 					} else {
@@ -221,9 +224,12 @@ public class DingtalkUserServiceImpl implements DingtalkUserService {
 					user.setName(userDetail.getName());
 					user.setMobile(userDetail.getMobile());
 					user.setTel(userDetail.getTel());
+					user.setEmail(userDetail.getEmail());
 					user.setAvatar(userDetail.getAvatar());
 					user.setPosition(userDetail.getPosition());
 					user.setOpenid(userDetail.getOpenId());
+					user.setUnionid(userDetail.getUnionid());
+					user.setJson(userDetail.getBody());
 					if (userDetail.getIsAdmin()) {
 						user.setType(2);
 					} else {
