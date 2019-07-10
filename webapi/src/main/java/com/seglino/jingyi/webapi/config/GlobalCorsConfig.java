@@ -1,4 +1,4 @@
-package com.seglino.jingyi.config;
+package com.seglino.jingyi.webapi.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

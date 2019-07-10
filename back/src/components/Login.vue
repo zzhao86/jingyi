@@ -13,8 +13,8 @@
     name: 'Login',
     created() {
       var appid = 'dingoahwjazjqdmlt2gs5k';
-      var url = this.$global.baseUrl + '/back/dingtalk/login/qrcode';
-      var goto = encodeURIComponent('https://oapi.dingtalk.com/connect/oauth2/sns_authorize?appid=' + appid + '&response_type=code&scope=snsapi_login&state=STATE&redirect_uri=' + url);
+      var url = 'https://oapi.dingtalk.com/connect/oauth2/sns_authorize?appid=' + appid + '&response_type=code&scope=snsapi_login&state=STATE&redirect_uri=' + this.$global.baseUrl + 'back/dingtalk/login/qrcode';
+      var goto = encodeURIComponent(url);
       this.$nextTick(function() {
         var obj = DDLogin({
           id: 'loginContainer',
@@ -28,7 +28,7 @@
       var hanndleMessage = function(event) {
         var origin = event.origin;
         if (origin == 'https://login.dingtalk.com') {
-          window.location.href = decodeURIComponent(goto) + '&loginTmpCode=' + event.data;
+          window.location.href = url + '&loginTmpCode=' + event.data;
         }
       };
       if (typeof window.addEventListener != 'undefined') {

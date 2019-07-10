@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.ServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,6 +20,7 @@ import com.seglino.jingyi.common.response.ApiResult;
 import com.seglino.jingyi.common.settings.pojo.Settings;
 import com.seglino.jingyi.common.settings.service.SettingsService;
 import com.seglino.jingyi.dingtalk.service.AuthService;
+import com.seglino.jingyi.user.pojo.User;
 import com.seglino.jingyi.user.service.UserService;
 
 @RestController
@@ -29,14 +31,19 @@ public class DingtalkLoginBackController {
 
 	@Autowired
 	private SettingsService settingsService;
-	
+
 	@Autowired
 	private UserService userService;
 
-	private String backBaseUrl = "http://192.168.0.238:5052/#/";
+	private String backBaseUrl = "http://192.168.0.8:5052/#/";
+
+	@GetMapping("login")
+	public ModelAndView login() {
+		return new ModelAndView(new RedirectView(backBaseUrl + "login"));
+	}
 
 	/**
-	 * 钉钉
+	 * 钉钉后台管理免登
 	 * 
 	 * @param code
 	 */
@@ -70,12 +77,21 @@ public class DingtalkLoginBackController {
 	@GetMapping("qrcode")
 	public ApiResult qrcodeLogin(String code) {
 		ApiResult aResult = new ApiResult();
+		if(StringUtils.isEmpty(code)) {
+			
+		}
 		try {
 			OapiSnsGetuserinfoBycodeResponse response = authService.getUserDetailByQrCode(code);
-			String unionid = response.getUserInfo().getUnionid();
-			Map<String, Object> param = new HashMap<String, Object>();
-			param.put("unionid", unionid);
-			aResult.setData(userService.detail(param));
+			if (response.isSuccess()) {
+				String unionid = response.getUserInfo().getUnionid();
+				Map<String, Object> param = new HashMap<String, Object>();
+				param.put("unionid", unionid);
+				User user = userService.detail(param);
+				org.springframework.security.core.userdetails.User users = new org.springframework.security.core.userdetails.User(user.getId().toString(), "123", null);
+				aResult.setData(users);
+			} else {
+				aResult.AddError(response.getErrmsg());
+			}
 		} catch (Exception e) {
 			aResult.AddError(e);
 		}

@@ -26,7 +26,7 @@ public class DingtalkInit {
 	@PostConstruct
 	public void init() {
 		try {
-			ScheduledThreadPoolExecutor scheduled = new ScheduledThreadPoolExecutor(3);
+			ScheduledThreadPoolExecutor scheduled = new ScheduledThreadPoolExecutor(1);
 			// 定时获取钉钉AccessToken
 			scheduled.scheduleAtFixedRate(new Runnable() {				
 				@Override
@@ -41,7 +41,7 @@ public class DingtalkInit {
 								logger.info("获取AccessToken成功，token：{}", response.getAccessToken());
 								break;
 							} else {
-								Thread.sleep(60 * 1000);
+								wait(60 * 1000);
 							}
 						} catch (Exception e) {
 							logger.error("{}", e);
@@ -65,7 +65,7 @@ public class DingtalkInit {
 								logger.info("获取SsoAccessToken成功，token：{}", response.getAccessToken());
 								break;
 							} else {
-								Thread.sleep(60 * 1000);
+								wait(60 * 1000);
 							}
 						} catch (Exception e) {
 							logger.error("{}", e);
@@ -92,7 +92,7 @@ public class DingtalkInit {
 								logger.info("获取JsapiTicket成功，ticket：{}", response.getTicket());
 								break;
 							} else {
-								Thread.sleep(60 * 1000);
+								wait(60 * 1000);
 							}
 						} catch (Exception e) {
 							logger.error("{}", e);
