@@ -87,8 +87,7 @@ public class DingtalkLoginBackController {
 				Map<String, Object> param = new HashMap<String, Object>();
 				param.put("unionid", unionid);
 				User user = userService.detail(param);
-				org.springframework.security.core.userdetails.User users = new org.springframework.security.core.userdetails.User(user.getId().toString(), "123", null);
-				aResult.setData(users);
+				
 			} else {
 				aResult.AddError(response.getErrmsg());
 			}

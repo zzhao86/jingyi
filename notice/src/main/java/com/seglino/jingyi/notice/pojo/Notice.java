@@ -1,10 +1,8 @@
 package com.seglino.jingyi.notice.pojo;
 
-import java.io.Serializable;
-
 import com.seglino.jingyi.common.core.po.BaseEntity;
 
-public class Notice extends BaseEntity implements Serializable {
+public class Notice extends BaseEntity {
 	private static final long serialVersionUID = 3647940942707340222L;
 
 	private String categoryId;

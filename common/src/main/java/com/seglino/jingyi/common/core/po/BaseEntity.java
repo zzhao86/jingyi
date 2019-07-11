@@ -1,8 +1,11 @@
 package com.seglino.jingyi.common.core.po;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public abstract class BaseEntity {
+public abstract class BaseEntity implements Serializable {
+	private static final long serialVersionUID = -5540810496647887918L;
+	
 	/**
 	 * 主键
 	 */

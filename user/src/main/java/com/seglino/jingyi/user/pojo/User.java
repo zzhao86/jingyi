@@ -1,10 +1,8 @@
 package com.seglino.jingyi.user.pojo;
 
-import java.io.Serializable;
-
 import com.seglino.jingyi.common.core.po.BaseEntity;
 
-public class User extends BaseEntity implements Serializable {
+public class User extends BaseEntity {
 	private static final long serialVersionUID = -5722258210735686372L;
 
 	private String name;
