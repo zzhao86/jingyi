@@ -13,18 +13,18 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 public class DingtalkQrcodeAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
-	public static final String QRCODE_KEY = "mobile";
+	public static final String QRCODE_KEY = "code";
 
 	private String qrcodeParameter = QRCODE_KEY;
 	private boolean postOnly = true;
 
 	protected DingtalkQrcodeAuthenticationFilter() {
-		super(new AntPathRequestMatcher("/back/dingtalk/login", "POST"));
+		super(new AntPathRequestMatcher("/back/dingtalk/login/qrcode", "GET"));
 	}
 
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
-		if (postOnly && !request.getMethod().equals("POST")) {
+		if (postOnly && !request.getMethod().equals("GET")) {
 			throw new AuthenticationServiceException("Authentication method not supported: " + request.getMethod());
 		}
 		String code = obtainQrcode(request);

@@ -4,18 +4,16 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import com.seglino.jingyi.webapi.security.BackUserService;
+import com.seglino.jingyi.webapi.security.BackUser;
 
 public class DingtalkQrcodeAuthenticationProvider implements AuthenticationProvider {
 
-	private BackUserService backUserService;
+	private DingtalkQrcodeUserService backUserService;
 
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		DingtalkQrcodeAuthenticationToken authenticationToken = (DingtalkQrcodeAuthenticationToken) authentication;
-		UserDetails userDetails = backUserService.loadUserByUsername((String) authenticationToken.getPrincipal());
+		BackUser userDetails = backUserService.loadUserbyCode((String) authenticationToken.getPrincipal());
 
 		if (userDetails == null)
 			throw new InternalAuthenticationServiceException("未找到用户");
@@ -32,11 +30,11 @@ public class DingtalkQrcodeAuthenticationProvider implements AuthenticationProvi
 		return DingtalkQrcodeAuthenticationToken.class.isAssignableFrom(authentication);
 	}
 
-	public BackUserService getBackUserService() {
+	public DingtalkQrcodeUserService getBackUserService() {
 		return backUserService;
 	}
 
-	public void setBackUserService(BackUserService backUserService) {
+	public void setBackUserService(DingtalkQrcodeUserService backUserService) {
 		this.backUserService = backUserService;
 	}
 }

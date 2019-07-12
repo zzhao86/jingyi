@@ -3,11 +3,13 @@
     <div class="app-header">
       <div class="app-name">京仪物业管理系统</div>
       <div class="user-info">
-        <div class="username">管理员</div>
+        <div class="username">
+          <el-button type="text" @click="onLogoutClick">管理员</el-button>
+        </div>
       </div>
     </div>
     <div class="app-content-container">
-      <div class="app-side" v-show="false">
+      <div class="app-side" v-show="true">
         <el-menu :default-openeds="['3']" :router="true">
           <el-menu-item index="1" route="/notice"><i class="el-icon-bell"></i>通知公告</el-menu-item>
           <el-menu-item index="2" route="/assets"><i class="el-icon-mobile"></i>资产管理</el-menu-item>
@@ -29,7 +31,12 @@
 
 <script>
   export default {
-    name: 'App'
+    name: 'App',
+    methods: {
+      onLogoutClick: function() {
+        window.location.href = this.$global.baseUrl + 'back/logout';
+      }
+    }
   };
 </script>
 

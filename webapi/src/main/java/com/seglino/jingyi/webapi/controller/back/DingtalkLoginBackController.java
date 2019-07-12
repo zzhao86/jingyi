@@ -4,15 +4,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
 import com.dingtalk.api.response.OapiSnsGetuserinfoBycodeResponse;
 import com.dingtalk.api.response.OapiSsoGetuserinfoResponse;
@@ -35,27 +31,6 @@ public class DingtalkLoginBackController {
 	@Autowired
 	private UserService userService;
 
-	private String backBaseUrl = "http://192.168.0.8:5052/#/";
-
-	@GetMapping("login")
-	public ModelAndView login() {
-		return new ModelAndView(new RedirectView(backBaseUrl + "login"));
-	}
-
-	/**
-	 * 钉钉后台管理免登
-	 * 
-	 * @param code
-	 */
-	@GetMapping("sso")
-	public ModelAndView ssoLogin(String code, ServletResponse response) {
-		if (isAlreadySetting()) {
-			return new ModelAndView("user_sso");
-		} else {
-			return new ModelAndView(new RedirectView(backBaseUrl + "dingtalk/settings"));
-		}
-	}
-
 	@GetMapping("user_sso")
 	public ApiResult getUserDetailBySso(String code) {
 		ApiResult aResult = new ApiResult();
@@ -74,11 +49,10 @@ public class DingtalkLoginBackController {
 		return aResult;
 	}
 
-	@GetMapping("qrcode")
 	public ApiResult qrcodeLogin(String code) {
 		ApiResult aResult = new ApiResult();
-		if(StringUtils.isEmpty(code)) {
-			
+		if (StringUtils.isEmpty(code)) {
+
 		}
 		try {
 			OapiSnsGetuserinfoBycodeResponse response = authService.getUserDetailByQrCode(code);
@@ -87,7 +61,7 @@ public class DingtalkLoginBackController {
 				Map<String, Object> param = new HashMap<String, Object>();
 				param.put("unionid", unionid);
 				User user = userService.detail(param);
-				
+				aResult.setData(user);
 			} else {
 				aResult.AddError(response.getErrmsg());
 			}

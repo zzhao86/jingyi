@@ -31,6 +31,7 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 var loadingInstance;
 axios.interceptors.request.use(
   function(config) {
+    config.withCredentials = true;
     loadingInstance = vue.$loading({
       lock: true,
       text: '加载中……',
