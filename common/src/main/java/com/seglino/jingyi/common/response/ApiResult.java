@@ -7,11 +7,20 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class ApiResult implements Serializable {
 	private static final long serialVersionUID = -5069999896975225627L;
-	
+
+	private int code = 200;
 	private boolean isSuccess;
 	private Object data;
 	private String message;
 	private List<Exception> errors;
+
+	public int getCode() {
+		return code;
+	}
+
+	public void setCode(int code) {
+		this.code = code;
+	}
 
 	public boolean getIsSuccess() {
 		if (errors == null || errors.size() == 0)
@@ -39,10 +48,16 @@ public class ApiResult implements Serializable {
 	}
 
 	public void AddError(String e) {
+		if (code == 200) {
+			code = 400;
+		}
 		AddError(new Exception(e));
 	}
 
 	public void AddError(Exception e) {
+		if (code == 200) {
+			code = 500;
+		}
 		if (errors == null)
 			errors = new ArrayList<Exception>();
 		errors.add(e);

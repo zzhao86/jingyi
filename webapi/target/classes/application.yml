@@ -13,6 +13,7 @@ spring:
     user:
       name: admin
       password: admin
+  
 #  security.basic.enabled: false
     
   # Json返回格式设置

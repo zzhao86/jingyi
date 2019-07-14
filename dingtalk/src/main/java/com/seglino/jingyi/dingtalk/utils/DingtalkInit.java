@@ -27,81 +27,93 @@ public class DingtalkInit {
 	public void init() {
 		try {
 			ScheduledThreadPoolExecutor scheduled = new ScheduledThreadPoolExecutor(1);
+			DingtalkAccessTokenThread accessTokenThread = new DingtalkAccessTokenThread();
+			DingtalkSsoAccessTokenThread ssoAccessTokenThread = new DingtalkSsoAccessTokenThread();
+			DingtalkJsapiTicketThread jsapiTicketThread = new DingtalkJsapiTicketThread();
+
 			// 定时获取钉钉AccessToken
-			scheduled.scheduleAtFixedRate(new Runnable() {				
-				@Override
-				public void run() {
-					while (true) {
-						try {
-							OapiGettokenResponse response = authService.getAccessToken();
-							if (response.isSuccess()) {
-								DingtalkGlobal.AccessToken = response.getAccessToken();
-								DingtalkGlobal.AccessTokenExpiresIn = response.getExpiresIn();
-
-								logger.info("获取AccessToken成功，token：{}", response.getAccessToken());
-								break;
-							} else {
-								wait(60 * 1000);
-							}
-						} catch (Exception e) {
-							logger.error("{}", e);
-						}
-					}
-				}
-			}, 0, 6900, TimeUnit.SECONDS);
-			
-			
+			scheduled.scheduleAtFixedRate(accessTokenThread, 0, 6900, TimeUnit.SECONDS);
 			// 定时获取钉钉SsoAccessToken
-			scheduled.scheduleAtFixedRate(new Runnable() {				
-				@Override
-				public void run() {
-					while (true) {
-						try {
-							OapiSsoGettokenResponse response = authService.getSsoAccessToken();
-							if (response.isSuccess()) {
-								DingtalkGlobal.SsoAccessToken = response.getAccessToken();
-								DingtalkGlobal.SsoAccessTokenExpiresIn = 7200;
-
-								logger.info("获取SsoAccessToken成功，token：{}", response.getAccessToken());
-								break;
-							} else {
-								wait(60 * 1000);
-							}
-						} catch (Exception e) {
-							logger.error("{}", e);
-						}
-					}
-				}
-			}, 0, 6900, TimeUnit.SECONDS);
-			
-			
+			scheduled.scheduleAtFixedRate(ssoAccessTokenThread, 0, 6900, TimeUnit.SECONDS);
 			// 定时获取钉钉JsapiTicket
-			scheduled.scheduleAtFixedRate(new Runnable() {				
-				@Override
-				public void run() {
-					while (true) {
-						try {
-							if (StringUtils.isEmpty(DingtalkGlobal.AccessToken))
-								continue;
-
-							OapiGetJsapiTicketResponse response = authService.getJsapiTicket();
-							if (response.isSuccess()) {
-								DingtalkGlobal.JsapiTicket = response.getTicket();
-								DingtalkGlobal.JsapiTicketExpiresIn = response.getExpiresIn();
-
-								logger.info("获取JsapiTicket成功，ticket：{}", response.getTicket());
-								break;
-							} else {
-								wait(60 * 1000);
-							}
-						} catch (Exception e) {
-							logger.error("{}", e);
-						}
-					}
-				}
-			}, 0, 6900, TimeUnit.SECONDS);
+			scheduled.scheduleAtFixedRate(jsapiTicketThread, 0, 6900, TimeUnit.SECONDS);
 		} catch (Exception e) {
 			logger.error("{}", e);
+		}
+	}
+
+	public class DingtalkAccessTokenThread implements Runnable {
+		@Override
+		public void run() {
+			synchronized (this) {
+				while (StringUtils.isEmpty(DingtalkGlobal.AccessToken)) {
+					try {
+						OapiGettokenResponse response = authService.getAccessToken();
+						if (response.isSuccess()) {
+							DingtalkGlobal.AccessToken = response.getAccessToken();
+							DingtalkGlobal.AccessTokenExpiresIn = response.getExpiresIn();
+
+							logger.info("获取AccessToken成功，token：{}", response.getAccessToken());
+							break;
+						} else {
+							this.wait(60 * 1000);
+						}
+					} catch (Exception e) {
+						logger.error("{}", e);
+					}
+				}
+			}
+		}
+	}
+
+	public class DingtalkSsoAccessTokenThread implements Runnable {
+		@Override
+		public void run() {
+			synchronized (this) {
+				while (StringUtils.isEmpty(DingtalkGlobal.SsoAccessToken)) {
+					try {
+						OapiSsoGettokenResponse response = authService.getSsoAccessToken();
+						if (response.isSuccess()) {
+							DingtalkGlobal.SsoAccessToken = response.getAccessToken();
+							DingtalkGlobal.SsoAccessTokenExpiresIn = 7200;
+
+							logger.info("获取SsoAccessToken成功，token：{}", response.getAccessToken());
+							break;
+						} else {
+							this.wait(60 * 1000);
+						}
+					} catch (Exception e) {
+						logger.error("{}", e);
+					}
+				}
+			}
+		}
+	}
+
+	public class DingtalkJsapiTicketThread implements Runnable {
+		@Override
+		public void run() {
+			synchronized (this) {
+				while (StringUtils.isEmpty(DingtalkGlobal.JsapiTicket)) {
+					try {
+						if (StringUtils.isEmpty(DingtalkGlobal.AccessToken))
+							continue;
+
+						OapiGetJsapiTicketResponse response = authService.getJsapiTicket();
+						if (response.isSuccess()) {
+							DingtalkGlobal.JsapiTicket = response.getTicket();
+							DingtalkGlobal.JsapiTicketExpiresIn = response.getExpiresIn();
+
+							logger.info("获取JsapiTicket成功，ticket：{}", response.getTicket());
+							break;
+						} else {
+							this.wait(60 * 1000);
+						}
+					} catch (Exception e) {
+						logger.error("{}", e);
+					}
+				}
+			}
 		}
 	}
 }

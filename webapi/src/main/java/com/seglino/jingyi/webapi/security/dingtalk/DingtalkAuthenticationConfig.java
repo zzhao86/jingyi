@@ -1,4 +1,4 @@
-package com.seglino.jingyi.webapi.security.dingtalk.qrcode;
+package com.seglino.jingyi.webapi.security.dingtalk;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,7 +12,7 @@ import com.seglino.jingyi.webapi.security.handler.BackAuthenticationFailureHandl
 import com.seglino.jingyi.webapi.security.handler.BackAuthenticationSuccessHandler;
 
 @Component
-public class DingtalkQrcodeAuthenticationConfig extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
+public class DingtalkAuthenticationConfig extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
 
 	@Autowired
 	private BackAuthenticationSuccessHandler authenticationSuccessHandler;
@@ -21,16 +21,16 @@ public class DingtalkQrcodeAuthenticationConfig extends SecurityConfigurerAdapte
 	private BackAuthenticationFailureHandler authenticationFailureHandler;
 
 	@Autowired
-	private DingtalkQrcodeUserService userDetailService;
+	private DingtalkUserService userDetailService;
 
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
-		DingtalkQrcodeAuthenticationFilter filter = new DingtalkQrcodeAuthenticationFilter();
+		DingtalkAuthenticationFilter filter = new DingtalkAuthenticationFilter();
 		filter.setAuthenticationManager(http.getSharedObject(AuthenticationManager.class));
 		filter.setAuthenticationSuccessHandler(authenticationSuccessHandler);
 		filter.setAuthenticationFailureHandler(authenticationFailureHandler);
 
-		DingtalkQrcodeAuthenticationProvider provider = new DingtalkQrcodeAuthenticationProvider();
+		DingtalkAuthenticationProvider provider = new DingtalkAuthenticationProvider();
 		provider.setBackUserService(userDetailService);
 
 		http.authenticationProvider(provider).addFilterAfter(filter, UsernamePasswordAuthenticationFilter.class);

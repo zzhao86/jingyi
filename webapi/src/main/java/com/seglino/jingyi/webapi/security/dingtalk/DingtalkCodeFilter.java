@@ -1,4 +1,4 @@
-//package com.seglino.jingyi.webapi.security.dingtalk.qrcode;
+//package com.seglino.jingyi.webapi.security.dingtalk;
 //
 //import java.io.IOException;
 //
@@ -15,7 +15,7 @@
 //import com.seglino.jingyi.webapi.security.handler.BackAuthenticationFailureHandler;
 //
 //@Component
-//public class DingtalkQrcodeCodeFilter extends OncePerRequestFilter {
+//public class DingtalkCodeFilter extends OncePerRequestFilter {
 //	@Autowired
 //	private BackAuthenticationFailureHandler authenticationFailureHandler;
 //

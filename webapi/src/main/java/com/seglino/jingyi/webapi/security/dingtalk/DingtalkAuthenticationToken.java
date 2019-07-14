@@ -1,22 +1,26 @@
-package com.seglino.jingyi.webapi.security.dingtalk.qrcode;
+package com.seglino.jingyi.webapi.security.dingtalk;
 
 import java.util.Collection;
 
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 
-public class DingtalkQrcodeAuthenticationToken extends AbstractAuthenticationToken {
+public class DingtalkAuthenticationToken extends AbstractAuthenticationToken {
 	private static final long serialVersionUID = -484323818638077192L;
 
 	private final Object principal;
+	
+	private String code;
+	private String type;
 
-	public DingtalkQrcodeAuthenticationToken(String code) {
+	public DingtalkAuthenticationToken(String type,String code) {
 		super(null);
-		this.principal = code;
+		this.type = type;
+		this.principal = this.code = code;
 		super.setAuthenticated(false);
 	}
 
-	public DingtalkQrcodeAuthenticationToken(Object principal, Collection<? extends GrantedAuthority> authorities) {
+	public DingtalkAuthenticationToken(Object principal, Collection<? extends GrantedAuthority> authorities) {
 		super(authorities);
 		this.principal = principal;
 		super.setAuthenticated(true);
@@ -41,4 +45,20 @@ public class DingtalkQrcodeAuthenticationToken extends AbstractAuthenticationTok
     public void eraseCredentials() {
         super.eraseCredentials();
     }
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
 }

@@ -12,8 +12,10 @@
   export default {
     name: 'Login',
     created() {
+      const vue = this;
       var appid = 'dingoahwjazjqdmlt2gs5k';
-      var url = 'https://oapi.dingtalk.com/connect/oauth2/sns_authorize?appid=' + appid + '&response_type=code&scope=snsapi_login&state=STATE&redirect_uri=' + this.$global.baseUrl + 'back/dingtalk/login/qrcode';
+      var redirect = encodeURIComponent(this.$global.baseUrl + 'back/dingtalk/login?type=qrcode');
+      var url = 'https://oapi.dingtalk.com/connect/oauth2/sns_authorize?appid=' + appid + '&response_type=code&scope=snsapi_login&state=STATE&redirect_uri=' + redirect;
       var goto = encodeURIComponent(url);
       this.$nextTick(function() {
         var obj = DDLogin({
