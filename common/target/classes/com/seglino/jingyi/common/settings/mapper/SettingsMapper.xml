@@ -10,7 +10,11 @@
 		name,
 		code,
 		value,
+		optionValues,
+		displayMode,
 		type,
+		sortNo,
+		description,
 		createTime,
 		createUid,
 		modifyTime,
@@ -25,6 +29,7 @@
 		<if test="id != null"> and id = #{id}</if>
 		<if test="name != null"> and name like '%${name}%'</if>
 		<if test="code != null"> and code = #{code}</if>
+		<if test="type != null"> and type = #{type}</if>
 		<if test="isDeleted != null"> and isDeleted = #{isDeleted}</if>
 	</sql>
 
@@ -37,7 +42,7 @@
 		<where>
 			<include refid="condition"></include>
 		</where>
-		ORDER BY createTime DESC
+		ORDER BY sortNo ASC
 	</select>
 
 	<!-- 根据条件获取详情 -->
@@ -67,17 +72,9 @@
 		UPDATE
 		<include refid="tableName"></include>
 		<set>
-			<if test="name != null">name = #{name},</if>
-			<if test="code != null">code = #{code},</if>
 			<if test="value != null">value = #{value},</if>
-			<if test="type != null">type = #{type},</if>
-			<if test="createTime != null">createTime = #{createTime},</if>
-			<if test="createUid != null">createUid = #{createUid},</if>
 			<if test="modifyTime != null">modifyTime = #{modifyTime},</if>
 			<if test="modifyUid != null">modifyUid = #{modifyUid},</if>
-			<if test="deleteTime != null">deleteTime = #{deleteTime},</if>
-			<if test="deleteUid != null">deleteUid = #{deleteUid},</if>
-			<if test="isDeleted != null">isDeleted = #{isDeleted},</if>
 		</set>
 		<where>
 			id = #{id}

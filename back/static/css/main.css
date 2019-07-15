@@ -122,3 +122,9 @@ body {
   bottom: 20px;
   background-color: #fff;
 }
+
+.form-item-desc{
+  line-height: 20px;
+  color: #ccc;
+  font-size: 12px;
+}

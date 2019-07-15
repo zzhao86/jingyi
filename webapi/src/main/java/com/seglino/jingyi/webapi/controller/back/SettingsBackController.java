@@ -8,14 +8,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.alibaba.fastjson.JSONObject;
 import com.seglino.jingyi.common.response.ApiResult;
 import com.seglino.jingyi.common.settings.pojo.Settings;
 import com.seglino.jingyi.common.settings.service.SettingsService;
+import com.seglino.jingyi.common.utils.AutoMapper;
+import com.seglino.jingyi.webapi.vo.back.settings.SettingsVo;
 
 @RestController
 @RequestMapping("back/settings")
@@ -33,7 +34,7 @@ public class SettingsBackController {
 				param.put("type", type);
 			}
 			List<Settings> list = settingsService.list(param);
-			aResult.setData(list);
+			aResult.setData(AutoMapper.mapperList(list, SettingsVo.class));
 		} catch (Exception e) {
 			aResult.AddError(e);
 		}
@@ -41,16 +42,16 @@ public class SettingsBackController {
 	}
 
 	@PostMapping("save")
-	public ApiResult save(@RequestParam String settings) {
+	public ApiResult save(@RequestBody SettingsVo vo) {
 		ApiResult aResult = new ApiResult();
-		if (!StringUtils.isEmpty(settings)) {
-			List<Settings> list = JSONObject.parseArray(settings, Settings.class);
-			int count = settingsService.update(list);
-			if (count == 0) {
+		try {
+			Settings settings = AutoMapper.mapper(vo, Settings.class);
+			int count = settingsService.update(settings);
+			if (count <= 0) {
 				aResult.AddError("更新失败");
 			}
-		} else {
-			aResult.AddError("参数错误");
+		} catch (Exception e) {
+			aResult.AddError("更新失败");
 		}
 		return aResult;
 	}

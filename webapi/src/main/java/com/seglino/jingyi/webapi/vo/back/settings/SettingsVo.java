@@ -1,17 +1,13 @@
-package com.seglino.jingyi.common.settings.pojo;
+package com.seglino.jingyi.webapi.vo.back.settings;
 
-import com.seglino.jingyi.common.core.po.BaseEntity;
+import com.seglino.jingyi.common.core.vo.BaseVo;
 
-public class Settings extends BaseEntity {
-
-	private static final long serialVersionUID = -835865453023461449L;
-
+public class SettingsVo extends BaseVo {
 	private String code;
 	private String name;
 	private String value;
 	private String optionValues;
 	private String type;
-	private Integer sortNo;
 	private String displayMode;
 	private String description;
 
@@ -55,14 +51,6 @@ public class Settings extends BaseEntity {
 		this.type = type;
 	}
 
-	public Integer getSortNo() {
-		return sortNo;
-	}
-
-	public void setSortNo(Integer sortNo) {
-		this.sortNo = sortNo;
-	}
-
 	public String getDisplayMode() {
 		return displayMode;
 	}
@@ -77,9 +65,5 @@ public class Settings extends BaseEntity {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
 	}
 }

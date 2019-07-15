@@ -3,10 +3,6 @@ package com.seglino.jingyi.webapi.controller.back;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,7 +12,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.seglino.jingyi.common.response.ApiResult;
 import com.seglino.jingyi.common.utils.AutoMapper;
 import com.seglino.jingyi.user.service.UserService;
-import com.seglino.jingyi.webapi.vo.back.UserDetailVo;
+import com.seglino.jingyi.webapi.vo.back.user.UserDetailVo;
 
 @RestController
 @RequestMapping("back")
@@ -43,17 +39,17 @@ public class AccountBackController {
 	@GetMapping("user")
 	public ApiResult user() {
 		ApiResult aResult = new ApiResult();
-		try {
-			SecurityContext context = SecurityContextHolder.getContext();
-			Authentication auth = context.getAuthentication();
-			User userAuth = (User) auth.getPrincipal();
-			com.seglino.jingyi.user.pojo.User user = userService.detailById(userAuth.getUsername());
-			if (null != user) {
-				aResult.setData(AutoMapper.mapper(user, UserDetailVo.class));
-			}
-		} catch (Exception e) {
-			aResult.AddError(e);
-		}
+//		try {
+//			SecurityContext context = SecurityContextHolder.getContext();
+//			Authentication auth = context.getAuthentication();
+//			User userAuth = (User) auth.getPrincipal();
+//			com.seglino.jingyi.user.pojo.User user = userService.detailById(userAuth.getUsername());
+//			if (null != user) {
+//				aResult.setData(AutoMapper.mapper(user, UserDetailVo.class));
+//			}
+//		} catch (Exception e) {
+//			aResult.AddError(e);
+//		}
 		return aResult;
 	}
 }

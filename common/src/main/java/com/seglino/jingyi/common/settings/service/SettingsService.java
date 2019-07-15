@@ -21,5 +21,5 @@ public interface SettingsService extends BaseService<Settings> {
 	 * @param list
 	 * @return
 	 */
-	public int update(List<Settings> list);
+//	public int update(List<Settings> list);
 }

@@ -13,7 +13,7 @@ import com.seglino.jingyi.common.settings.service.SettingsService;
 
 @Service
 public class SettingsServiceImpl extends BaseServiceImpl<SettingsDao, Settings> implements SettingsService {
-	private Logger logger = LoggerFactory.getLogger(SettingsServiceImpl.class);
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	/**
 	 * 根据Code获取设置详值
@@ -34,20 +34,20 @@ public class SettingsServiceImpl extends BaseServiceImpl<SettingsDao, Settings> 
 	/**
 	 * 批量更新
 	 */
-	@Override
-	public int update(List<Settings> list) {
-		int count = 0;
-		try {
-			if (list == null || list.size() == 0)
-				return count;
-			for (Settings settings : list) {
-				count += dao.update(settings);
-			}
-		} catch (Exception e) {
-			count = 0;
-			logger.error("{}", e);
-		}
-		return count;
-	}
+//	@Override
+//	public int update(List<Settings> list) {
+//		int count = 0;
+//		try {
+//			if (list == null || list.size() == 0)
+//				return count;
+//			for (Settings settings : list) {
+//				count += dao.update(settings);
+//			}
+//		} catch (Exception e) {
+//			count = 0;
+//			logger.error("{}", e);
+//		}
+//		return count;
+//	}
 
 }

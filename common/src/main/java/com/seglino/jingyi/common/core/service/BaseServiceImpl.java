@@ -6,11 +6,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import com.github.pagehelper.Page;
@@ -37,7 +32,8 @@ public abstract class BaseServiceImpl<D extends BaseDao<T>, T extends BaseEntity
 		if (null != entity) {
 			entity.setId(UUID.randomUUID().toString().replaceAll("-", ""));
 			entity.setCreateTime(DateUtils.getNow());
-			entity.setCreateUid(getUserid());
+			entity.setCreateUid(null);
+//			entity.setCreateUid(getUserid());
 		}
 		return dao.insert(entity);
 	}
@@ -63,7 +59,8 @@ public abstract class BaseServiceImpl<D extends BaseDao<T>, T extends BaseEntity
 	public int update(T entity) {
 		if (null != entity) {
 			entity.setModifyTime(DateUtils.getNow());
-			entity.setModifyUid(getUserid());
+			entity.setModifyUid(null);
+//			entity.setModifyUid(getUserid());
 		}
 		return dao.update(entity);
 	}
@@ -78,7 +75,8 @@ public abstract class BaseServiceImpl<D extends BaseDao<T>, T extends BaseEntity
 	public int delete(T entity) {
 		if (null != entity) {
 			entity.setDeleteTime(DateUtils.getNow());
-			entity.setDeleteUid(getUserid());
+			entity.setDeleteUid(null);
+//			entity.setDeleteUid(getUserid());
 		}
 		return dao.delete(entity);
 	}
@@ -163,14 +161,14 @@ public abstract class BaseServiceImpl<D extends BaseDao<T>, T extends BaseEntity
 		return dao.page(params.getCondition());
 	}
 
-	private String getUserid() {
-		User user = null;
-		SecurityContext ctx = SecurityContextHolder.getContext();
-		Authentication auth = ctx.getAuthentication();
-		if (!(auth instanceof AnonymousAuthenticationToken)) {
-			user = (User) auth.getPrincipal();
-			return user.getUsername();
-		}
-		return null;
-	}
+//	private String getUserid() {
+//		User user = null;
+//		SecurityContext ctx = SecurityContextHolder.getContext();
+//		Authentication auth = ctx.getAuthentication();
+//		if (!(auth instanceof AnonymousAuthenticationToken)) {
+//			user = (User) auth.getPrincipal();
+//			return user.getUsername();
+//		}
+//		return null;
+//	}
 }

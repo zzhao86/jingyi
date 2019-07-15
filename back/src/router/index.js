@@ -2,9 +2,10 @@ import Vue from "vue";
 import Router from "vue-router";
 import Home from "@/components/Home";
 import Login from "@/components/Login";
-import DingtalkSettings from "@/components/DingtalkSettings";
-import DeptIndex from "@/components/dept/index";
-import UserIndex from "@/components/user/index";
+import NoticeIndex from "@/components/notice/Index";
+import NoticeDetail from "@/components/notice/Detail";
+import SettingsIndex from "@/components/settings/Index";
+import UserIndex from "@/components/user/Index";
 import UserDetail from "@/components/user/Detail";
 
 Vue.use(Router);
@@ -28,14 +29,19 @@ const router = new Router({
       }
     },
     {
-      path: "/dingtalk/settings",
-      name: "DingtalkSettings",
-      component: DingtalkSettings
+      path: "/notice",
+      name: "NoticeIndex",
+      component: NoticeIndex
     },
     {
-      path: "/dept",
-      name: "DeptIndex",
-      component: DeptIndex
+      path: "/notice/detail/:mode",
+      name: "NoticeDetail",
+      component: NoticeDetail
+    },
+    {
+      path: "/settings",
+      name: "SettingsIndex",
+      component: SettingsIndex
     },
     {
       path: "/user",

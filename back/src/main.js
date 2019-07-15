@@ -87,6 +87,8 @@ var vue = new Vue({
     Global.isDingTalkClient = dd.env.platform != "notInDingTalk";
 
     Vue.prototype.$http = axios;
+    Vue.prototype.$get = axios.get;
+    Vue.prototype.$post = axios.post;
     Vue.prototype.$global = Global;
     Vue.prototype.$dd = dd;
     Vue.prototype.$alert = function(message) {
