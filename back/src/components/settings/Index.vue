@@ -13,13 +13,13 @@
               <div class="form-item-desc">{{ item.description }}</div>
             </el-form-item>
             <el-form-item :label="item.name" v-else-if="item.displayMode === 'radio'">
-              <el-radio-group v-model="item.value">
+              <el-radio-group v-model="item.value" @change="onSaveChange(item)">
                 <el-radio border :label="o.value" v-for="o in JSON.parse(item.optionValues)" :key="o.value">{{ o.label }}</el-radio>
               </el-radio-group>
               <div class="form-item-desc">{{ item.description }}</div>
             </el-form-item>
             <el-form-item :label="item.name" v-else-if="item.displayMode === 'checkbox'">
-              <el-checkbox-group v-model="item.value">
+              <el-checkbox-group v-model="item.value" @change="onSaveChange(item)">
                 <el-checkbox border :label="o.value" v-for="o in JSON.parse(item.optionValues)" :key="o.value">{{ o.label }}</el-checkbox>
               </el-checkbox-group>
               <div class="form-item-desc">{{ item.description }}</div>

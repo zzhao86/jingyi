@@ -76,7 +76,7 @@
       onLogoutClick: function() {
         this.$confirm('确定要注销当前登录的用户吗？', () => {
           this.$http
-            .post('back/logout')
+            .post('logout')
             .then(res => {
               this.$global.user = null;
               this.$router.replace('/login');

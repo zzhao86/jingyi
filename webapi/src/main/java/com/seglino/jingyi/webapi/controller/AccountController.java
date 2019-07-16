@@ -1,26 +1,41 @@
 package com.seglino.jingyi.webapi.controller;
 
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
-import com.dingtalk.api.response.OapiSnsGetuserinfoBycodeResponse;
 import com.seglino.jingyi.common.response.ApiResult;
-import com.seglino.jingyi.dingtalk.service.AuthService;
-import com.seglino.jingyi.webapi.shiro.DingtalkAuthenticationToken;
+import com.seglino.jingyi.webapi.shiro.CustomToken;
+import com.seglino.jingyi.webapi.shiro.LoginType;
 
 @RestController
 @RequestMapping("account")
 public class AccountController {
 	
-	@Autowired
-	private AuthService authService;
-	
-	
+private final String BackBaseUrl = "http://192.168.0.8:5052/#/";
+
+	@GetMapping("login/dingtalk_qrcode")
+	public ModelAndView loginByDingtalkQrcode(String code, String state) {
+		RedirectView redirect = new RedirectView();
+		try {
+			Subject subject = SecurityUtils.getSubject();
+			CustomToken token = new CustomToken(LoginType.DINGTALK_QRCODE, code, code, code, state);
+			subject.login(token);
+			if (subject.isAuthenticated()) {
+				redirect.setUrl(BackBaseUrl);
+			} else {
+				redirect.setUrl(BackBaseUrl + "login");
+			}
+		} catch (Exception e) {
+			redirect.setUrl(BackBaseUrl + "login");
+		}
+		return new ModelAndView(redirect);
+	}
+
 	@GetMapping("notlogin")
 	public ApiResult notlogin() {
 		ApiResult aResult = new ApiResult();
@@ -28,22 +43,11 @@ public class AccountController {
 		return aResult;
 	}
 
-	@GetMapping("login")
-	public ApiResult login(String type, String code) {
+	@GetMapping("logout")
+	public ApiResult logout() {
 		ApiResult aResult = new ApiResult();
 		try {
-			Subject subject = SecurityUtils.getSubject();
-//			if("qrcode".equals(type)) {
-//				OapiSnsGetuserinfoBycodeResponse response = authService.getUserDetailByQrCode(code);
-//				if(response.isSuccess()) {
-//					String unionid = response.getUserInfo().getUnionid();
-//					
-//				}
-//			}
-//			UsernamePasswordToken token = new UsernamePasswordToken(code, type);
-			DingtalkAuthenticationToken token = new DingtalkAuthenticationToken(type, code);
-	        subject.login(token);
-	        
+			SecurityUtils.getSubject().logout();
 		} catch (Exception e) {
 			aResult.AddError(e);
 		}

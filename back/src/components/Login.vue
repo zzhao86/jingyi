@@ -14,9 +14,9 @@
     created() {
       const vue = this;
       var appid = 'dingoahwjazjqdmlt2gs5k';
-      var redirect = encodeURIComponent(this.$global.baseUrl + 'back/dingtalk/login?type=qrcode');
-      var url = 'https://oapi.dingtalk.com/connect/oauth2/sns_authorize?appid=' + appid + '&response_type=code&scope=snsapi_login&state=STATE&redirect_uri=' + redirect;
-      var goto = encodeURIComponent(url);
+      var redirect = encodeURIComponent(this.$global.baseUrl + 'account/login/dingtalk_qrcode');
+      var url = 'https://oapi.dingtalk.com/connect/oauth2/sns_authorize?appid=' + appid + '&response_type=code&scope=snsapi_login&state=STATE&redirect_uri=';
+      var goto = encodeURIComponent(url + redirect);
       this.$nextTick(function() {
         var obj = DDLogin({
           id: 'loginContainer',
@@ -30,7 +30,7 @@
       var hanndleMessage = function(event) {
         var origin = event.origin;
         if (origin == 'https://login.dingtalk.com') {
-          window.location.href = url + '&loginTmpCode=' + event.data;
+          window.location.href = url + redirect + '&loginTmpCode=' + event.data;
         }
       };
       if (typeof window.addEventListener != 'undefined') {
