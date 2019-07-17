@@ -10,18 +10,23 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.pam.ModularRealmAuthenticator;
 import org.apache.shiro.realm.Realm;
 
-
 public class CustomModularRealmAuthenticator extends ModularRealmAuthenticator {
 
 	@Override
 	protected AuthenticationInfo doAuthenticate(AuthenticationToken authenticationToken) throws AuthenticationException {
 		assertRealmsConfigured();
-		Collection<Realm> realms= getRealms();
+		Collection<Realm> realms = getRealms();
 		Map<String, Realm> realmMap = new HashMap<String, Realm>(realms.size());
 		for (Realm realm : realms) {
 			realmMap.put(realm.getName(), realm);
 		}
-		
-		return super.doAuthenticate(authenticationToken);
+
+		CustomToken token = (CustomToken) authenticationToken;
+		LoginType loginType = token.getLoginType();
+		if(null!=realmMap.get(loginType.getType())) {
+			return doSingleRealmAuthentication(realmMap.get(loginType.getType()), token);
+		}else {
+			return doMultiRealmAuthentication(realms, token);
+		}
 	}
 }

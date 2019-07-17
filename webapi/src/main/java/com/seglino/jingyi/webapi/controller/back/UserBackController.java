@@ -43,7 +43,7 @@ public class UserBackController {
 			aResult.setTotal(list.getTotal());
 			aResult.setData(AutoMapper.mapperList(list, UserListVo.class));
 		} catch (Exception e) {
-			aResult.AddError(e);
+			aResult.addError(e);
 		}
 		return aResult;
 	}
@@ -63,7 +63,7 @@ public class UserBackController {
 			UserDetailDto user = userService.detailForDept(param);
 			aResult.setData(AutoMapper.mapper(user, UserDetailVo.class));
 		} catch (Exception e) {
-			aResult.AddError(e);
+			aResult.addError(e);
 		}
 		return aResult;
 	}
@@ -82,7 +82,7 @@ public class UserBackController {
 			aResult.setData("同步完成，共同步用户" + count + "人");
 			dingtalkUserService.initAdmin();
 		} catch (Exception e) {
-			aResult.AddError(e);
+			aResult.addError(e);
 		}
 		return aResult;
 	}

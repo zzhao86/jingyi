@@ -16,6 +16,9 @@ import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreato
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.seglino.jingyi.webapi.shiro.realm.DingtalkQrcodeRealm;
+import com.seglino.jingyi.webapi.shiro.realm.DingtalkSsoRealm;
+
 @Configuration
 public class ShiroConfiguration {
 
@@ -24,11 +27,13 @@ public class ShiroConfiguration {
 		ShiroFilterFactoryBean filter = new ShiroFilterFactoryBean();
 		filter.setSecurityManager(securityManager);
 		filter.setLoginUrl("/account/login");
-		filter.setUnauthorizedUrl("/account/notlogin");
+		filter.setUnauthorizedUrl("/account/login");
 
 		// 权限控制map.
 		Map<String, String> filterChainDefinitionMap = new HashMap<String, String>();
 		// 公共请求
+		filterChainDefinitionMap.put("/back", "anon");
+		filterChainDefinitionMap.put("/account/**", "anon");
 		filterChainDefinitionMap.put("/common/**", "anon");
 		// 静态资源
 		filterChainDefinitionMap.put("/static/**", "anon");
@@ -44,8 +49,9 @@ public class ShiroConfiguration {
 		DefaultWebSecurityManager manager = new DefaultWebSecurityManager();
 		manager.setAuthenticator(modularRealmAuthenticator());
 
-		List<Realm> realms = new ArrayList<>();
+		List<Realm> realms = new ArrayList<Realm>();
 		realms.add(dingtalkQrcodeRealm());
+		realms.add(dingtalkSsoRealm());
 		manager.setRealms(realms);
 		return manager;
 	}
@@ -58,7 +64,6 @@ public class ShiroConfiguration {
 		CustomModularRealmAuthenticator authenticator = new CustomModularRealmAuthenticator();
 		// 设置realm判断条件
 		authenticator.setAuthenticationStrategy(new AtLeastOneSuccessfulStrategy());
-
 		return authenticator;
 	}
 
@@ -66,6 +71,13 @@ public class ShiroConfiguration {
 	public DingtalkQrcodeRealm dingtalkQrcodeRealm() {
 		DingtalkQrcodeRealm realm = new DingtalkQrcodeRealm();
 		realm.setName(LoginType.DINGTALK_QRCODE.getType());
+		return realm;
+	}
+
+	@Bean
+	public DingtalkSsoRealm dingtalkSsoRealm() {
+		DingtalkSsoRealm realm = new DingtalkSsoRealm();
+		realm.setName(LoginType.DINGTALK_SSO.getType());
 		return realm;
 	}
 

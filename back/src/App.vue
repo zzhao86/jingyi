@@ -3,9 +3,9 @@
     <div class="app-header">
       <div class="app-name">京仪物业管理系统</div>
       <el-dropdown class="user-info" @command="userDropdownCommand" v-show="$global.user">
-        <div>
+        <div class="user">
           <el-avatar class="user-avatar" :src="avatar"></el-avatar>
-          <div class="user-name">{{ name }}</div>
+          <div class="user-name" :title="name">{{ name }}</div>
         </div>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item command="userCenter">用户中心</el-dropdown-item>
@@ -52,7 +52,7 @@
     methods: {
       loadUserData: function() {
         if (!this.$global.user) {
-          this.$http.get('back/user').then(res => {
+          this.$http.get('account/user').then(res => {
             if (res.isSuccess) {
               this.$global.user = res.data;
               this.name = this.$global.user.name;
@@ -76,7 +76,7 @@
       onLogoutClick: function() {
         this.$confirm('确定要注销当前登录的用户吗？', () => {
           this.$http
-            .post('logout')
+            .get('account/logout')
             .then(res => {
               this.$global.user = null;
               this.$router.replace('/login');

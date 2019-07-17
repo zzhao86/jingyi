@@ -31,7 +31,7 @@ public class DingtalkClientController {
 		try {
 			aResult.setData(authService.getJsapiConfig(url));
 		} catch (Exception e) {
-			aResult.AddError(e);
+			aResult.addError(e);
 		}
 		return aResult;
 	}
@@ -54,7 +54,7 @@ public class DingtalkClientController {
 				aResult.setData(map);
 			}
 		} catch (Exception e) {
-			aResult.AddError(e);
+			aResult.addError(e);
 		}
 		return aResult;
 	}

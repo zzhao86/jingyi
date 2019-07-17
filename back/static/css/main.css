@@ -33,7 +33,6 @@ body {
   height: 60px;
   border-bottom: solid 1px #ddd;
   background-color: #1890ff;
-  display: flex;
   padding: 0 20px;
   color: rgba(255, 255, 255, 0.9);
 }
@@ -42,32 +41,38 @@ body {
   height: 60px;
   line-height: 60px;
   font-size: 20px;
+  float: left;
 }
 
 .app-container .app-header .user-info {
   position: relative;
-  flex: 1;
+  float: right;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.app-container .app-header .user-info .user {
   height: 60px;
-  line-height: 60px;
   text-align: right;
   font-size: 14px;
 }
 
+.app-container .app-header .user-info .user-avatar {
+  position: relative;
+  top: 50%;
+  margin-right: 5px;
+  transform: translateY(-50%);
+  display: inline-block;
+}
 .app-container .app-header .user-info .user-name {
   position: relative;
   color: #fff;
-  width: 90px;
   text-align: left;
-  display: inline-block;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-.app-container .app-header .user-info .user-avatar {
-  position: absolute;
-  top: 50%;
-  right: 100px;
-  transform: translateY(-50%);
+  max-width: 100px;
+  display: inline-block;
 }
 
 .app-container .app-content-container {
@@ -123,7 +128,7 @@ body {
   background-color: #fff;
 }
 
-.form-item-desc{
+.form-item-desc {
   line-height: 20px;
   color: #ccc;
   font-size: 12px;

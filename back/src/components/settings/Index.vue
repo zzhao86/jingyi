@@ -5,29 +5,55 @@
       <div class="buttons"></div>
     </div>
     <el-tabs v-model="tabsDefaultName" type="card">
-      <el-tab-pane label="钉钉配置" name="dingtalk">
-        <el-form ref="form" label-width="200px">
-          <div v-for="(item, index) in settings" :key="index">
-            <el-form-item :label="item.name" v-if="item.displayMode === 'text'">
-              <el-input v-model="item.value" @change="onSaveChange(item)"></el-input>
+      <el-tab-pane :label="tab.label" :name="tab.name" v-for="tab in tabs" :key="tab.name">
+        <el-form :ref="tab.name" label-width="200px">
+          <div v-for="(item, index) in settings.filter(o=>{return o.type === tab.name})" :key="index">
+            <el-form-item :label="item.name" :prop="item.code" v-if="item.displayMode === 'text'">
+              <div class="form-item">
+                <el-input v-model="item.value" :ref="item.id" :readonly="item.readonly"></el-input>
+                <div class="form-item-buttons">
+                  <el-button type="primary" icon="el-icon-edit" @click="onFormItemEditClick(item)" v-if="item.readonly"></el-button>
+                  <el-button-group v-else>
+                    <el-button type="success" icon="el-icon-check" @click="onSaveChange(item)"></el-button>
+                    <el-button type="danger" icon="el-icon-close" @click="onFormItemCancelClick(item)"></el-button>
+                  </el-button-group>
+                </div>
+              </div>
+              <div class="form-item-desc" v-show="item.readonly">{{ item.description }}</div>
+            </el-form-item>
+            <el-form-item :label="item.name" :prop="item.code" v-else-if="item.displayMode === 'radio'">
+              <div class="form-item">
+                <el-radio-group v-model="item.value" :ref="item.id" :disabled="item.readonly">
+                  <el-radio border :label="o.value" v-for="o in JSON.parse(item.optionValues)" :key="o.value">{{ o.label }}</el-radio>
+                </el-radio-group>
+                <div class="form-item-buttons">
+                  <el-button type="primary" icon="el-icon-edit" @click="onFormItemEditClick(item)" v-if="item.readonly"></el-button>
+                  <el-button-group v-else>
+                    <el-button type="success" icon="el-icon-check" @click="onSaveChange(item)"></el-button>
+                    <el-button type="danger" icon="el-icon-close" @click="onFormItemCancelClick(item)"></el-button>
+                  </el-button-group>
+                </div>
+              </div>
               <div class="form-item-desc">{{ item.description }}</div>
             </el-form-item>
-            <el-form-item :label="item.name" v-else-if="item.displayMode === 'radio'">
-              <el-radio-group v-model="item.value" @change="onSaveChange(item)">
-                <el-radio border :label="o.value" v-for="o in JSON.parse(item.optionValues)" :key="o.value">{{ o.label }}</el-radio>
-              </el-radio-group>
-              <div class="form-item-desc">{{ item.description }}</div>
-            </el-form-item>
-            <el-form-item :label="item.name" v-else-if="item.displayMode === 'checkbox'">
-              <el-checkbox-group v-model="item.value" @change="onSaveChange(item)">
-                <el-checkbox border :label="o.value" v-for="o in JSON.parse(item.optionValues)" :key="o.value">{{ o.label }}</el-checkbox>
-              </el-checkbox-group>
+            <el-form-item :label="item.name" :prop="item.code" v-else-if="item.displayMode === 'checkbox'">
+              <div class="form-item">
+                <el-checkbox-group v-model="item.value" :ref="item.id" :disabled="item.readonly">
+                  <el-checkbox border :label="o.value" v-for="o in JSON.parse(item.optionValues)" :key="o.value">{{ o.label }}</el-checkbox>
+                </el-checkbox-group>
+                <div class="form-item-buttons">
+                  <el-button type="primary" icon="el-icon-edit" @click="onFormItemEditClick(item)" v-if="item.readonly"></el-button>
+                  <el-button-group v-else>
+                    <el-button type="success" icon="el-icon-check" @click="onSaveChange(item)"></el-button>
+                    <el-button type="danger" icon="el-icon-close" @click="onFormItemCancelClick(item)"></el-button>
+                  </el-button-group>
+                </div>
+              </div>
               <div class="form-item-desc">{{ item.description }}</div>
             </el-form-item>
           </div>
         </el-form>
       </el-tab-pane>
-      <el-tab-pane label="系统配置" name="system">系统配置</el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -39,21 +65,19 @@
     },
     data() {
       return {
-        tabsDefaultName: 'dingtalk',
-        settings: []
+        tabsDefaultName: '',
+        settings: [],
+        tabs: [{ label: '钉钉配置', name: 'DINGTALK' }, { label: '系统配置', name: 'SYSTEM' }],
+        formItemTemp: null
       };
     },
     methods: {
       loadFormData: function() {
-        this.$http
-          .get('back/settings/list', {
-            params: {
-              type: 'DINGTALK'
-            }
-          })
-          .then(res => {
+        this.$get('back/settings/list').then(res => {
+          if (res.isSuccess) {
             for (let i = 0; i < res.data.length; i++) {
               var item = res.data[i];
+              item.readonly = true;
               if (item.displayMode === 'checkbox') {
                 if (item.value) {
                   item.value = item.value.split(',');
@@ -62,20 +86,64 @@
                 }
               }
             }
-            this.settings = res.data;
-          });
+          }
+          this.settings = res.data;
+          this.tabsDefaultName = this.tabs[0].name;
+        });
+      },
+      onFormItemEditClick: function(item) {
+        for (let i = 0; i < this.settings.length; i++) {
+          let item = this.settings[i];
+          if (!item.readonly) {
+            item.value = this.formItemTemp;
+          }
+          item.readonly = true;
+        }
+        item.readonly = false;
+        this.formItemTemp = item.value;
+        if (item.displayMode === 'text') {
+          var element = this.$refs[item.id][0];
+          element.focus();
+        }
+      },
+      onFormItemCancelClick: function(item) {
+        item.readonly = true;
+        item.value = this.formItemTemp;
       },
       onSaveChange: function(item) {
         if (!item.value) {
           this.$error('配置项“' + item.name + '”不能为空');
           return;
         }
+        if (item.value === this.formItemTemp) {
+          item.readonly = true;
+          return;
+        }
+        if (item.displayMode === 'checkbox') {
+          var value = item.value.join(',');
+          item.value = value;
+        }
         this.$post('back/settings/save', item).then(res => {
+          item.value = item.value.split(',');
+          item.readonly = true;
           this.$success('修改成功');
-          console.log(res);
         });
       }
     }
   };
 </script>
-<style></style>
+<style>
+  .form-item {
+    display: flex;
+  }
+  .form-item .el-input,
+  .form-item .el-radio-group,
+  .form-item .el-checkbox-group {
+    flex: 1;
+  }
+  .form-item .form-item-buttons {
+    margin-left: 10px;
+    width: 120px;
+    text-align: left;
+  }
+</style>

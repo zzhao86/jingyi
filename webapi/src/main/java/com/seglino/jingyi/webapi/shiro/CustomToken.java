@@ -14,8 +14,14 @@ public class CustomToken extends UsernamePasswordToken {
 		super(username, password);
 		this.loginType = loginType;
 	}
+	
+	public CustomToken(LoginType loginType, String code, String username, String password) {
+		super(username, password);
+		this.loginType = loginType;
+		this.code = code;
+	}
 
-	public CustomToken(LoginType loginType, String username, String password, String code, String state) {
+	public CustomToken(LoginType loginType, String code, String state, String username, String password) {
 		super(username, password);
 		this.loginType = loginType;
 		this.code = code;

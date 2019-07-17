@@ -47,14 +47,14 @@ public class ApiResult implements Serializable {
 		return sb.toString();
 	}
 
-	public void AddError(String e) {
+	public void addError(String e) {
 		if (code == 200) {
 			code = 400;
 		}
-		AddError(new Exception(e));
+		addError(new Exception(e));
 	}
 
-	public void AddError(Exception e) {
+	public void addError(Exception e) {
 		if (code == 200) {
 			code = 500;
 		}

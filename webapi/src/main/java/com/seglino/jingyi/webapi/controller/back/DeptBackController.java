@@ -32,7 +32,7 @@ public class DeptBackController {
 			List<Dept> list = deptService.list(param);
 			aResult.setData(list);
 		} catch (Exception e) {
-			aResult.AddError(e);
+			aResult.addError(e);
 		}
 		return aResult;
 	}
@@ -44,7 +44,7 @@ public class DeptBackController {
 			List<DeptTreeDto> list = deptService.tree();
 			aResult.setData(list);
 		} catch (Exception e) {
-			aResult.AddError(e);
+			aResult.addError(e);
 		}
 		return aResult;
 	}
@@ -55,7 +55,7 @@ public class DeptBackController {
 		try {
 			dingtalkDeptService.initDeptData(null, id);
 		} catch (Exception e) {
-			aResult.AddError(e);
+			aResult.addError(e);
 		}
 		return aResult;
 	}

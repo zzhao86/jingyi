@@ -36,7 +36,7 @@ public class SettingsBackController {
 			List<Settings> list = settingsService.list(param);
 			aResult.setData(AutoMapper.mapperList(list, SettingsVo.class));
 		} catch (Exception e) {
-			aResult.AddError(e);
+			aResult.addError(e);
 		}
 		return aResult;
 	}
@@ -48,10 +48,10 @@ public class SettingsBackController {
 			Settings settings = AutoMapper.mapper(vo, Settings.class);
 			int count = settingsService.update(settings);
 			if (count <= 0) {
-				aResult.AddError("更新失败");
+				aResult.addError("更新失败");
 			}
 		} catch (Exception e) {
-			aResult.AddError("更新失败");
+			aResult.addError("更新失败");
 		}
 		return aResult;
 	}

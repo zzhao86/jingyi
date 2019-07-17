@@ -29,7 +29,7 @@ public class NoticeBackController {
 			List<Notice> list = noticeService.list(param);
 			aResult.setData(list);
 		} catch (Exception e) {
-			aResult.AddError(e);
+			aResult.addError(e);
 		}
 		return aResult;
 	}
