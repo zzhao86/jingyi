@@ -11,8 +11,10 @@
 		title,
 		content,
 		author,
+		coverUrl,
 		readCount,
-		unreadCount,
+		totalCount,
+		publishTime,
 		createTime,
 		createUid,
 		modifyTime,
@@ -27,6 +29,7 @@
 		<if test="id != null"> and id = #{id}</if>
 		<if test="categoryId != null"> and categoryId = #{categoryId}</if>
 		<if test="title != null"> and title like '%${title}%'</if>
+		<if test="isPublished != null"> and isPublished = #{isPublished}</if>
 		<if test="isDeleted != null"> and isDeleted = #{isDeleted}</if>
 	</sql>
 
@@ -42,8 +45,20 @@
 		ORDER BY createTime DESC
 	</select>
 
+	<!-- 根据条件获取分页列表 -->
+	<select id="page" resultType="com.seglino.jingyi.notice.pojo.Notice">
+		SELECT
+		<include refid="column"></include>
+		FROM
+		<include refid="tableName"></include>
+		<where>
+			<include refid="condition"></include>
+		</where>
+		ORDER BY createTime DESC
+	</select>
+
 	<!-- 根据条件获取详情 -->
-	<select id="detail" resultType="com.seglino.jingyi.user.pojo.User">
+	<select id="detail" resultType="com.seglino.jingyi.notice.pojo.Notice">
 		SELECT
 		<include refid="column"></include>
 		FROM
@@ -65,7 +80,7 @@
 	</select>
 	
 	<!-- 根据条件获取数据总数 -->
-	<select id="count" resultType="com.seglino.jingyi.user.pojo.User">
+	<select id="count" resultType="com.seglino.jingyi.notice.pojo.Notice">
 		SELECT COUNT(*) FROM
 		<include refid="tableName"></include>
 		<where>
@@ -74,7 +89,7 @@
 	</select>
 
 	<!-- 插入 -->
-	<insert id="insert" parameterType="com.seglino.jingyi.user.pojo.User">
+	<insert id="insert" parameterType="com.seglino.jingyi.notice.pojo.Notice">
 		INSERT INTO
 		<include refid="tableName"></include>
 		<trim prefix="(" suffix=")" suffixOverrides=",">
@@ -83,8 +98,10 @@
 			<if test="title != null">title,</if>
 			<if test="content != null">content,</if>
 			<if test="author != null">author,</if>
+			<if test="coverUrl != null">coverUrl,</if>
 			<if test="readCount != null">readCount,</if>
-			<if test="unreadCount != null">unreadCount,</if>
+			<if test="totalCount != null">totalCount,</if>
+			<if test="publishTime != null">publishTime,</if>
 			<if test="createTime != null">createTime,</if>
 			<if test="createUid != null">createUid,</if>
 			<if test="modifyTime != null">modifyTime,</if>
@@ -100,8 +117,10 @@
 			<if test="title != null">#{title},</if>
 			<if test="content != null">#{content},</if>
 			<if test="author != null">#{author},</if>
+			<if test="coverUrl != null">#{coverUrl},</if>
 			<if test="readCount != null">#{readCount},</if>
-			<if test="unreadCount != null">#{unreadCount},</if>
+			<if test="totalCount != null">#{totalCount},</if>
+			<if test="publishTime != null">#{publishTime},</if>
 			<if test="createTime != null">#{createTime},</if>
 			<if test="createUid != null">#{createUid},</if>
 			<if test="modifyTime != null">#{modifyTime},</if>
@@ -113,7 +132,7 @@
 	</insert>
 
 	<!-- 修改 -->
-	<update id="update" parameterType="com.seglino.jingyi.user.pojo.User">
+	<update id="update" parameterType="com.seglino.jingyi.notice.pojo.Notice">
 		UPDATE
 		<include refid="tableName"></include>
 		<set>
@@ -121,8 +140,10 @@
 			<if test="title != null">title = #{title},</if>
 			<if test="content != null">content = #{content},</if>
 			<if test="author != null">author = #{author},</if>
+			<if test="coverUrl != null">coverUrl = #{coverUrl},</if>
 			<if test="readCount != null">readCount = #{readCount},</if>
-			<if test="unreadCount != null">unreadCount = #{unreadCount},</if>
+			<if test="totalCount != null">totalCount = #{totalCount},</if>
+			<if test="publishTime != null">publishTime = #{publishTime},</if>
 			<if test="createTime != null">createTime = #{createTime},</if>
 			<if test="createUid != null">createUid = #{createUid},</if>
 			<if test="modifyTime != null">modifyTime = #{modifyTime},</if>

@@ -1,5 +1,7 @@
 package com.seglino.jingyi.notice.pojo;
 
+import java.util.Date;
+
 import com.seglino.jingyi.common.core.po.BaseEntity;
 
 public class Notice extends BaseEntity {
@@ -9,8 +11,10 @@ public class Notice extends BaseEntity {
 	private String title;
 	private String content;
 	private String author;
+	private String coverUrl;
 	private Integer readCount;
-	private Integer unreadCount;
+	private Integer totalCount;
+	private Date publishTime;
 	
 	public String getCategoryId() {
 		return categoryId;
@@ -36,16 +40,28 @@ public class Notice extends BaseEntity {
 	public void setAuthor(String author) {
 		this.author = author;
 	}
+	public String getCoverUrl() {
+		return coverUrl;
+	}
+	public void setCoverUrl(String coverUrl) {
+		this.coverUrl = coverUrl;
+	}
 	public Integer getReadCount() {
 		return readCount;
 	}
 	public void setReadCount(Integer readCount) {
 		this.readCount = readCount;
 	}
-	public Integer getUnreadCount() {
-		return unreadCount;
+	public Integer getTotalCount() {
+		return totalCount;
 	}
-	public void setUnreadCount(Integer unreadCount) {
-		this.unreadCount = unreadCount;
+	public void setTotalCount(Integer totalCount) {
+		this.totalCount = totalCount;
+	}
+	public Date getPublishTime() {
+		return publishTime;
+	}
+	public void setPublishTime(Date publishTime) {
+		this.publishTime = publishTime;
 	}
 }

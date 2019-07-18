@@ -1,10 +1,10 @@
 package com.seglino.jingyi.webapi.controller;
 
-import javax.security.sasl.AuthenticationException;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +14,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.seglino.jingyi.common.response.ApiResult;
 import com.seglino.jingyi.common.utils.AutoMapper;
 import com.seglino.jingyi.user.pojo.User;
+import com.seglino.jingyi.user.service.UserService;
 import com.seglino.jingyi.webapi.shiro.CustomToken;
 import com.seglino.jingyi.webapi.shiro.LoginType;
 import com.seglino.jingyi.webapi.vo.back.user.UserDetailVo;
@@ -24,6 +25,9 @@ public class AccountController {
 
 	private final String BackBaseUrl = "http://192.168.0.8:5052/#/";
 	private final String BackLoginUrl = BackBaseUrl + "login";
+	
+	@Autowired
+	private UserService userService;
 
 	@GetMapping("login/dingtalk_qrcode")
 	public ModelAndView loginByDingtalkQrcode(String code, String state) {
@@ -67,9 +71,11 @@ public class AccountController {
 		ApiResult aResult = new ApiResult();
 		Subject subject = SecurityUtils.getSubject();
 		if (subject.isAuthenticated()) {
-			User user = (User) subject.getPrincipal();
+			Object userid = subject.getPrincipal();
+			User user = userService.detailById(userid);
 			aResult.setData(AutoMapper.mapper(user, UserDetailVo.class));
 		} else {
+			aResult.addError("");
 			aResult.setCode(401);
 		}
 		return aResult;

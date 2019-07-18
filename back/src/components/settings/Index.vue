@@ -7,51 +7,25 @@
     <el-tabs v-model="tabsDefaultName" type="card">
       <el-tab-pane :label="tab.label" :name="tab.name" v-for="tab in tabs" :key="tab.name">
         <el-form :ref="tab.name" label-width="200px">
-          <div v-for="(item, index) in settings.filter(o=>{return o.type === tab.name})" :key="index">
-            <el-form-item :label="item.name" :prop="item.code" v-if="item.displayMode === 'text'">
-              <div class="form-item">
-                <el-input v-model="item.value" :ref="item.id" :readonly="item.readonly"></el-input>
-                <div class="form-item-buttons">
-                  <el-button type="primary" icon="el-icon-edit" @click="onFormItemEditClick(item)" v-if="item.readonly"></el-button>
-                  <el-button-group v-else>
-                    <el-button type="success" icon="el-icon-check" @click="onSaveChange(item)"></el-button>
-                    <el-button type="danger" icon="el-icon-close" @click="onFormItemCancelClick(item)"></el-button>
-                  </el-button-group>
-                </div>
+          <el-form-item :label="item.name" :prop="item.code" v-for="(item, index) in settings.filter(o=>{return o.type === tab.name})" :key="index">
+            <div class="form-item">
+              <el-input v-model="item.value" :ref="item.id" :readonly="item.readonly" v-if="item.displayMode === 'text'"></el-input>
+              <el-radio-group v-model="item.value" :ref="item.id" :disabled="item.readonly" v-if="item.displayMode === 'radio'">
+                <el-radio border :label="o.value" v-for="o in JSON.parse(item.optionValues)" :key="o.value">{{ o.label }}</el-radio>
+              </el-radio-group>
+              <el-checkbox-group v-model="item.value" :ref="item.id" :disabled="item.readonly" v-if="item.displayMode === 'checkbox'">
+                <el-checkbox border :label="o.value" v-for="o in JSON.parse(item.optionValues)" :key="o.value">{{ o.label }}</el-checkbox>
+              </el-checkbox-group>
+              <div class="form-item-buttons">
+                <el-button type="primary" plain size="mini" icon="fa fa-pencil" title="修改" @click="onFormItemEditClick(item)" v-if="item.readonly"></el-button>
+                <el-button-group v-else>
+                  <el-button type="success" plain size="mini" icon="fa fa-check" title="确定" @click="onSaveChange(item)"></el-button>
+                  <el-button type="default" plain size="mini" icon="fa fa-reply" title="取消" @click="onFormItemCancelClick(item)"></el-button>
+                </el-button-group>
               </div>
-              <div class="form-item-desc" v-show="item.readonly">{{ item.description }}</div>
-            </el-form-item>
-            <el-form-item :label="item.name" :prop="item.code" v-else-if="item.displayMode === 'radio'">
-              <div class="form-item">
-                <el-radio-group v-model="item.value" :ref="item.id" :disabled="item.readonly">
-                  <el-radio border :label="o.value" v-for="o in JSON.parse(item.optionValues)" :key="o.value">{{ o.label }}</el-radio>
-                </el-radio-group>
-                <div class="form-item-buttons">
-                  <el-button type="primary" icon="el-icon-edit" @click="onFormItemEditClick(item)" v-if="item.readonly"></el-button>
-                  <el-button-group v-else>
-                    <el-button type="success" icon="el-icon-check" @click="onSaveChange(item)"></el-button>
-                    <el-button type="danger" icon="el-icon-close" @click="onFormItemCancelClick(item)"></el-button>
-                  </el-button-group>
-                </div>
-              </div>
-              <div class="form-item-desc">{{ item.description }}</div>
-            </el-form-item>
-            <el-form-item :label="item.name" :prop="item.code" v-else-if="item.displayMode === 'checkbox'">
-              <div class="form-item">
-                <el-checkbox-group v-model="item.value" :ref="item.id" :disabled="item.readonly">
-                  <el-checkbox border :label="o.value" v-for="o in JSON.parse(item.optionValues)" :key="o.value">{{ o.label }}</el-checkbox>
-                </el-checkbox-group>
-                <div class="form-item-buttons">
-                  <el-button type="primary" icon="el-icon-edit" @click="onFormItemEditClick(item)" v-if="item.readonly"></el-button>
-                  <el-button-group v-else>
-                    <el-button type="success" icon="el-icon-check" @click="onSaveChange(item)"></el-button>
-                    <el-button type="danger" icon="el-icon-close" @click="onFormItemCancelClick(item)"></el-button>
-                  </el-button-group>
-                </div>
-              </div>
-              <div class="form-item-desc">{{ item.description }}</div>
-            </el-form-item>
-          </div>
+            </div>
+            <div class="form-item-desc" v-show="item.readonly">{{ item.description }}</div>
+          </el-form-item>
         </el-form>
       </el-tab-pane>
     </el-tabs>
@@ -143,7 +117,7 @@
   }
   .form-item .form-item-buttons {
     margin-left: 10px;
-    width: 120px;
+    width: 150px;
     text-align: left;
   }
 </style>

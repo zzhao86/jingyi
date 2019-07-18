@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +35,7 @@ public abstract class BaseServiceImpl<D extends BaseDao<T>, T extends BaseEntity
 			entity.setId(UUID.randomUUID().toString().replaceAll("-", ""));
 			entity.setCreateTime(DateUtils.getNow());
 			entity.setCreateUid(null);
-//			entity.setCreateUid(getUserid());
+			entity.setCreateUid(getUserid());
 		}
 		return dao.insert(entity);
 	}
@@ -60,7 +62,7 @@ public abstract class BaseServiceImpl<D extends BaseDao<T>, T extends BaseEntity
 		if (null != entity) {
 			entity.setModifyTime(DateUtils.getNow());
 			entity.setModifyUid(null);
-//			entity.setModifyUid(getUserid());
+			entity.setModifyUid(getUserid());
 		}
 		return dao.update(entity);
 	}
@@ -76,7 +78,7 @@ public abstract class BaseServiceImpl<D extends BaseDao<T>, T extends BaseEntity
 		if (null != entity) {
 			entity.setDeleteTime(DateUtils.getNow());
 			entity.setDeleteUid(null);
-//			entity.setDeleteUid(getUserid());
+			entity.setDeleteUid(getUserid());
 		}
 		return dao.delete(entity);
 	}
@@ -161,14 +163,11 @@ public abstract class BaseServiceImpl<D extends BaseDao<T>, T extends BaseEntity
 		return dao.page(params.getCondition());
 	}
 
-//	private String getUserid() {
-//		User user = null;
-//		SecurityContext ctx = SecurityContextHolder.getContext();
-//		Authentication auth = ctx.getAuthentication();
-//		if (!(auth instanceof AnonymousAuthenticationToken)) {
-//			user = (User) auth.getPrincipal();
-//			return user.getUsername();
-//		}
-//		return null;
-//	}
+	private String getUserid() {
+		Subject subject = SecurityUtils.getSubject();
+		if (subject.isAuthenticated()) {
+			return subject.getPrincipal().toString();
+		}
+		return null;
+	}
 }

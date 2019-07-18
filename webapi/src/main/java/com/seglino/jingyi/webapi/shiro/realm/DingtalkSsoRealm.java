@@ -50,7 +50,7 @@ public class DingtalkSsoRealm extends AuthorizingRealm {
 				throw new DisabledAccountException("账号已被禁用");
 			}
 
-			SimpleAuthenticationInfo authInfo = new SimpleAuthenticationInfo(user, code, LoginType.DINGTALK_SSO.getType());
+			SimpleAuthenticationInfo authInfo = new SimpleAuthenticationInfo(user.getId(), code, LoginType.DINGTALK_SSO.getType());
 			return authInfo;
 		} else {
 			throw new AuthenticationException("授权失败");

@@ -28,7 +28,11 @@
           <el-table-column align="center" label="序号" width="50">
             <template slot-scope="scope">{{ scope.$index + (params.index - 1) * params.size + 1 }}</template>
           </el-table-column>
-          <el-table-column prop="name" label="姓名"></el-table-column>
+          <el-table-column prop="name" label="姓名">
+            <template slot-scope="scope">
+              <el-button type="text" size="mini" @click="onViewClick(scope.row)">{{scope.row.name}}</el-button>
+            </template>
+          </el-table-column>
           <el-table-column prop="mobile" label="手机号" width="150"></el-table-column>
           <el-table-column prop="tel" label="办公电话" width="150"></el-table-column>
           <el-table-column prop="position" label="职位" width="150"></el-table-column>
@@ -37,13 +41,6 @@
               <span v-show="scope.row.type == 1" class="el-link el-link--danger">主管理员</span>
               <span v-show="scope.row.type == 2" class="el-link el-link--warning">子管理员</span>
               <span v-show="scope.row.type == 99" class="el-link el-link--info">系统用户</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="操作" width="75">
-            <template slot-scope="scope">
-              <el-button-group>
-                <el-button type="success" size="mini" @click="onViewClick(scope.row)">查看</el-button>
-              </el-button-group>
             </template>
           </el-table-column>
         </el-table>
@@ -106,7 +103,7 @@
       },
       // 加载Tree数据
       loadTreeData: function() {
-        this.$http.get('back/dept/tree').then(res => {
+        this.$get('back/dept/tree').then(res => {
           if (res.data) {
             // 添加Tree数据
             this.treeData = res.data;
@@ -168,7 +165,7 @@
         });
       },
       onViewClick: function(row) {
-				this.$router.push('/user/detail/view?id=' + row.id);
+        this.$router.push('/user/detail/view?id=' + row.id);
       }
     }
   };

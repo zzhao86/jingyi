@@ -34,7 +34,6 @@ public class ShiroConfiguration {
 		// 公共请求
 		filterChainDefinitionMap.put("/back", "anon");
 		filterChainDefinitionMap.put("/account/**", "anon");
-		filterChainDefinitionMap.put("/common/**", "anon");
 		// 静态资源
 		filterChainDefinitionMap.put("/static/**", "anon");
 

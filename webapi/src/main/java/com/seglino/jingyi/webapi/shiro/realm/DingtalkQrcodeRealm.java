@@ -50,7 +50,7 @@ public class DingtalkQrcodeRealm extends AuthorizingRealm {
 				throw new DisabledAccountException("账号已被禁用");
 			}
 
-			SimpleAuthenticationInfo authInfo = new SimpleAuthenticationInfo(user, code, LoginType.DINGTALK_QRCODE.getType());
+			SimpleAuthenticationInfo authInfo = new SimpleAuthenticationInfo(user.getId(), code, LoginType.DINGTALK_QRCODE.getType());
 			return authInfo;
 		} else {
 			throw new AuthenticationException("授权失败");

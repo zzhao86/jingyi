@@ -52,7 +52,7 @@
     methods: {
       loadUserData: function() {
         if (!this.$global.user) {
-          this.$http.get('account/user').then(res => {
+          this.$get('account/user').then(res => {
             if (res.isSuccess) {
               this.$global.user = res.data;
               this.name = this.$global.user.name;

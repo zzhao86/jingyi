@@ -14,7 +14,7 @@ spring:
     
   # Json返回格式设置
   jackson:
-    date-format: yyyy-MM-dd HH:mm:ss
+    date-format: yyyy-MM-dd HH:mm
     time-zone: GMT+8
     serialization:
       write-dates-as-timestamps: false

@@ -13,6 +13,9 @@ public class AutoMapper {
 	 * @param sourceFieldNames 要转换的字段名称
 	 */
 	public static <TSource, TDestination> TDestination mapper(TSource source, Class<TDestination> targetClass) {
+		if(null == source) {
+			return null;
+		}
 		TDestination destination = null;
 		try {
 			destination = targetClass.newInstance();

@@ -102,7 +102,7 @@
                 }
               }
             }
-            this.$http.post('back/settings/save', qs.stringify({ settings: JSON.stringify(this.settings) })).then(res => {
+            this.$post('back/settings/save', qs.stringify({ settings: JSON.stringify(this.settings) })).then(res => {
               if (res.isSuccess) {
                 this.$success('保存成功');
               }

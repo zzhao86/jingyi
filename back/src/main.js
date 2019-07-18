@@ -1,18 +1,18 @@
 import Vue from 'vue';
 import App from './App';
 import router from './router';
-
 import axios from 'axios';
-//钉钉jsapi
 import * as dd from 'dingtalk-jsapi';
 // Element UI
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 
-//全局变量
-import Global from './Global.vue';
-
+// 静态资源
 import '../static/css/main.css';
+import '../static/lib/font-awesome/css/font-awesome.min.css'
+
+// 全局变量
+import Global from './Global.vue';
 
 import tableAutoHeight from './components/utils/directive/table-auto-height';
 
