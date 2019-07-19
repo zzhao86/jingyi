@@ -46,12 +46,12 @@
 	<select id="list" resultType="com.seglino.jingyi.user.pojo.User">
 		SELECT
 		<include refid="column"></include>
-		FROM
-		<include refid="tableName"></include> a
+		FROM <include refid="tableName"></include> a
+		JOIN tab_dept_user b ON a.id = b.userId
 		<where>
 			<include refid="condition"></include>
 		</where>
-		ORDER BY createTime ASC
+		ORDER BY sortNo DESC
 	</select>
 	
 	<!-- 分页获取列表 -->

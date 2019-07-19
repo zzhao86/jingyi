@@ -14,7 +14,7 @@ import '../static/lib/font-awesome/css/font-awesome.min.css'
 // 全局变量
 import Global from './Global.vue';
 
-import tableAutoHeight from './components/utils/directive/table-auto-height';
+import tableAutoHeight from './components/utils/directive/TableAutoHeight';
 
 Vue.directive('auto-height', tableAutoHeight);
 

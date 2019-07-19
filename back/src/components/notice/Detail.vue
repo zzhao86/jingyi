@@ -33,25 +33,19 @@
         <el-input v-model="detailData.position"></el-input>
       </el-form-item>
     </el-form>
+    <contact-choose></contact-choose>
   </div>
 </template>
 <script>
-  import dd from 'dingtalk-jsapi';
-  export default {
+  import ContactChoose from '../utils/components/ContactChoose';
+    export default {
     name: 'NoticeDetail',
+    components:{
+      ContactChoose
+    },
     created() {
-      dd.biz.contact.choose({
-        multiple: true, //是否多选：true多选 false单选； 默认true
-        corpId: 'ding88b58049aa34141835c2f4657eb6378f', //企业id
-        max: 10, //人数限制，当multiple为true才生效，可选范围1-1500
-        onSuccess: function(data) {
-          console.log(data);
-        },
-        onFail: function(err) {}
-      });
       const mode = this.$route.params.mode;
       const query = this.$route.query;
-
       if (query.id) {
         this.loadDetailData(query.id);
       }

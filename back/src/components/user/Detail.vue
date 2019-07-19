@@ -45,7 +45,6 @@
     created() {
       const mode = this.$route.params.mode;
       const query = this.$route.query;
-
       if (query.id) {
         this.loadDetailData(query.id);
       }
