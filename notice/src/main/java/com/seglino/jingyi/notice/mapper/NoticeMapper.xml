@@ -12,6 +12,7 @@
 		content,
 		author,
 		coverUrl,
+		scopeJson,
 		readCount,
 		totalCount,
 		publishTime,
@@ -99,6 +100,7 @@
 			<if test="content != null">content,</if>
 			<if test="author != null">author,</if>
 			<if test="coverUrl != null">coverUrl,</if>
+			<if test="scopeJson != null">scopeJson,</if>
 			<if test="readCount != null">readCount,</if>
 			<if test="totalCount != null">totalCount,</if>
 			<if test="publishTime != null">publishTime,</if>
@@ -118,6 +120,7 @@
 			<if test="content != null">#{content},</if>
 			<if test="author != null">#{author},</if>
 			<if test="coverUrl != null">#{coverUrl},</if>
+			<if test="scopeJson != null">#{scopeJson},</if>
 			<if test="readCount != null">#{readCount},</if>
 			<if test="totalCount != null">#{totalCount},</if>
 			<if test="publishTime != null">#{publishTime},</if>
@@ -141,6 +144,7 @@
 			<if test="content != null">content = #{content},</if>
 			<if test="author != null">author = #{author},</if>
 			<if test="coverUrl != null">coverUrl = #{coverUrl},</if>
+			<if test="scopeJson != null">scopeJson = #{scopeJson},</if>
 			<if test="readCount != null">readCount = #{readCount},</if>
 			<if test="totalCount != null">totalCount = #{totalCount},</if>
 			<if test="publishTime != null">publishTime = #{publishTime},</if>

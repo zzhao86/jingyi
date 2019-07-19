@@ -12,6 +12,7 @@ public class Notice extends BaseEntity {
 	private String content;
 	private String author;
 	private String coverUrl;
+	private String scopeJson;
 	private Integer readCount;
 	private Integer totalCount;
 	private Date publishTime;
@@ -45,6 +46,12 @@ public class Notice extends BaseEntity {
 	}
 	public void setCoverUrl(String coverUrl) {
 		this.coverUrl = coverUrl;
+	}
+	public String getScopeJson() {
+		return scopeJson;
+	}
+	public void setScopeJson(String scopeJson) {
+		this.scopeJson = scopeJson;
 	}
 	public Integer getReadCount() {
 		return readCount;
