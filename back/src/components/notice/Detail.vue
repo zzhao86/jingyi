@@ -4,6 +4,7 @@
       <div class="title">用户详情</div>
       <div class="buttons">
         <el-button type="default" size="small" @click="$router.back()">返回</el-button>
+        <el-button type="primary" size="small" @click="onSaveClick">保存</el-button>
       </div>
     </div>
     <el-form ref="form" :model="detailData" label-width="100px">
@@ -26,22 +27,23 @@
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
       </el-form-item>
-      <el-form-item label="电话">
-        <el-input v-model="detailData.tel"></el-input>
+      <el-form-item label="发送范围">
+        <contact-tag :data="detailData.scopeJson" @choosed-scope="onChoosedScope"></contact-tag>
       </el-form-item>
-      <el-form-item label="职位">
-        <el-input v-model="detailData.position"></el-input>
+      <el-form-item label="正文">
+        <ueditor :content="detailData.content" @content-change="onUEContentChange"></ueditor>
       </el-form-item>
     </el-form>
-    <contact-choose></contact-choose>
   </div>
 </template>
 <script>
-  import ContactChoose from '../utils/components/ContactChoose';
-    export default {
+  import ContactTag from '../utils/components/ContactTag';
+  import Ueditor from '../utils/components/Ueditor';
+  export default {
     name: 'NoticeDetail',
-    components:{
-      ContactChoose
+    components: {
+      ContactTag,
+      Ueditor
     },
     created() {
       const mode = this.$route.params.mode;
@@ -52,7 +54,8 @@
     },
     data() {
       return {
-        detailData: {}
+        detailData: {},
+        contactVisible: false
       };
     },
     methods: {
@@ -69,7 +72,6 @@
       },
       onCoverUploadSuccess: function(res, file) {},
       beforeCoverUpload: function(file) {
-        console.log(file);
         if (!(file.type == 'image/jpeg' || file.type == 'image/png')) {
           this.$message.error('封面图片只能是 JPG或PNG 格式!');
           return false;
@@ -78,7 +80,14 @@
           this.$message.error('封面图片大小不得超过1M');
           return false;
         }
-      }
+      },
+      onChoosedScope: function(scope) {
+        this.detailData.scopeJson = scope;
+      },
+      onUEContentChange: function(content) {
+        this.detailData.content = content;
+      },
+      onSaveClick: function() {}
     }
   };
 </script>

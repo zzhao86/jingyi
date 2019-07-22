@@ -9,6 +9,7 @@ public class NoticeDetailVo extends BaseVo {
 	private String author;
 	private String content;
 	private String coverUrl;
+	private String scopeJson;
 	private int readCount;
 	private int totalCount;
 	private Date publishTime;
@@ -43,6 +44,14 @@ public class NoticeDetailVo extends BaseVo {
 
 	public void setCoverUrl(String coverUrl) {
 		this.coverUrl = coverUrl;
+	}
+
+	public String getScopeJson() {
+		return scopeJson;
+	}
+
+	public void setScopeJson(String scopeJson) {
+		this.scopeJson = scopeJson;
 	}
 
 	public int getReadCount() {

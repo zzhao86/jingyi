@@ -5,6 +5,7 @@ public class UserChooseVo {
 	public String name;
 	public String avatar;
 	public String type;
+	public boolean checked = false;
 
 	public String getId() {
 		return id;
@@ -36,5 +37,13 @@ public class UserChooseVo {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public boolean GetIsChecked() {
+		return checked;
+	}
+
+	public void setIsChecked(boolean checked) {
+		this.checked = checked;
 	}
 }

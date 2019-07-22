@@ -1,5 +1,10 @@
 package com.seglino.jingyi.webapi.controller.back;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,12 +41,45 @@ public class DeptBackController {
 		}
 		return aResult;
 	}
+	
+	@GetMapping("root")
+	public ApiResult rootDept() {
+		ApiResult aResult = new ApiResult();
+		try {
+			Map<String, Object> param = new HashMap<String, Object>();
+			param.put("parentId", "0");
+			Dept dept = deptService.detail(param);
+			aResult.setData(dept);
+		} catch (Exception e) {
+			aResult.addError(e);
+		}
+		return aResult;
+	}
 
 	@GetMapping("tree")
 	public ApiResult tree() {
 		ApiResult aResult = new ApiResult();
 		try {
 			List<DeptTreeDto> list = deptService.tree();
+			aResult.setData(list);
+		} catch (Exception e) {
+			aResult.addError(e);
+		}
+		return aResult;
+	}
+	
+	@GetMapping("parent_list")
+	public ApiResult parentsDept(String id) {
+		ApiResult aResult =new ApiResult();
+		try {
+			List<Dept> list = new ArrayList<Dept>();
+			Dept dept = deptService.detailById(id);
+			list.add(dept);
+			while(!"0".equals(dept.getParentId())) {
+				dept = deptService.detailById(dept.getParentId());
+				list.add(dept);
+			}
+			Collections.reverse(list);			
 			aResult.setData(list);
 		} catch (Exception e) {
 			aResult.addError(e);

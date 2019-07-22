@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -81,23 +82,29 @@ public class UserBackController {
 	 * @return
 	 */
 	@GetMapping("choose")
-	public ApiResult choose(String deptId) {
+	public ApiResult choose(String deptId, String keywords) {
 		ApiResult aResult = new ApiResult();
 		try {
 			List<UserChooseVo> list = new ArrayList<UserChooseVo>();
 			Map<String, Object> param = new HashMap<String, Object>();
-			param.put("parentId", deptId);
-			param.put("isDeleted", false);
-			List<Dept> deptList = deptservice.list(param);
-			for (Dept dept : deptList) {
-				UserChooseVo vo = new UserChooseVo();
-				vo.setId(dept.getId().toString());
-				vo.setName(dept.getName());
-				vo.setType("dept");
-				list.add(vo);
+			if (StringUtils.isEmpty(keywords)) {
+				param.put("name", keywords);
+				param.put("parentId", deptId);
+				param.put("isDeleted", false);
+				List<Dept> deptList = deptservice.list(param);
+				for (Dept dept : deptList) {
+					UserChooseVo vo = new UserChooseVo();
+					vo.setId(dept.getId().toString());
+					vo.setName(dept.getName());
+					vo.setType("dept");
+					list.add(vo);
+				}
 			}
 			param.clear();
-			param.put("deptId", deptId);
+			param.put("name", keywords);
+			if (StringUtils.isEmpty(keywords)) {
+				param.put("deptId", deptId);
+			}
 			param.put("isDeleted", false);
 			List<User> userList = userService.list(param);
 

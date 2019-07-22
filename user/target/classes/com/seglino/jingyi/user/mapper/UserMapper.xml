@@ -44,7 +44,7 @@
 
 	<!-- 根据条件获取列表 -->
 	<select id="list" resultType="com.seglino.jingyi.user.pojo.User">
-		SELECT
+		SELECT DISTINCT
 		<include refid="column"></include>
 		FROM <include refid="tableName"></include> a
 		JOIN tab_dept_user b ON a.id = b.userId
