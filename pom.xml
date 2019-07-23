@@ -10,6 +10,7 @@
 		<module>notice</module>
 		<module>dingtalk</module>
 		<module>user</module>
+		<module>ueditor</module>
 	</modules>
 
 	<properties>
@@ -86,7 +87,12 @@
 				<artifactId>dingtalk</artifactId>
 				<version>${app.version}</version>
 			</dependency>
-			
+			<dependency>
+				<groupId>com.seglino</groupId>
+				<artifactId>ueditor</artifactId>
+				<version>${app.version}</version>
+			</dependency>
+
 			<!-- shiro权限认证 -->
 			<dependency>
 				<groupId>org.apache.shiro</groupId>
@@ -146,6 +152,13 @@
 				<version>1.0.0</version>
 				<scope>system</scope>
 				<systemPath>${project.basedir}/lib/lippi-oapi-encrpt.jar</systemPath>
+			</dependency>
+
+			<!-- 上传组件 -->
+			<dependency>
+				<groupId>commons-fileupload</groupId>
+				<artifactId>commons-fileupload</artifactId>
+				<version>1.4</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

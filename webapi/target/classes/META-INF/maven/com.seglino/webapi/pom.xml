@@ -15,12 +15,17 @@
 			<groupId>com.seglino</groupId>
 			<artifactId>dingtalk</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.seglino</groupId>
+			<artifactId>ueditor</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>org.apache.shiro</groupId>
 			<artifactId>shiro-spring</artifactId>
 		</dependency>
 
+		<!-- Spring Boot -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>

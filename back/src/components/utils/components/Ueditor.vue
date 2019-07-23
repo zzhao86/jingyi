@@ -28,7 +28,7 @@
         type: Object,
         default: function() {
           return {
-            serverUrl: this.$global.baseUrl + 'controller.ashx',
+            serverUrl: this.$global.baseUrl + 'static/ueditor/controller',
             toolbars: [
               [
                 'undo',
@@ -60,7 +60,8 @@
                 'insertunorderedlist',
                 '|',
                 'inserttable',
-                'drafts'
+                'drafts',
+                'source'
               ]
             ],
             initialFrameWidth: 750,
