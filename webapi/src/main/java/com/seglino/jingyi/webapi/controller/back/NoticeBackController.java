@@ -1,7 +1,10 @@
 package com.seglino.jingyi.webapi.controller.back;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -44,6 +47,22 @@ public class NoticeBackController {
 		} catch (Exception e) {
 			aResult.addError(e);
 		}
+		return aResult;
+	}
+	
+	@PostMapping("save")
+	public ApiResult save(@RequestBody NoticeDetailVo vo) {
+		ApiResult aResult = new ApiResult();
+		try {
+			Notice notice = AutoMapper.mapper(vo, Notice.class);
+			if(StringUtils.isEmpty(vo.getId())) {
+				noticeService.insert(notice);
+			} else {
+				noticeService.update(notice);
+			}
+		} catch (Exception e) {
+			aResult.addError(e);
+		}		
 		return aResult;
 	}
 }

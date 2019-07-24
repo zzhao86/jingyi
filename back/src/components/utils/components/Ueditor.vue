@@ -60,12 +60,14 @@
                 'insertunorderedlist',
                 '|',
                 'inserttable',
-                'drafts',
-                'source'
+                'drafts'
               ]
             ],
+            fontsize: [10, 11, 12, 14, 16, 18, 20, 24, 32, 40, 48, 60, 72],
             initialFrameWidth: 750,
             initialFrameHeight: 400,
+            autoHeightEnabled: false,
+            scaleEnabled: false,
             elementPathEnabled: false,
             wordCount: false,
             allowDivTransToP: false
@@ -115,7 +117,7 @@
   };
 </script>
 <style>
-  .edui-default{
+  .edui-default {
     line-height: 1;
   }
 </style>

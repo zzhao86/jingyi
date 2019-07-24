@@ -17,7 +17,7 @@
       <el-form-item label="封面图片">
         <el-upload
           class="avatar-uploader"
-          action="https://jsonplaceholder.typicode.com/posts/"
+          :action="uploadImageUrl"
           :show-file-list="false"
           :on-success="onCoverUploadSuccess"
           :before-upload="beforeCoverUpload"
@@ -54,6 +54,7 @@
     },
     data() {
       return {
+        uploadImageUrl: this.$global.baseUrl + 'upload/image',
         detailData: {},
         contactVisible: false
       };
@@ -70,7 +71,10 @@
           }
         });
       },
-      onCoverUploadSuccess: function(res, file) {},
+      onCoverUploadSuccess: function(res, file) {
+        console.log(res);
+        console.log(file);
+      },
       beforeCoverUpload: function(file) {
         if (!(file.type == 'image/jpeg' || file.type == 'image/png')) {
           this.$message.error('封面图片只能是 JPG或PNG 格式!');
@@ -87,7 +91,15 @@
       onUEContentChange: function(content) {
         this.detailData.content = content;
       },
-      onSaveClick: function() {}
+      onSaveClick: function() {
+        this.$post('back/notice/save', this.detailData).then(res => {
+          if (res.isSuccess) {
+            this.$success('保存成功');
+          } else {
+            this.$error(res.message);
+          }
+        });
+      }
     }
   };
 </script>
