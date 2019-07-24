@@ -15,14 +15,7 @@
         <el-input v-model="detailData.author"></el-input>
       </el-form-item>
       <el-form-item label="封面图片">
-        <el-upload
-          class="avatar-uploader"
-          :action="uploadImageUrl"
-          :show-file-list="false"
-          :on-success="onCoverUploadSuccess"
-          :before-upload="beforeCoverUpload"
-          accept="image/jpeg, image/png"
-        >
+        <el-upload class="avatar-uploader" :action="uploadImageUrl" :show-file-list="false" :on-success="onCoverUploadSuccess" :before-upload="beforeCoverUpload" accept="image/jpeg, image/png">
           <img v-if="detailData.coverUrl" :src="$global.baseUrl + detailData.coverUrl" class="avatar" />
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
@@ -32,6 +25,21 @@
       </el-form-item>
       <el-form-item label="正文">
         <ueditor :content="detailData.content" @content-change="onUEContentChange"></ueditor>
+      </el-form-item>
+      <el-form-item label="附件">
+        <el-upload
+          action="https://jsonplaceholder.typicode.com/posts/"
+          multiple
+          :limit="3"
+          :file-list="attachList"
+          :on-preview="uploadAttachPreview"
+          :on-remove="uploadAttachRemove"
+          :before-remove="uploadAttachBeforeRemove"
+          :on-exceed="uploadAttachExceed"
+        >
+          <el-button size="small" type="primary">点击上传</el-button>
+          <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+        </el-upload>
       </el-form-item>
     </el-form>
   </div>
@@ -55,6 +63,7 @@
     data() {
       return {
         uploadImageUrl: this.$global.baseUrl + 'upload/image',
+        attachList: [],
         detailData: {},
         contactVisible: false
       };
@@ -90,6 +99,18 @@
       },
       onUEContentChange: function(content) {
         this.detailData.content = content;
+      },
+      uploadAttachRemove(file, fileList) {
+        console.log(file, fileList);
+      },
+      uploadAttachPreview(file) {
+        console.log(file);
+      },
+      uploadAttachExceed(files, fileList) {
+        this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+      },
+      uploadAttachBeforeRemove(file, fileList) {
+        this.$confirm(`确定移除 ${ file.name }？`);
       },
       onSaveClick: function() {
         this.$post('back/notice/save', this.detailData).then(res => {
