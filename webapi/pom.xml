@@ -17,9 +17,14 @@
 		</dependency>
 		<dependency>
 			<groupId>com.seglino</groupId>
+			<artifactId>file</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.seglino</groupId>
 			<artifactId>ueditor</artifactId>
 		</dependency>
 
+		<!-- shiro -->
 		<dependency>
 			<groupId>org.apache.shiro</groupId>
 			<artifactId>shiro-spring</artifactId>

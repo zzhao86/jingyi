@@ -68,18 +68,7 @@
 			<include refid="condition"></include>
 		</where>
 	</select>
-
-	<!-- 根据ID获取详情 -->
-	<select id="detailById" resultType="Object">
-		SELECT
-		<include refid="column"></include>
-		FROM
-		<include refid="tableName"></include>
-		<where>
-			id = #{id}
-		</where>
-	</select>
-	
+		
 	<!-- 根据条件获取数据总数 -->
 	<select id="count" resultType="com.seglino.jingyi.notice.pojo.Notice">
 		SELECT COUNT(*) FROM
@@ -160,37 +149,9 @@
 			id = #{id}
 		</where>
 	</update>
-
-	<!-- 逻辑删除 -->
-	<update id="delete" parameterType="com.seglino.jingyi.common.core.po.BaseEntity">
-		UPDATE
-		<include refid="tableName"></include>
-		<set>
-			deleteTime = SYSDATE(),
-			deleteUid = #{deleteUid},
-			isDeleted = true,
-		</set>
-		<where>
-			id = #{id}
-		</where>
-	</update>
-
-	<!-- 恢复删除 -->
-	<update id="restore" parameterType="com.seglino.jingyi.common.core.po.BaseEntity">
-		UPDATE
-		<include refid="tableName"></include>
-		<set>
-			deleteTime = SYSDATE(),
-			deleteUid = #{deleteUid},
-			isDeleted = false,
-		</set>
-		<where>
-			id = #{id}
-		</where>
-	</update>
 	
 	<!-- 物理删除 -->
-	<delete id="deletePhysical" parameterType="Object">
+	<delete id="delete" parameterType="Object">
 		DELETE FROM
 		<include refid="tableName" />
 		<where>

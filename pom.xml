@@ -11,6 +11,7 @@
 		<module>dingtalk</module>
 		<module>user</module>
 		<module>ueditor</module>
+		<module>file</module>
 	</modules>
 
 	<properties>
@@ -90,6 +91,11 @@
 			<dependency>
 				<groupId>com.seglino</groupId>
 				<artifactId>ueditor</artifactId>
+				<version>${app.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.seglino</groupId>
+				<artifactId>file</artifactId>
 				<version>${app.version}</version>
 			</dependency>
 

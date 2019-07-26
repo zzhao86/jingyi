@@ -34,7 +34,6 @@ public abstract class BaseServiceImpl<D extends BaseDao<T>, T extends BaseEntity
 		if (null != entity) {
 			entity.setId(UUID.randomUUID().toString().replaceAll("-", ""));
 			entity.setCreateTime(DateUtils.getNow());
-			entity.setCreateUid(null);
 			entity.setCreateUid(getUserid());
 		}
 		return dao.insert(entity);
@@ -61,7 +60,6 @@ public abstract class BaseServiceImpl<D extends BaseDao<T>, T extends BaseEntity
 	public int update(T entity) {
 		if (null != entity) {
 			entity.setModifyTime(DateUtils.getNow());
-			entity.setModifyUid(null);
 			entity.setModifyUid(getUserid());
 		}
 		return dao.update(entity);
@@ -77,10 +75,10 @@ public abstract class BaseServiceImpl<D extends BaseDao<T>, T extends BaseEntity
 	public int delete(T entity) {
 		if (null != entity) {
 			entity.setDeleteTime(DateUtils.getNow());
-			entity.setDeleteUid(null);
 			entity.setDeleteUid(getUserid());
+			entity.setIsDeleted(true);
 		}
-		return dao.delete(entity);
+		return dao.update(entity);
 	}
 
 	/**
@@ -91,7 +89,11 @@ public abstract class BaseServiceImpl<D extends BaseDao<T>, T extends BaseEntity
 	 */
 	@Override
 	public int restore(T entity) {
-		return dao.restore(entity);
+		if (null != entity) {
+			entity.setDeleteUid("");
+			entity.setIsDeleted(false);
+		}
+		return dao.update(entity);
 	}
 
 	/**
@@ -102,7 +104,7 @@ public abstract class BaseServiceImpl<D extends BaseDao<T>, T extends BaseEntity
 	 */
 	@Override
 	public int deletePhysical(Object id) {
-		return dao.deletePhysical(id);
+		return dao.delete(id);
 	}
 
 	/**

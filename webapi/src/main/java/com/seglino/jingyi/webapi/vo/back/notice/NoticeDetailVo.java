@@ -1,6 +1,8 @@
 package com.seglino.jingyi.webapi.vo.back.notice;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.seglino.jingyi.common.core.vo.BaseVo;
 
@@ -8,11 +10,13 @@ public class NoticeDetailVo extends BaseVo {
 	private String title;
 	private String author;
 	private String content;
+	private String coverId;
 	private String coverUrl;
 	private String scopeJson;
 	private int readCount;
 	private int totalCount;
 	private Date publishTime;
+	private List<NoticeAttachVo> attachList = new ArrayList<NoticeAttachVo>();
 
 	public String getTitle() {
 		return title;
@@ -36,6 +40,14 @@ public class NoticeDetailVo extends BaseVo {
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+
+	public String getCoverId() {
+		return coverId;
+	}
+
+	public void setCoverId(String coverId) {
+		this.coverId = coverId;
 	}
 
 	public String getCoverUrl() {
@@ -76,5 +88,13 @@ public class NoticeDetailVo extends BaseVo {
 
 	public void setPublishTime(Date publishTime) {
 		this.publishTime = publishTime;
+	}
+
+	public List<NoticeAttachVo> getAttachList() {
+		return attachList;
+	}
+
+	public void setAttachList(List<NoticeAttachVo> attachList) {
+		this.attachList = attachList;
 	}
 }

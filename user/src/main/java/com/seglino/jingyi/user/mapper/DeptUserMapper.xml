@@ -121,37 +121,9 @@
 			id = #{id}
 		</where>
 	</update>
-
-	<!-- 逻辑删除 -->
-	<update id="delete" parameterType="com.seglino.jingyi.common.core.po.BaseEntity">
-		UPDATE
-		<include refid="tableName"></include>
-		<set>
-			deleteTime = SYSDATE(),
-			deleteUid = #{deleteUid},
-			isDeleted = true,
-		</set>
-		<where>
-			id = #{id}
-		</where>
-	</update>
-
-	<!-- 恢复删除 -->
-	<update id="restore" parameterType="com.seglino.jingyi.common.core.po.BaseEntity">
-		UPDATE
-		<include refid="tableName"></include>
-		<set>
-			deleteTime = SYSDATE(),
-			deleteUid = #{deleteUid},
-			isDeleted = false,
-		</set>
-		<where>
-			id = #{id}
-		</where>
-	</update>
 	
 	<!-- 物理删除 -->
-	<delete id="deletePhysical" parameterType="Object">
+	<delete id="delete" parameterType="Object">
 		DELETE FROM
 		<include refid="tableName" />
 		<where>

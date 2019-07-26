@@ -9,7 +9,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 
 // 静态资源
 import '../static/css/main.css';
-import '../static/lib/font-awesome/css/font-awesome.min.css'
+import '../static/lib/font-awesome/css/font-awesome.min.css';
 
 // 全局变量
 import Global from './Global.vue';
@@ -120,7 +120,9 @@ var vue = new Vue({
         showCancelButton: true,
         callback: function(action, instance) {
           if (action === 'confirm') {
-            callback();
+            if (callback) {
+              callback();
+            }
           }
         }
       });

@@ -7,8 +7,8 @@
           <el-tag size="mini" type="" v-else-if="item.type == 'user'">{{ item.name }}</el-tag>
         </span>
       </div>
+      <contact-choose :visible="contactVisible" :choosed="scope" @ok="onContactOk" @close="onContactClose"></contact-choose>
     </div>
-    <contact-choose :visible="contactVisible" :choosed="scope" @ok="onContactOk" @close="onContactClose"></contact-choose>
   </div>
 </template>
 <script>

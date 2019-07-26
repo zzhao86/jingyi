@@ -1,5 +1,9 @@
 package com.seglino.jingyi.webapi.controller.back;
 
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,8 +17,15 @@ import com.seglino.jingyi.common.request.RequestListParams;
 import com.seglino.jingyi.common.response.ApiPageResult;
 import com.seglino.jingyi.common.response.ApiResult;
 import com.seglino.jingyi.common.utils.AutoMapper;
+import com.seglino.jingyi.file.dto.FileType;
+import com.seglino.jingyi.file.pojo.Files;
+import com.seglino.jingyi.file.service.FilesService;
+import com.seglino.jingyi.notice.dto.NoticeDetailDto;
 import com.seglino.jingyi.notice.pojo.Notice;
+import com.seglino.jingyi.notice.pojo.NoticeAttach;
 import com.seglino.jingyi.notice.service.NoticeService;
+import com.seglino.jingyi.webapi.vo.FilesVo;
+import com.seglino.jingyi.webapi.vo.back.notice.NoticeAttachVo;
 import com.seglino.jingyi.webapi.vo.back.notice.NoticeDetailVo;
 import com.seglino.jingyi.webapi.vo.back.notice.NoticeListVo;
 
@@ -24,6 +35,9 @@ public class NoticeBackController {
 
 	@Autowired
 	private NoticeService noticeService;
+
+	@Autowired
+	private FilesService filesService;
 
 	@GetMapping("list")
 	public ApiPageResult list(RequestListParams params) {
@@ -42,27 +56,53 @@ public class NoticeBackController {
 	public ApiResult detail(String id) {
 		ApiResult aResult = new ApiResult();
 		try {
-			Notice notice = noticeService.detailById(id);
-			aResult.setData(AutoMapper.mapper(notice, NoticeDetailVo.class));
+			NoticeDetailDto notice = noticeService.detailDto(id);
+			NoticeDetailVo vo = AutoMapper.mapper(notice, NoticeDetailVo.class);
+			vo.setAttachList(AutoMapper.mapperList(notice.getAttacheList(), NoticeAttachVo.class));
+			aResult.setData(vo);
 		} catch (Exception e) {
 			aResult.addError(e);
 		}
 		return aResult;
 	}
-	
+
 	@PostMapping("save")
 	public ApiResult save(@RequestBody NoticeDetailVo vo) {
 		ApiResult aResult = new ApiResult();
 		try {
-			Notice notice = AutoMapper.mapper(vo, Notice.class);
-			if(StringUtils.isEmpty(vo.getId())) {
-				noticeService.insert(notice);
-			} else {
-				noticeService.update(notice);
+			NoticeDetailDto dto = AutoMapper.mapper(vo, NoticeDetailDto.class);
+			dto.setAttacheList(AutoMapper.mapperList(vo.getAttachList(), NoticeAttach.class));
+			int count = noticeService.save(dto);
+			if(count == 0) {
+				aResult.addError("保存失败");
 			}
 		} catch (Exception e) {
 			aResult.addError(e);
-		}		
+		}
+		return aResult;
+	}
+
+	@PostMapping("upload_cover")
+	public ApiResult uploadCover(HttpServletRequest request) {
+		ApiResult aResult = new ApiResult();
+		try {
+			List<Files> list = filesService.upload(request, FileType.IMAGE);
+			aResult.setData(list);
+		} catch (Exception e) {
+			aResult.addError(e);
+		}
+		return aResult;
+	}
+
+	@PostMapping("upload_attach")
+	public ApiResult uploadAttach(HttpServletRequest request) {
+		ApiResult aResult = new ApiResult();
+		try {
+			List<Files> list = filesService.upload(request, FileType.FILE);
+			aResult.setData(AutoMapper.mapperList(list, FilesVo.class));
+		} catch (Exception e) {
+			aResult.addError(e);
+		}
 		return aResult;
 	}
 }

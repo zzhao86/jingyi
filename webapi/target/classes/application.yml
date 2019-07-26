@@ -9,8 +9,12 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/jingyi?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8&useSSL=true
     username: root
     password: root
-  
-#  security.basic.enabled: false
+  servlet:
+    multipart:
+      enabled: true
+      resolve-lazily: true
+      max-file-size: 20MB
+      max-request-size: 100MB
     
   # Json返回格式设置
   jackson:

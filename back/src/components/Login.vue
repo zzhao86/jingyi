@@ -53,7 +53,7 @@
     transform: translateY(-50%);
     width: 400px;
     height: 400px;
-    background-color: #ffffffcf;
+    background-color: rgba(255, 255, 255, 0.8);
     border-radius: 20px;
     text-align: center;
   }

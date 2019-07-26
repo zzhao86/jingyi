@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="通讯录选择" width="700px" append-to-body :show-close="false" :close-on-click-modal="false" :visible.sync="visible" @before-close="beforeDialogClose">
+    <el-dialog title="通讯录选择" width="700px" append-to-body :show-close="false" :close-on-press-escape="false" :close-on-click-modal="false" :visible.sync="visible" @before-close="beforeDialogClose">
       <div class="content">
         <div class="choose-wrapper">
           <div class="title">通讯录：</div>
@@ -349,5 +349,6 @@
     cursor: pointer;
     flex: 1;
     text-align: right;
+    padding-right: 10px;
   }
 </style>
