@@ -7,9 +7,12 @@ import * as dd from 'dingtalk-jsapi';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 
-// 静态资源
+// 样式表
 import '../static/css/main.css';
 import '../static/lib/font-awesome/css/font-awesome.min.css';
+
+// 日期工具
+import '../static/js/DateUtils'
 
 // 全局变量
 import Global from './Global.vue';

@@ -4,7 +4,8 @@
       <div class="title">用户详情</div>
       <div class="buttons">
         <el-button type="default" size="small" @click="$router.back()">返回</el-button>
-        <el-button type="primary" size="small" @click="onSaveClick">保存</el-button>
+        <el-button type="success" size="small" @click="onPreviewClick">预览</el-button>
+        <el-button type="primary" size="small" @click="onSaveClick">保存并发送</el-button>
       </div>
     </div>
     <el-form ref="form" :model="detailData" label-width="100px">
@@ -33,7 +34,7 @@
       </el-form-item>
       <el-form-item label="发送范围">
         <contact-tag :data="detailData.scopeJson" @choosed-scope="onChoosedScope"></contact-tag>
-        <el-button type="primary" size="small">查看接收详情</el-button>
+        <el-button type="primary" size="small" v-show="viewContactButtonShow" @click="onReadListShowClick">查看接收详情</el-button>
       </el-form-item>
       <el-form-item label="正文">
         <ueditor :content="detailData.content" @content-change="onUEContentChange"></ueditor>
@@ -55,16 +56,27 @@
         </el-upload>
       </el-form-item>
     </el-form>
+    <!-- 预览Modal -->
+    <el-dialog title="预览" append-to-body :visible.sync="dialogPreviewVisible" custom-class="preview-dialog" width="375px">
+      <div class="prview-body">
+        <iframe id="previewIframe" frameborder="0" width="375" height="600" @load="onPreviewIframeLoaded" src="../../../static/html/noticePreview.html"></iframe>
+      </div>
+    </el-dialog>
+
+    <!-- 已读未读人员列表Modal -->
+    <read-list :visible="readListVisible" type="notice" :readed="detailData.readCount" :total="detailData.totalCount" :relId="detailData.id" @close="onReadListCloseClick"></read-list>
   </div>
 </template>
 <script>
   import ContactTag from '../utils/components/ContactTag';
   import Ueditor from '../utils/components/Ueditor';
+  import ReadList from '../utils/components/ReadList';
   export default {
     name: 'NoticeDetail',
     components: {
       ContactTag,
-      Ueditor
+      Ueditor,
+      ReadList
     },
     created() {
       const mode = this.$route.params.mode;
@@ -72,13 +84,19 @@
       if (query.id) {
         this.loadDetailData(query.id);
       }
+      if (mode == 'edit' || mode == 'view') {
+        this.viewContactButtonShow = true;
+      }
     },
     data() {
       return {
         uploadImageUrl: this.$global.baseUrl + 'back/notice/upload_cover',
         uploadAttachUrl: this.$global.baseUrl + 'back/notice/upload_attach',
         detailData: {},
-        contactVisible: false
+        contactVisible: false,
+        viewContactButtonShow: false,
+        dialogPreviewVisible: false,
+        readListVisible: false
       };
     },
     computed: {
@@ -166,6 +184,24 @@
         });
         return false;
       },
+      // 预览dialog显示
+      onPreviewClick: function() {
+        this.dialogPreviewVisible = true;
+      },
+      // 在iframe加载完成后，向iframe中传入公告内容
+      onPreviewIframeLoaded: function() {
+        var iframe = document.getElementById('previewIframe');
+        iframe.contentWindow.postMessage(this.detailData, '*');
+      },
+      // 显示已读未读人员列表
+      onReadListShowClick: function() {
+        this.readListVisible = true;
+      },
+      // 关闭已读未读人员列表
+      onReadListCloseClick: function() {
+        this.readListVisible = false;
+      },
+      // 保存并发送
       onSaveClick: function() {
         this.$post('back/notice/save', this.detailData).then(res => {
           if (res.isSuccess) {
@@ -220,5 +256,8 @@
   .cover-uploader .cover img {
     max-width: 120px;
     max-height: 120px;
+  }
+  .preview-dialog .el-dialog__body {
+    padding: 0;
   }
 </style>

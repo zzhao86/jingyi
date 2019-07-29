@@ -5,7 +5,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,13 +20,16 @@ import com.seglino.jingyi.file.dto.FileType;
 import com.seglino.jingyi.file.pojo.Files;
 import com.seglino.jingyi.file.service.FilesService;
 import com.seglino.jingyi.notice.dto.NoticeDetailDto;
+import com.seglino.jingyi.notice.dto.NoticeUserDto;
 import com.seglino.jingyi.notice.pojo.Notice;
 import com.seglino.jingyi.notice.pojo.NoticeAttach;
 import com.seglino.jingyi.notice.service.NoticeService;
+import com.seglino.jingyi.notice.service.NoticeUserService;
 import com.seglino.jingyi.webapi.vo.FilesVo;
 import com.seglino.jingyi.webapi.vo.back.notice.NoticeAttachVo;
 import com.seglino.jingyi.webapi.vo.back.notice.NoticeDetailVo;
 import com.seglino.jingyi.webapi.vo.back.notice.NoticeListVo;
+import com.seglino.jingyi.webapi.vo.back.notice.NoticeUserListVo;
 
 @RestController
 @RequestMapping("back/notice")
@@ -35,9 +37,10 @@ public class NoticeBackController {
 
 	@Autowired
 	private NoticeService noticeService;
-
 	@Autowired
 	private FilesService filesService;
+	@Autowired
+	private NoticeUserService noticeUserService;
 
 	@GetMapping("list")
 	public ApiPageResult list(RequestListParams params) {
@@ -63,6 +66,19 @@ public class NoticeBackController {
 		} catch (Exception e) {
 			aResult.addError(e);
 		}
+		return aResult;
+	}
+
+	/**
+	 * 告公接收人列表
+	 * @return
+	 */
+	@GetMapping("user_list")
+	public ApiPageResult Userlist(RequestListParams params) {
+		ApiPageResult aResult = new ApiPageResult();
+		Page<NoticeUserDto> page = noticeUserService.listForUser(params);
+		aResult.setTotal(page.getTotal());
+		aResult.setData(AutoMapper.mapperList(page, NoticeUserListVo.class));
 		return aResult;
 	}
 

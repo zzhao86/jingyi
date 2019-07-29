@@ -8,20 +8,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.seglino.jingyi.common.core.service.BaseServiceImpl;
 import com.seglino.jingyi.common.utils.AutoMapper;
 import com.seglino.jingyi.notice.dao.NoticeDao;
 import com.seglino.jingyi.notice.dto.NoticeDetailDto;
 import com.seglino.jingyi.notice.pojo.Notice;
 import com.seglino.jingyi.notice.pojo.NoticeAttach;
+import com.seglino.jingyi.notice.pojo.NoticeUser;
 import com.seglino.jingyi.notice.service.NoticeAttachService;
 import com.seglino.jingyi.notice.service.NoticeService;
+import com.seglino.jingyi.notice.service.NoticeUserService;
+import com.seglino.jingyi.user.pojo.User;
+import com.seglino.jingyi.user.service.UserService;
 
 @Service
 public class NoticeServiceImpl extends BaseServiceImpl<NoticeDao, Notice> implements NoticeService {
 
 	@Autowired
 	private NoticeAttachService attachService;
+	@Autowired
+	private NoticeUserService noticeUserService;
+	@Autowired
+	private UserService userService;
 
 	/**
 	 * 获取公告详情，带附件列表
@@ -47,6 +57,7 @@ public class NoticeServiceImpl extends BaseServiceImpl<NoticeDao, Notice> implem
 		if (null == dto) {
 			return 0;
 		}
+		Map<String, Object> param = new HashMap<String, Object>();
 		Notice notice = AutoMapper.mapper(dto, Notice.class);
 		// 保存提交的附件列表
 		List<NoticeAttach> saveAttachList = AutoMapper.mapperList(dto.getAttacheList(), NoticeAttach.class);
@@ -55,7 +66,44 @@ public class NoticeServiceImpl extends BaseServiceImpl<NoticeDao, Notice> implem
 		} else {
 			update(notice);
 		}
-		Map<String, Object> param = new HashMap<String, Object>();
+		// 保存接收人
+		if (!StringUtils.isEmpty(dto.getScopeJson())) {
+			// 删除所有接收人，重新添加
+			noticeUserService.deleteAll(notice.getId().toString());
+			
+			JSONArray array = JSONObject.parseArray(dto.getScopeJson());
+			for (Object object : array) {
+				JSONObject json = (JSONObject) object;
+				String id = json.getString("id");
+				String type = json.getString("type");
+				if ("user".equals(type)) {
+					// 类型是user，直接添加
+					NoticeUser noticeUser = new NoticeUser();
+					noticeUser.setNoticeId(notice.getId().toString());
+					noticeUser.setUserId(id);
+					noticeUserService.insert(noticeUser);
+				} else if ("dept".equals(type)) {
+					//类型是dept，添加部门下所有的用户
+					List<User> list = userService.listByDept(id, true);
+					for(User user : list) {
+						NoticeUser noticeUser = new NoticeUser();
+						noticeUser.setNoticeId(notice.getId().toString());
+						noticeUser.setUserId(user.getId().toString());
+						noticeUserService.insert(noticeUser);
+					}
+				}
+			}
+		}
+		// 更新公告表已读未读数量
+		param.clear();
+		param.put("noticeId", notice.getId());
+		int totalCount = noticeUserService.count(param);
+		notice.setTotalCount(totalCount);
+		notice.setReadCount(0);
+		update(notice);
+
+		// 保存附件
+		param.clear();
 		param.put("noticeId", notice.getId());
 		List<NoticeAttach> oldAttacheList = attachService.list(param);
 		// 删除不在保存列表中的附件
