@@ -133,4 +133,15 @@ public class NoticeBackController {
 		}		
 		return aResult;
 	}
+	
+	@GetMapping("delete_batch")
+	public ApiResult deleteBatch(String id) {
+		ApiResult aResult = new ApiResult();
+		try {
+			noticeService.delete(id);
+		} catch (Exception e) {
+			aResult.addError(e);
+		}		
+		return aResult;
+	}
 }
