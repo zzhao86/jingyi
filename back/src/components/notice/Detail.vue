@@ -1,43 +1,37 @@
 <template>
   <div class="app-main">
     <div class="main-header">
-      <div class="title">用户详情</div>
+      <div class="title">公告详情</div>
       <div class="buttons">
-        <el-button type="default" size="small" @click="$router.back()">返回</el-button>
-        <el-button type="success" size="small" @click="onPreviewClick">预览</el-button>
-        <el-button type="primary" size="small" @click="onSaveClick">保存并发送</el-button>
+        <el-button type="default" size="small" @click="$router.push('/notice')">返回</el-button>
+        <el-button type="success" size="small" :disabled="previewButtonDisabled" @click="onPreviewClick">预览</el-button>
+        <el-button type="primary" size="small" @click="onSaveClick" v-show="!disabled">保存并发送</el-button>
       </div>
     </div>
-    <el-form ref="form" :model="detailData" label-width="100px">
-      <el-form-item label="标题">
-        <el-input v-model="detailData.title"></el-input>
+    <el-form ref="form" :rules="rules" :disabled="disabled" :model="detailData" label-width="100px">
+      <el-form-item label="标题" prop="title">
+        <el-input v-model="detailData.title" placeholder="请输入公告标题"></el-input>
       </el-form-item>
-      <el-form-item label="作者">
-        <el-input v-model="detailData.author"></el-input>
+      <el-form-item label="作者" style="width: 500px;">
+        <el-input v-model="detailData.author" placeholder="请输入公告作者"></el-input>
+      </el-form-item>
+      <el-form-item label="正文" prop="content">
+        <UEditor :content="detailData.content" :disabled="disabled" @content-change="onUEContentChange"></UEditor>
       </el-form-item>
       <el-form-item label="封面图片">
-        <el-upload
-          class="cover-uploader"
-          with-credentials
-          :action="uploadImageUrl"
-          :show-file-list="false"
-          :on-success="onCoverUploadSuccess"
-          :before-upload="beforeCoverUpload"
-          accept="image/jpeg, image/png"
-        >
+        <el-upload class="cover-uploader" with-credentials :action="uploadImageUrl" :show-file-list="false" :on-success="onCoverUploadSuccess" :before-upload="beforeCoverUpload" accept=".jpg,.png">
           <div class="cover" v-if="detailData.coverUrl">
             <div class="cover-mask"><i class="el-icon-delete" @click.stop="onCoverDeleteClick"></i></div>
             <img :src="$global.baseUrl + detailData.coverUrl" />
           </div>
           <i v-else class="el-icon-plus cover-uploader-icon"></i>
+          <div slot="tip" class="el-upload__tip">封面图片只能是JPG或PNG格式，并且大小不超过500KB。</div>
         </el-upload>
       </el-form-item>
-      <el-form-item label="发送范围">
-        <contact-tag :data="detailData.scopeJson" @choosed-scope="onChoosedScope"></contact-tag>
+      <el-form-item label="发送范围" prop="scopeJson">
+        <el-input v-model="detailData.scopeJson" v-show="false"></el-input>
+        <contact-tag :data="detailData.scopeJson" :disabled="disabled" placeholder="请选择公告发送范围" @choosed-scope="onChoosedScope"></contact-tag>
         <el-button type="primary" size="small" v-show="viewContactButtonShow" @click="onReadListShowClick">查看接收详情</el-button>
-      </el-form-item>
-      <el-form-item label="正文">
-        <ueditor :content="detailData.content" @content-change="onUEContentChange"></ueditor>
       </el-form-item>
       <el-form-item label="附件">
         <el-upload
@@ -69,13 +63,13 @@
 </template>
 <script>
   import ContactTag from '../utils/components/ContactTag';
-  import Ueditor from '../utils/components/Ueditor';
+  import UEditor from '../utils/components/UEditor';
   import ReadList from '../utils/components/ReadList';
   export default {
     name: 'NoticeDetail',
     components: {
       ContactTag,
-      Ueditor,
+      UEditor,
       ReadList
     },
     created() {
@@ -92,14 +86,50 @@
       return {
         uploadImageUrl: this.$global.baseUrl + 'back/notice/upload_cover',
         uploadAttachUrl: this.$global.baseUrl + 'back/notice/upload_attach',
-        detailData: {},
+        detailData: {
+          title: '',
+          author: '',
+          content: '',
+          coverUrl: '',
+          scopeJson: '',
+          attachList: []
+        },
         contactVisible: false,
         viewContactButtonShow: false,
         dialogPreviewVisible: false,
-        readListVisible: false
+        readListVisible: false,
+        rules: {
+          title: [
+            {
+              required: true,
+              message: '请输入公告标题',
+              trigger: 'blur'
+            }
+          ],
+          content: [
+            {
+              required: true,
+              message: '请输入公告正文内容',
+              trigger: 'change'
+            }
+          ],
+          scopeJson: [
+            {
+              required: true,
+              message: '请选择公告发送范围',
+              trigger: 'change'
+            }
+          ]
+        }
       };
     },
     computed: {
+      disabled: {
+        get: function() {
+          const mode = this.$route.params.mode;
+          return mode != 'add' && mode != 'edit';
+        }
+      },
       attachs: {
         get: function() {
           let array = [];
@@ -113,6 +143,11 @@
             }
           }
           return array;
+        }
+      },
+      previewButtonDisabled: {
+        get: function() {
+          return !this.detailData.title || !this.detailData.content;
         }
       }
     },
@@ -133,16 +168,15 @@
         if (res.isSuccess) {
           this.detailData.coverUrl = res.data[0].url;
         }
-        return false;
       },
       // 封面上传验证
       beforeCoverUpload: function(file) {
         if (!(file.type == 'image/jpeg' || file.type == 'image/png')) {
-          this.$message.error('封面图片只能是 JPG或PNG 格式!');
+          this.$message.error('封面图片只能是JPG或PNG格式!');
           return false;
         }
-        if (file.size / 1024 / 1024 > 1) {
-          this.$message.error('封面图片大小不得超过1M');
+        if (file.size / 1024 > 500) {
+          this.$message.error('封面图片大小不得超过500KB');
           return false;
         }
       },
@@ -186,6 +220,14 @@
       },
       // 预览dialog显示
       onPreviewClick: function() {
+        if (!this.detailData.title) {
+          this.$message.error('请输入公告标题');
+          return;
+        }
+        if (!this.detailData.content) {
+          this.$message.error('请输入公告正文内容');
+          return;
+        }
         this.dialogPreviewVisible = true;
       },
       // 在iframe加载完成后，向iframe中传入公告内容
@@ -203,11 +245,15 @@
       },
       // 保存并发送
       onSaveClick: function() {
-        this.$post('back/notice/save', this.detailData).then(res => {
-          if (res.isSuccess) {
-            this.$success('保存成功');
-          } else {
-            this.$error(res.message);
+        this.$refs['form'].validate(valid => {
+          if (valid) {
+            this.$post('back/notice/save', this.detailData).then(res => {
+              if (res.isSuccess) {
+                this.$success('保存成功');
+              } else {
+                this.$error(res.message);
+              }
+            });
           }
         });
       }
@@ -215,6 +261,10 @@
   };
 </script>
 <style>
+  .cover-uploader {
+    line-height: 1;
+    margin-bottom: 10px;
+  }
   .cover-uploader .el-upload {
     border: 1px dashed #d9d9d9;
     border-radius: 6px;

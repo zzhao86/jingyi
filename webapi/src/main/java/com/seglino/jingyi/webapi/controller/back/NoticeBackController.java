@@ -46,6 +46,7 @@ public class NoticeBackController {
 	public ApiPageResult list(RequestListParams params) {
 		ApiPageResult aResult = new ApiPageResult();
 		try {
+			params.addCondition("isDeleted", false);
 			Page<Notice> page = noticeService.page(params);
 			aResult.setTotal(page.getTotal());
 			aResult.setData(AutoMapper.mapperList(page, NoticeListVo.class));
@@ -119,6 +120,17 @@ public class NoticeBackController {
 		} catch (Exception e) {
 			aResult.addError(e);
 		}
+		return aResult;
+	}
+	
+	@GetMapping("delete")
+	public ApiResult delete(String id) {
+		ApiResult aResult = new ApiResult();
+		try {
+			noticeService.delete(id);
+		} catch (Exception e) {
+			aResult.addError(e);
+		}		
 		return aResult;
 	}
 }

@@ -12,6 +12,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.seglino.jingyi.common.core.service.BaseServiceImpl;
 import com.seglino.jingyi.common.utils.AutoMapper;
+import com.seglino.jingyi.common.utils.DateUtils;
 import com.seglino.jingyi.notice.dao.NoticeDao;
 import com.seglino.jingyi.notice.dto.NoticeDetailDto;
 import com.seglino.jingyi.notice.pojo.Notice;
@@ -59,6 +60,7 @@ public class NoticeServiceImpl extends BaseServiceImpl<NoticeDao, Notice> implem
 		}
 		Map<String, Object> param = new HashMap<String, Object>();
 		Notice notice = AutoMapper.mapper(dto, Notice.class);
+		notice.setPublishTime(DateUtils.getNow());
 		// 保存提交的附件列表
 		List<NoticeAttach> saveAttachList = AutoMapper.mapperList(dto.getAttacheList(), NoticeAttach.class);
 		if (StringUtils.isEmpty(notice.getId())) {
@@ -69,7 +71,7 @@ public class NoticeServiceImpl extends BaseServiceImpl<NoticeDao, Notice> implem
 		// 保存接收人
 		if (!StringUtils.isEmpty(dto.getScopeJson())) {
 			// 删除所有接收人，重新添加
-			noticeUserService.deleteAll(notice.getId().toString());
+			noticeUserService.deleteByNoticeId(notice.getId().toString());
 			
 			JSONArray array = JSONObject.parseArray(dto.getScopeJson());
 			for (Object object : array) {
@@ -128,4 +130,5 @@ public class NoticeServiceImpl extends BaseServiceImpl<NoticeDao, Notice> implem
 		}
 		return 1;
 	}
+	
 }

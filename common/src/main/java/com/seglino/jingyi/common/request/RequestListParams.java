@@ -38,10 +38,15 @@ public class RequestListParams implements Serializable {
 	@SuppressWarnings("unchecked")
 	public Map<String, Object> getCondition() {
 		if (!StringUtils.isEmpty(query)) {
-			Map<String, Object> map = JSONObject.parseObject(query, Map.class);
-			return map;
+			condition = JSONObject.parseObject(query, Map.class);
+			return condition;
 		}
 		return condition;
 	}
-
+	
+	public void addCondition(String key, Object value) {
+		Map<String, Object> map = getCondition();
+		map.put(key, value);
+		this.query = JSONObject.toJSONString(map);
+	}
 }

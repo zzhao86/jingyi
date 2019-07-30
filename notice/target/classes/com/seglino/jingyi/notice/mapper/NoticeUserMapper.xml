@@ -147,10 +147,10 @@
 		<where>
 			id = #{id}
 		</where>
-	</delete>
+	</delete>	
 	
-	<!-- 全部删除 -->
-	<delete id="deleteAll" parameterType="String">
+	<!-- 删除公告下所有的 -->
+	<delete id="deleteByNoticeId" parameterType="Object">
 		DELETE FROM
 		<include refid="tableName" />
 		<where>

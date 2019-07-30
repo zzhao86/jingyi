@@ -10,20 +10,26 @@
         font-size: 18px;
         text-align: left;
         font-weight: 400;
-        margin: 0 10px;
+        margin: 10px 0;
       }
       .author {
         font-size: 13px;
         color: #858e99;
-        margin: 10px 0 10px;
+        margin: 10px 0;
         text-align: left;
-        margin: 0 10px;
+        overflow: hidden;
       }
-      .author .time {
-        margin-left: 20px;
+      .author .name{
+        padding-right: 15px;
+        float: left;
+      }
+      .author .time{
+        float: left;
       }
       .content {
-        margin-top: 10px;
+        clear: left;
+        margin-top: 20px;
+        overflow: hidden;
       }
     </style>
   </head>
@@ -38,10 +44,10 @@
     <script>
       window.addEventListener('message', function(msg) {
         var notice = msg.data;
-        document.getElementsByClassName('title')[0].innerHTML = notice.title;
-        document.getElementsByClassName('name')[0].innerHTML = notice.author;
+        document.getElementsByClassName('title')[0].innerHTML = notice.title || '';
+        document.getElementsByClassName('name')[0].innerHTML = notice.author || '';
         document.getElementsByClassName('time')[0].innerHTML = new Date().format('yyyy-MM-dd hh:mm');
-        document.getElementsByClassName('content')[0].innerHTML = notice.content;
+        document.getElementsByClassName('content')[0].innerHTML = notice.content || '';
       });
     </script>
   </body>

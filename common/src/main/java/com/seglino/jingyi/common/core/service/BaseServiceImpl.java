@@ -68,11 +68,12 @@ public abstract class BaseServiceImpl<D extends BaseDao<T>, T extends BaseEntity
 	/**
 	 * 根据ID删除数据
 	 * 
-	 * @param entity
+	 * @param id
 	 * @return
 	 */
 	@Override
-	public int delete(T entity) {
+	public int delete(Object id) {
+		T entity = detailById(id);		
 		if (null != entity) {
 			entity.setDeleteTime(DateUtils.getNow());
 			entity.setDeleteUid(getUserid());
@@ -80,15 +81,29 @@ public abstract class BaseServiceImpl<D extends BaseDao<T>, T extends BaseEntity
 		}
 		return dao.update(entity);
 	}
+	
+	/**
+	 * 根据ID批量删除
+	 * @param ids
+	 * @return
+	 */
+	public int deleteBatch(List<Object> ids) {
+		int count = 0;
+		for (Object id : ids) {
+			count += delete(id);
+		}
+		return count;
+	}
 
 	/**
 	 * 根据ID恢复删除（未彻底删除）的数据
 	 * 
-	 * @param entity
+	 * @param id
 	 * @return
 	 */
 	@Override
-	public int restore(T entity) {
+	public int restore(Object id) {
+		T entity = detailById(id);		
 		if (null != entity) {
 			entity.setDeleteUid("");
 			entity.setIsDeleted(false);

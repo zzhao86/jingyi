@@ -35,17 +35,24 @@ public interface BaseService<T> {
 	/**
 	 * 根据ID删除数据
 	 * 
-	 * @param entity
+	 * @param id
 	 * @return
 	 */
-	public int delete(T entity);
+	public int delete(Object id);
+	
+	/**
+	 * 根据ID批量删除
+	 * @param ids
+	 * @return
+	 */
+	public int deleteBatch(List<Object> ids);
 	
 	/**
 	 * 根据ID恢复删除（未彻底删除）的数据
-	 * @param entity
+	 * @param id
 	 * @return
 	 */
-	public int restore(T entity);
+	public int restore(Object id);
 
 	/**
 	 * 根据ID彻底删除数据

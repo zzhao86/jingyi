@@ -11,7 +11,8 @@
                 <span>{{ user.name }}</span>
               </li>
             </ul>
-            <el-pagination :hide-on-single-page="true" background @current-change="onCurrentPageChange" :page-size="params[item.name].size" layout="prev, pager, next" :total="count[item.name]"> </el-pagination>
+            <el-pagination :hide-on-single-page="true" background @current-change="onCurrentPageChange" :page-size="params[item.name].size" layout="prev, pager, next" :total="count[item.name]">
+            </el-pagination>
           </div>
         </el-tab-pane>
       </el-tabs>
@@ -24,7 +25,6 @@
 <script>
   export default {
     name: 'ReadList',
-    created() {},
     data() {
       return {
         params: {
@@ -32,7 +32,7 @@
             index: 1,
             size: 100,
             query: {
-              noticeId: this.relId,
+              noticeId: '',
               isRead: false
             }
           },
@@ -40,7 +40,7 @@
             index: 1,
             size: 100,
             query: {
-              noticeId: this.relId,
+              noticeId: '',
               isRead: true
             }
           }
@@ -86,7 +86,6 @@
     methods: {
       loadListData: function() {
         if (!this.url) return;
-
         this.$get(this.url, {
           params: this.params[this.activeTab]
         }).then(res => {
@@ -98,6 +97,8 @@
         this.loadListData();
       },
       onDialogOpen: function() {
+        this.params.unread.query.noticeId = this.relId;
+        this.params.readed.query.noticeId = this.relId;
         this.loadListData();
         this.count.readed = this.readed;
         this.count.unread = this.total - this.readed;
@@ -112,7 +113,7 @@
           return name;
         }
       },
-      onCurrentPageChange:function(index){
+      onCurrentPageChange: function(index) {
         this.params[this.activeTab].index = index;
         this.loadListData();
       }
@@ -144,7 +145,7 @@
   }
   .user-list-container .user-list {
     position: relative;
-    width: 100%;    
+    width: 100%;
     height: 400px;
     margin: 0 auto;
     padding-top: 0;

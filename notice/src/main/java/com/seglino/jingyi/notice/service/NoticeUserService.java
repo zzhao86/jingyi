@@ -22,5 +22,5 @@ public interface NoticeUserService extends BaseService<NoticeUser> {
 	 * @param noticeId 公告ID
 	 * @return
 	 */
-	public int deleteAll(String noticeId);
+	public int deleteByNoticeId(String noticeId);
 }

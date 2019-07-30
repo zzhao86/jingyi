@@ -20,7 +20,7 @@
       content: {
         type: String
       },
-      readonly: {
+      disabled: {
         type: Boolean,
         default: false
       },
@@ -76,22 +76,26 @@
         required: false
       }
     },
-    mounted() {
-      const self = this;
-      if (!this.editor) {
-        this.editor = UE.getEditor('editor', this.config);
-      }
-      this.editor.addListener('ready', function() {
-        if (self.readonly) {
-          self.editor.setDisabled();
-        } else {
-          self.editor.setEnabled();
+    created() {
+      this.$nextTick(function() {
+        const self = this;
+        if (!this.editor) {
+          this.editor = UE.getEditor('editor', this.config);
         }
-        self.editor.setContent(self.content);
-      });
-      this.editor.addListener('contentChange', function() {
-        this.content = self.editor.getContent();
-        self.$emit('content-change', this.content);
+        this.editor.addListener('ready', function() {
+          if (self.disabled) {
+            self.editor.setDisabled();
+          } else {
+            self.editor.setEnabled();
+          }
+          if (self.content) {
+            self.editor.setContent(self.content);
+          }
+        });
+        this.editor.addListener('contentChange', function() {
+          this.content = self.editor.getContent();
+          self.$emit('content-change', this.content);
+        });
       });
     },
     methods: {
@@ -100,7 +104,7 @@
       }
     },
     watch: {
-      readonly: function(val, old) {
+      disabled: function(val, old) {
         const self = this;
         this.editor.addListener('ready', function() {
           if (val) {

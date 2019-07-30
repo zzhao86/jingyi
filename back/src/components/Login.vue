@@ -2,8 +2,13 @@
   <div>
     <div class="login-bg"></div>
     <div class="login-container">
-      <div class="title">扫码登录</div>
-      <div id="loginContainer"></div>
+      <div class="login-tip-wrapper">
+        <div class="login-tip">京仪物业系统管理后台</div>
+      </div>
+      <div class="login-wrapper">
+        <div class="title">扫码登录</div>
+        <div id="loginContainer"></div>
+      </div>
     </div>
   </div>
 </template>
@@ -13,6 +18,11 @@
     name: 'Login',
     created() {
       const vue = this;
+      if (vue.$global.user) {
+        vue.$router.push('/');
+        return;
+      }
+
       var appid = 'dingoahwjazjqdmlt2gs5k';
       var redirect = encodeURIComponent(this.$global.baseUrl + 'account/login/dingtalk_qrcode');
       var url = 'https://oapi.dingtalk.com/connect/oauth2/sns_authorize?appid=' + appid + '&response_type=code&scope=snsapi_login&state=STATE&redirect_uri=';
@@ -48,21 +58,48 @@
 <style scoped>
   .login-container {
     position: absolute;
-    right: 300px;
+    width: 1000px;
     top: 50%;
-    transform: translateY(-50%);
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .login-tip-wrapper {
+    float: left;
+    margin-top: 100px;
+  }
+  .login-tip-wrapper .login-tip {
+    font-size: 36px;
+    text-shadow: 0 0 2px #000;
+    color: #fff;
+  }
+  .login-wrapper {
+    float: right;
     width: 400px;
     height: 400px;
     background-color: rgba(255, 255, 255, 0.8);
     border-radius: 20px;
     text-align: center;
   }
-  .login-container .title {
+  @media (max-width: 1200px) {
+    .login-container {
+      width: 768px;
+    }
+  }
+  @media (max-width: 768px) {
+    .login-container {
+      width: 400px;
+    }
+    .login-tip-wrapper {
+      display: none;
+    }
+  }
+  .login-wrapper .title {
     font-size: 20px;
     margin-top: 20px;
     text-align: center;
     font-family: '微软雅黑';
   }
+
   .login-bg {
     position: fixed;
     top: 0;

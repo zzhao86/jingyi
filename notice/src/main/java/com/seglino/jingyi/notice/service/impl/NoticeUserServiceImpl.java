@@ -49,8 +49,8 @@ public class NoticeUserServiceImpl extends BaseServiceImpl<NoticeUserDao, Notice
 	 * @return
 	 */
 	@Override
-	public int deleteAll(String noticeId) {
-		return dao.deleteAll(noticeId);
+	public int deleteByNoticeId(String noticeId) {
+		return dao.deleteByNoticeId(noticeId);
 	}
 
 }

@@ -16,12 +16,16 @@ iframe::-webkit-scrollbar {
   width: 12px;
   height: 12px;
 }
+* {
+  box-sizing: border-box;
+}
 
 body {
   padding: 0;
   margin: 0;
   overflow: hidden;
   background-color: #f6f6f6;
+  font-family: 'Helvetica Neue', 'Helvetica', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'SimSun', 'sans-serif';
 }
 
 .el-menu {
@@ -32,10 +36,26 @@ body {
   max-width: 800px;
 }
 
+.el-dialog {
+  overflow: hidden;
+  border-radius: 5px;
+}
+.el-dialog .el-dialog__header {
+  background-color: #efefef;
+  border-bottom: solid 1px #e8e8e8;
+}
+
 .el-radio-button.is-disabled input:checked + .el-radio-button__inner {
   background-color: #409eff;
   color: #fff;
   opacity: 0.6;
+}
+
+.el-upload__tip {
+  line-height: 15px;
+  color: #afafaf;
+  margin-top: 3px;
+  margin-bottom: 15px;
 }
 
 .app-container {
@@ -123,9 +143,8 @@ body {
 }
 .main-header .title {
   line-height: 40px;
-  font-size: 16px;
-  font-weight: bold;
-  color: #888;
+  font-size: 18px;
+  color: #666;
   width: 300px;
   margin-left: 10px;
 }

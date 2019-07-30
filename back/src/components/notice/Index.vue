@@ -22,7 +22,8 @@
         <el-table-column label="状态" width="100">
           <template slot-scope="scope">
             <div class="total-count">共{{ scope.row.totalCount }}人</div>
-            <div class="read-count">已读{{ scope.row.readCount }}人</div>
+            <!-- <div class="read-count">已读{{ scope.row.readCount }}人</div> -->
+            <el-button type="text" class="read-count" size="mini" @click="onReadListShowClick(scope.row)">已读{{ scope.row.readCount }}人</el-button>
           </template>
         </el-table-column>
         <el-table-column prop="publishTime" label="发布时间" width="150"></el-table-column>
@@ -34,15 +35,19 @@
         </el-table-column>
       </el-table>
       <pagination :params="params" :total="total" @page-change="onPageChange" @size-change="onSizeChange"></pagination>
+      <!-- 已读未读人员列表Modal -->
+      <read-list :visible="read.visible" type="notice" :readed="read.readCount" :total="read.totalCount" :relId="read.id" @close="onReadListCloseClick"></read-list>
     </div>
   </div>
 </template>
 <script>
-  import pagination from '../utils/components/Pagination';
+  import Pagination from '../utils/components/Pagination';
+  import ReadList from '../utils/components/ReadList';
   export default {
     name: 'NoticeIndex',
     components: {
-      pagination
+      Pagination,
+      ReadList
     },
     created() {
       this.loadTableData();
@@ -60,7 +65,13 @@
         tableData: [],
         maxHeight: 500,
         tableSelected: [],
-        deleteButtonState: true
+        deleteButtonState: true,
+        read: {
+          visible: false,
+          readCount: 0,
+          totalCount: 0,
+          id: ''
+        }
       };
     },
     methods: {
@@ -108,6 +119,15 @@
       onTableSelectionChange: function(selection) {
         this.tableSelected = selection;
         this.deleteButtonState = selection.length == 0;
+      },
+      onReadListShowClick: function(row) {
+        this.read.id = row.id;
+        this.read.readCount = row.readCount;
+        this.read.totalCount = row.totalCount;
+        this.read.visible = true;
+      },
+      onReadListCloseClick: function(visible) {
+        this.read.visible = visible;
       }
     }
   };
