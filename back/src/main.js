@@ -11,8 +11,8 @@ import 'element-ui/lib/theme-chalk/index.css';
 import '../static/css/main.css';
 import '../static/lib/font-awesome/css/font-awesome.min.css';
 
-// 日期工具
-import '../static/js/DateUtils'
+// 工具
+import '../static/js/Utils';
 
 // 全局变量
 import Global from './Global.vue';
@@ -107,10 +107,13 @@ var vue = new Vue({
         type: 'error'
       });
     };
-    Vue.prototype.$success = function(message) {
+    Vue.prototype.$success = function(message, callback) {
       this.$message({
         message: message,
-        type: 'success'
+        type: 'success',
+        onClose: () => {
+          callback();
+        }
       });
     };
     Vue.prototype.$confirm = function(message, callback) {

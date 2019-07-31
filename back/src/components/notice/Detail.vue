@@ -53,7 +53,7 @@
     <!-- 预览Modal -->
     <el-dialog title="预览" append-to-body :visible.sync="dialogPreviewVisible" custom-class="preview-dialog" width="375px">
       <div class="prview-body">
-        <iframe id="previewIframe" frameborder="0" width="375" height="600" @load="onPreviewIframeLoaded" src="../../../static/html/noticePreview.html"></iframe>
+        <iframe id="previewIframe" frameborder="0" width="375" height="600" @load="onPreviewIframeLoaded" src="../../../static/html/NoticePreview.html"></iframe>
       </div>
     </el-dialog>
 
@@ -245,13 +245,16 @@
       },
       // 保存并发送
       onSaveClick: function() {
-        this.$refs['form'].validate(valid => {
+        const vue = this;
+        vue.$refs['form'].validate(valid => {
           if (valid) {
-            this.$post('back/notice/save', this.detailData).then(res => {
+            vue.$post('back/notice/save', vue.detailData).then(res => {
               if (res.isSuccess) {
-                this.$success('保存成功');
+                vue.$success('保存成功', () => {
+                  vue.$router.push('/notice');
+                });
               } else {
-                this.$error(res.message);
+                vue.$error(res.message);
               }
             });
           }

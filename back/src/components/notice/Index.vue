@@ -9,7 +9,7 @@
     </div>
     <div class="main-container">
       <el-table :data="tableData" ref="table" stripe v-auto-height :max-height="maxHeight" @selection-change="onTableSelectionChange">
-        <el-table-column type="selection" align="center" width="50"> </el-table-column>
+        <el-table-column type="selection" align="center" width="30"> </el-table-column>
         <el-table-column align="center" label="序号" width="50">
           <template slot-scope="scope">{{ scope.$index + (params.index - 1) * params.size + 1 }}</template>
         </el-table-column>
@@ -27,10 +27,13 @@
           </template>
         </el-table-column>
         <el-table-column prop="publishTime" label="发布时间" width="150"></el-table-column>
-        <el-table-column label="操作" width="120">
+        <el-table-column label="操作" width="160">
           <template slot-scope="scope">
-            <el-button type="primary" plain size="mini" icon="fa fa-pencil" title="编辑" @click="onEditClick(scope.row)"></el-button>
-            <el-button type="danger" plain size="mini" icon="fa fa-remove" title="删除" @click="onDeleteClick(scope.row)"></el-button>
+            <div class="options-buttons">
+              <el-button type="primary" size="mini" @click="onEditClick(scope.row)">编辑</el-button>
+              <el-button type="danger" size="mini" @click="onDeleteClick(scope.row)">删除</el-button>
+              <el-button type="success" size="mini" @click="onFilesClick(scope.row)">文件列表</el-button>
+            </div>
           </template>
         </el-table-column>
       </el-table>
@@ -104,17 +107,40 @@
         this.$router.push('/notice/detail/edit?id=' + row.id);
       },
       onDeleteClick: function(row) {
-        this.$router.push('/notice/detail/view?id=' + row.id);
+        const vue = this;
+        vue.$confirm(`确定要删除公告 ${row.title} 吗？`, () => {
+          vue
+            .$get('back/notice/delete', {
+              params: {
+                id: row.id
+              }
+            })
+            .then(res => {
+              if (res.isSuccess) {
+                vue.tableData.remove(row);
+                vue.$success(`公告 ${row.title} 删除成功`);
+              }
+            });
+        });
       },
       onDeleteBatchClick: function() {
-        if (!this.tableSelected.length || this.tableSelected.length == 0) {
-          this.$message.error('请选择要删除的数据行');
+        const vue = this;
+        if (!vue.tableSelected.length || vue.tableSelected.length == 0) {
+          vue.$message.error('请选择要删除的数据行');
           return;
         }
         let ids = new Array();
-        for (let i = 0; i < this.tableSelected.length; i++) {
-          ids.push(this.tableSelected[i].id);
+        for (let i = 0; i < vue.tableSelected.length; i++) {
+          ids.push(vue.tableSelected[i].id);
         }
+        vue.$confirm(`确定要删除所有选中项吗？`, () => {
+          vue.$post('back/notice/delete_batch', ids).then(res => {
+            if (res.isSuccess) {
+              vue.tableData.removes(vue.tableSelected);
+              vue.$success(`删除成功`);
+            }
+          });
+        });
       },
       onTableSelectionChange: function(selection) {
         this.tableSelected = selection;

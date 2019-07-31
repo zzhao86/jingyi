@@ -17,10 +17,10 @@
                 <el-checkbox border :label="o.value" v-for="o in JSON.parse(item.optionValues)" :key="o.value">{{ o.label }}</el-checkbox>
               </el-checkbox-group>
               <div class="form-item-buttons">
-                <el-button type="primary" plain size="mini" icon="fa fa-pencil" title="修改" @click="onFormItemEditClick(item)" v-if="item.readonly"></el-button>
+                <el-button type="primary" plain size="small" icon="fa fa-pencil-square-o" title="修改" @click="onFormItemEditClick(item)" v-if="item.readonly"></el-button>
                 <el-button-group v-else>
-                  <el-button type="success" plain size="mini" icon="fa fa-check" title="确定" @click="onSaveChange(item)"></el-button>
-                  <el-button type="default" plain size="mini" icon="fa fa-reply" title="取消" @click="onFormItemCancelClick(item)"></el-button>
+                  <el-button type="success" size="small" @click="onSaveChange(item)">确定</el-button>
+                  <el-button type="default" size="small" @click="onFormItemCancelClick(item)">取消</el-button>
                 </el-button-group>
               </div>
             </div>

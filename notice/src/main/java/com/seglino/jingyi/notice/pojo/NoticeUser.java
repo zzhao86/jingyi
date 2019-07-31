@@ -7,6 +7,7 @@ public class NoticeUser extends BaseEntity {
 	
 	private String noticeId;
 	private String userId;
+	private String ddUserId;
 	private String isRead;
 	private String readTime;
 
@@ -24,6 +25,14 @@ public class NoticeUser extends BaseEntity {
 
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+
+	public String getDdUserId() {
+		return ddUserId;
+	}
+
+	public void setDdUserId(String ddUserId) {
+		this.ddUserId = ddUserId;
 	}
 
 	public String getIsRead() {

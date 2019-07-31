@@ -20,11 +20,12 @@
 		isDeleted
 	</sql>
 	
-	<resultMap type="com.seglino.jingyi.notice.dto.NoticeUserDto" id="resultMap">
+	<resultMap id="resultMap" type="com.seglino.jingyi.notice.dto.NoticeUserDto">
 		<result column="id" property="id" />
 		<result column="userId" property="userId" />
 		<result column="name" property="name" />
 		<result column="avatar" property="avatar" />
+		<result column="ddUserId" property="ddUserId" />
 		<result column="isRead" property="isRead" />
 		<result column="readTime" property="readTime" />
 	</resultMap>
@@ -35,6 +36,12 @@
 		<if test="userId != null"> and userId = #{userId}</if>
 		<if test="isRead != null"> and isRead = #{isRead}</if>
 		<if test="isDeleted != null"> and isDeleted = #{isDeleted}</if>
+	</sql>
+	<sql id="conditionForUser">
+		<if test="noticeId != null"> and a.noticeId = #{noticeId}</if>
+		<if test="userId != null"> and a.userId = #{userId}</if>
+		<if test="isRead != null"> and a.isRead = #{isRead}</if>
+		<if test="isDeleted != null"> and a.isDeleted = #{isDeleted} and b.isDeleted = #{isDeleted} </if>
 	</sql>
 
 	<!-- 根据条件获取列表 -->
@@ -53,12 +60,15 @@
 	<select id="listForUser" resultMap="resultMap">
 		SELECT a.id,
 			   a.userId,
+			   a.isRead,
+			   a.readTime,
 			   b.name,
-			   b.avatar
+			   b.avatar,
+			   b.ddUserId
 		FROM tab_notice_user a
 		JOIN tab_user b ON a.userId = b.id
 		<where>
-			<include refid="condition"></include>
+			<include refid="conditionForUser"></include>
 		</where>
 		ORDER BY a.readTime ASC, a.createTime ASC
 	</select>

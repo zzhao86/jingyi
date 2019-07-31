@@ -131,4 +131,14 @@ public class DingtalkConfig {
 	 * 获取部门详情
 	 */
 	public final static String GetDeptDetail = ApiBaseUrl + prop.getProperty("GetDeptDetail");
+	
+	/**
+	 * 发送普通消息
+	 */
+	public final static String SendMessage = ApiBaseUrl + prop.getProperty("SendMessage");
+
+	/**
+	 * 发送工作消息
+	 */
+	public final static String SendWorkMessage = ApiBaseUrl + prop.getProperty("SendWorkMessage");
 }

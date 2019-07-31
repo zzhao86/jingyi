@@ -1,6 +1,7 @@
 package com.seglino.jingyi.common.request;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.util.StringUtils;
@@ -40,6 +41,8 @@ public class RequestListParams implements Serializable {
 		if (!StringUtils.isEmpty(query)) {
 			condition = JSONObject.parseObject(query, Map.class);
 			return condition;
+		} else {
+			condition = new HashMap<String, Object>();
 		}
 		return condition;
 	}

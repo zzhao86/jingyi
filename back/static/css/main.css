@@ -171,3 +171,25 @@ body {
   color: #ccc;
   font-size: 12px;
 }
+
+/******************** 禁用状态下 单选按钮样式 开始 ********************/
+.el-radio.is-bordered.is-checked.is-disabled {
+  border-color: #409eff;
+}
+.el-radio__input.is-disabled.is-checked .el-radio__inner {
+  border-color: #409eff;
+}
+.el-radio__input.is-disabled.is-checked .el-radio__inner::after {
+  background-color: #409eff;
+}
+.el-radio__input.is-disabled.is-checked + span.el-radio__label {
+  color: #409eff;
+}
+/******************** 禁用状态下 单选按钮样式 结束 ********************/
+
+.options-buttons .el-button--mini {
+  padding: 5px 3px;
+}
+.options-buttons .el-button + .el-button {
+  margin-left: 3px;
+}
