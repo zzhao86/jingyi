@@ -21,6 +21,12 @@ import com.seglino.jingyi.user.service.UserService;
 import com.seglino.jingyi.webapi.shiro.CustomToken;
 import com.seglino.jingyi.webapi.shiro.LoginType;
 
+/**
+ * 钉钉应用管理后台中免登系统管理后台
+ * 
+ * @author ZZH
+ *
+ */
 public class DingtalkSsoRealm extends AuthorizingRealm {
 	@Autowired
 	private UserService userService;

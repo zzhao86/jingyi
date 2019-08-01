@@ -16,6 +16,7 @@ import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreato
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.seglino.jingyi.webapi.shiro.realm.DingtalkCorpRealm;
 import com.seglino.jingyi.webapi.shiro.realm.DingtalkQrcodeRealm;
 import com.seglino.jingyi.webapi.shiro.realm.DingtalkSsoRealm;
 
@@ -31,11 +32,16 @@ public class ShiroConfiguration {
 
 		// 权限控制map.
 		Map<String, String> filterChainDefinitionMap = new HashMap<String, String>();
+		//客户端钉钉鉴权
+		filterChainDefinitionMap.put("/client/dingtalk/jsapi_config", "anon");
 		// 公共请求
 		filterChainDefinitionMap.put("/back", "anon");
 		filterChainDefinitionMap.put("/account/**", "anon");
 		// 静态资源
 		filterChainDefinitionMap.put("/static/**", "anon");
+		
+		// 测试方法
+		filterChainDefinitionMap.put("/test/**", "anon");
 
 		// 此处需要添加一个kickout，上面添加的自定义拦截器才能生效
 		filterChainDefinitionMap.put("/back/**", "authc");// 表示需要认证才可以访问
@@ -51,6 +57,7 @@ public class ShiroConfiguration {
 		List<Realm> realms = new ArrayList<Realm>();
 		realms.add(dingtalkQrcodeRealm());
 		realms.add(dingtalkSsoRealm());
+		realms.add(dingtalkCorpRealm());
 		manager.setRealms(realms);
 		return manager;
 	}
@@ -77,6 +84,13 @@ public class ShiroConfiguration {
 	public DingtalkSsoRealm dingtalkSsoRealm() {
 		DingtalkSsoRealm realm = new DingtalkSsoRealm();
 		realm.setName(LoginType.DINGTALK_SSO.getType());
+		return realm;
+	}
+
+	@Bean
+	public DingtalkCorpRealm dingtalkCorpRealm() {
+		DingtalkCorpRealm realm = new DingtalkCorpRealm();
+		realm.setName(LoginType.DINGTALK_CORP.getType());
 		return realm;
 	}
 

@@ -1,0 +1,10 @@
+{
+  "pages": [
+    "pages/splash/splash",
+    "pages/notice/index/index",
+    "pages/notice/detail/detail"
+  ],
+  "window": {
+    "defaultTitle": "京仪"
+  }
+}

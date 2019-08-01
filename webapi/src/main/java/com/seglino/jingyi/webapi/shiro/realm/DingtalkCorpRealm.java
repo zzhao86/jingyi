@@ -14,7 +14,7 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
-import com.dingtalk.api.response.OapiSnsGetuserinfoBycodeResponse;
+import com.dingtalk.api.response.OapiUserGetuserinfoResponse;
 import com.seglino.jingyi.dingtalk.service.AuthService;
 import com.seglino.jingyi.user.pojo.User;
 import com.seglino.jingyi.user.service.UserService;
@@ -22,12 +22,12 @@ import com.seglino.jingyi.webapi.shiro.CustomToken;
 import com.seglino.jingyi.webapi.shiro.LoginType;
 
 /**
- * 钉钉扫码登系统录管理后台
+ * 钉钉企业内部应用免登
  * 
  * @author ZZH
  *
  */
-public class DingtalkQrcodeRealm extends AuthorizingRealm {
+public class DingtalkCorpRealm extends AuthorizingRealm {
 	@Autowired
 	private UserService userService;
 	@Autowired
@@ -40,11 +40,11 @@ public class DingtalkQrcodeRealm extends AuthorizingRealm {
 		if (StringUtils.isEmpty(code)) {
 			throw new AuthenticationException("临时授权码获取失败");
 		}
-		OapiSnsGetuserinfoBycodeResponse response = authService.getUserDetailByQrCode(code);
+		OapiUserGetuserinfoResponse response = authService.getUserDetailByCorp(code);
 		if (response.isSuccess()) {
-			String unionid = response.getUserInfo().getUnionid();
+			String ddUserId = response.getUserid();
 			Map<String, Object> param = new HashMap<String, Object>();
-			param.put("unionid", unionid);
+			param.put("ddUserId", ddUserId);
 			User user = userService.detail(param);
 			if (null == user) {
 				throw new AuthenticationException("用户不存在");
@@ -56,7 +56,7 @@ public class DingtalkQrcodeRealm extends AuthorizingRealm {
 				throw new DisabledAccountException("账号已被禁用");
 			}
 
-			SimpleAuthenticationInfo authInfo = new SimpleAuthenticationInfo(user.getId(), code, LoginType.DINGTALK_QRCODE.getType());
+			SimpleAuthenticationInfo authInfo = new SimpleAuthenticationInfo(user.getId(), code, LoginType.DINGTALK_CORP.getType());
 			return authInfo;
 		} else {
 			throw new AuthenticationException("授权失败");
@@ -71,7 +71,7 @@ public class DingtalkQrcodeRealm extends AuthorizingRealm {
 	@Override
 	public boolean supports(AuthenticationToken token) {
 		if (token instanceof CustomToken) {
-			return ((CustomToken) token).getLoginType() == LoginType.DINGTALK_QRCODE;
+			return ((CustomToken) token).getLoginType() == LoginType.DINGTALK_CORP;
 		} else {
 			return false;
 		}

@@ -9,8 +9,9 @@ Object.defineProperties(this, {
   },
   user: {
     get: () => {
-      if (sessionStorage.getItem("JINGYI_BACK_USER")) {
-        return JSON.parse(sessionStorage.getItem("JINGYI_BACK_USER"));
+      let userSession = sessionStorage.getItem("JINGYI_BACK_USER");
+      if (userSession) {
+        return JSON.parse(userSession);
       } else {
         return null;
       }

@@ -73,7 +73,7 @@ new Vue({
       .get('client/dingtalk/jsapi_config', {
         params: {
           // url: location.href
-          url: 'http://192.168.0.218:5051'
+          url: 'http://192.168.0.8:5051'
         }
       })
       .then(res => {

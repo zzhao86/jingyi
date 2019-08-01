@@ -19,12 +19,12 @@ public interface AuthService {
 	public OapiGettokenResponse getAccessToken();
 
 	/**
-	 * 用免登码获取用户信息
+	 * 企业内部应用免登码获取用户信息
 	 * 
 	 * @param code
 	 * @return
 	 */
-	public OapiUserGetuserinfoResponse getUserDetail(String code);
+	public OapiUserGetuserinfoResponse getUserDetailByCorp(String code);
 
 	/**
 	 * 获取应用管理后台免登的管理员信息

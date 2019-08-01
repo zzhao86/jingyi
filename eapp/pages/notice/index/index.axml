@@ -1,0 +1,15 @@
+<view>
+	<view class="notice-wrapper" a:for="{{list}}" a:for-index="index", a:for-item="item">
+		<view class="notice-info">
+			<view class="notice-title">{{item.title}}</view>
+			<view class="notice-ext">
+				<view class="notice-author">{{item.author}}</view>
+				<view class="notice-date">{{item.publishTime}}</view>
+			</view>
+		</view>
+		<view class="notice-cover">
+			<image mode="aspectFill" src="{{baseApiUrl + item.coverUrl}}" class="notice-cover-image"/>
+		</view>
+		<view>
+		</view>
+	</view>

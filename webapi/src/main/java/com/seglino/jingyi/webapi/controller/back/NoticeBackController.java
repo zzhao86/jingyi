@@ -1,5 +1,6 @@
 package com.seglino.jingyi.webapi.controller.back;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
 
@@ -51,6 +52,11 @@ public class NoticeBackController {
 	@Autowired
 	private DingtalkMessageService dingtalkMessageService;
 
+	/**
+	 * 获取分页列表
+	 * @param params
+	 * @return
+	 */
 	@GetMapping("list")
 	public ApiPageResult list(RequestListParams params) {
 		ApiPageResult aResult = new ApiPageResult();
@@ -65,6 +71,11 @@ public class NoticeBackController {
 		return aResult;
 	}
 
+	/**
+	 * 获取详情
+	 * @param id
+	 * @return
+	 */
 	@GetMapping("detail")
 	public ApiResult detail(String id) {
 		ApiResult aResult = new ApiResult();
@@ -93,6 +104,11 @@ public class NoticeBackController {
 		return aResult;
 	}
 
+	/**
+	 * 保存
+	 * @param vo
+	 * @return
+	 */
 	@PostMapping("save")
 	public ApiResult save(@RequestBody NoticeDetailVo vo) {
 		ApiResult aResult = new ApiResult();
@@ -102,6 +118,9 @@ public class NoticeBackController {
 			int count = noticeService.save(dto);
 			if (count == 0) {
 				aResult.addError("保存失败");
+			} else {
+				// 保存成功之后，给所有接收人发送钉钉工作通知
+				sendDingtalkWorkMessage(dto.getId().toString());
 			}
 		} catch (Exception e) {
 			aResult.addError(e);
@@ -109,6 +128,11 @@ public class NoticeBackController {
 		return aResult;
 	}
 
+	/**
+	 * 上传封面
+	 * @param request
+	 * @return
+	 */
 	@PostMapping("upload_cover")
 	public ApiResult uploadCover(HttpServletRequest request) {
 		ApiResult aResult = new ApiResult();
@@ -121,6 +145,11 @@ public class NoticeBackController {
 		return aResult;
 	}
 
+	/**
+	 * 上传附件
+	 * @param request
+	 * @return
+	 */
 	@PostMapping("upload_attach")
 	public ApiResult uploadAttach(HttpServletRequest request) {
 		ApiResult aResult = new ApiResult();
@@ -133,6 +162,11 @@ public class NoticeBackController {
 		return aResult;
 	}
 
+	/**
+	 * 删除
+	 * @param id
+	 * @return
+	 */
 	@GetMapping("delete")
 	public ApiResult delete(String id) {
 		ApiResult aResult = new ApiResult();
@@ -143,7 +177,12 @@ public class NoticeBackController {
 		}
 		return aResult;
 	}
-
+	
+	/**
+	 * 批量删除	
+	 * @param ids
+	 * @return
+	 */
 	@PostMapping("delete_batch")
 	public ApiResult deleteBatch(@RequestBody List<Object> ids) {
 		ApiResult aResult = new ApiResult();
@@ -155,52 +194,50 @@ public class NoticeBackController {
 		return aResult;
 	}
 
-	@GetMapping("test")
-	public ApiResult sendmessage() {
-		ApiResult aResult = new ApiResult();
-		try {
-			String id = "e63bb95f8d9f11e9a79000ffeb657a63";
-			String baseUrl = "http://192.168.0.8:5050";
-			Notice notice = noticeService.detailById(id);
-			String text = "";
-			if (StringUtils.isEmpty(notice.getAuthor())) {
-				text = DateUtils.toString(notice.getPublishTime(), "MM月dd日 HH:ss");
-			} else {
-				text = notice.getAuthor() + "　" + DateUtils.toString(notice.getPublishTime(), "MM月dd日 HH:ss");
-			}
-			// 获取公告接收人列表，并组合成字符串
-			RequestListParams params = new RequestListParams();
-			params.setIndex(1);
-			params.setSize(9999999);
-			params.addCondition("noticeId", id);
-			params.addCondition("isRead", false);
-			params.addCondition("isDeleted", false);
-			List<NoticeUserDto> noticeUserList = noticeUserService.listForUser(params);
-			StringBuilder sb = new StringBuilder();
-			for (NoticeUserDto noticeUser : noticeUserList) {
-				sb.append(noticeUser.getDdUserId());
-				sb.append(",");
-			}
-			if (sb.length() > 0) {
-				sb.deleteCharAt(sb.lastIndexOf(","));
-			}
-
-			DingtalkWorkMessageDto.Link link = new DingtalkWorkMessageDto.Link();
-			link.setMessageUrl("dingtalk://dingtalkclient/page/link?url=" + URLEncoder.encode(baseUrl, "UTF-8") + "&pc_slide=true");
-			link.setPicUrl(baseUrl + notice.getCoverUrl());
-			link.setTitle(notice.getTitle());
-			link.setText(text);
-
-			DingtalkWorkMessageDto dto = new DingtalkWorkMessageDto();
-			dto.setUseridList(sb.toString());
-			dto.setMsgType(MessageType.LINK);
-			dto.setLink(link);
-
-			OapiMessageCorpconversationAsyncsendV2Response response = dingtalkMessageService.sendWorkMessage(dto);
-			aResult.setData(response);
-		} catch (Exception e) {
-			aResult.addError(e);
+	/**
+	 * 给公告接收人发送钉钉工作消息
+	 * @param notice
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
+	private boolean sendDingtalkWorkMessage(String id) throws UnsupportedEncodingException {
+		String baseUrl = "http://192.168.0.8:5050";
+		String text = "";
+		Notice notice = noticeService.detailById(id);
+		if (StringUtils.isEmpty(notice.getAuthor())) {
+			text = DateUtils.toString(notice.getPublishTime(), "MM月dd日 HH:ss");
+		} else {
+			text = notice.getAuthor() + "　" + DateUtils.toString(notice.getPublishTime(), "MM月dd日 HH:mm");
 		}
-		return aResult;
+		// 获取公告接收人列表，并组合成字符串
+		RequestListParams params = new RequestListParams();
+		params.setIndex(1);
+		params.setSize(9999999);
+		params.addCondition("noticeId", notice.getId());
+		params.addCondition("isRead", false);
+		params.addCondition("isDeleted", false);
+		List<NoticeUserDto> noticeUserList = noticeUserService.listForUser(params);
+		StringBuilder sb = new StringBuilder();
+		for (NoticeUserDto noticeUser : noticeUserList) {
+			sb.append(noticeUser.getDdUserId());
+			sb.append(",");
+		}
+		if (sb.length() > 0) {
+			sb.deleteCharAt(sb.lastIndexOf(","));
+		}
+
+		DingtalkWorkMessageDto.Link link = new DingtalkWorkMessageDto.Link();
+		link.setMessageUrl("dingtalk://dingtalkclient/page/link?url=" + URLEncoder.encode(baseUrl, "UTF-8") + "&pc_slide=true");
+		link.setPicUrl(baseUrl + notice.getCoverUrl());
+		link.setTitle(notice.getTitle());
+		link.setText(text);
+
+		DingtalkWorkMessageDto dto = new DingtalkWorkMessageDto();
+		dto.setUseridList(sb.toString());
+		dto.setMsgType(MessageType.LINK);
+		dto.setLink(link);
+
+		OapiMessageCorpconversationAsyncsendV2Response response = dingtalkMessageService.sendWorkMessage(dto);
+		return response.isSuccess();
 	}
 }

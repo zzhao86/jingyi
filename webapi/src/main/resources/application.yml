@@ -9,12 +9,17 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/jingyi?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8&useSSL=true
     username: root
     password: root
+  # 文件上传配置
   servlet:
     multipart:
       enabled: true
       resolve-lazily: true
       max-file-size: 20MB
       max-request-size: 100MB
+  mvc:
+    view:
+      prefix: /static/view
+      suffix: .jsp
     
   # Json返回格式设置
   jackson:

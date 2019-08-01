@@ -68,6 +68,7 @@ public class NoticeServiceImpl extends BaseServiceImpl<NoticeDao, Notice> implem
 		} else {
 			update(notice);
 		}
+		dto.setId(notice.getId());
 		// 保存接收人
 		if (!StringUtils.isEmpty(dto.getScopeJson())) {
 			// 删除所有接收人，重新添加

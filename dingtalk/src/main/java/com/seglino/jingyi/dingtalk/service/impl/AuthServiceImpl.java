@@ -62,7 +62,7 @@ public class AuthServiceImpl implements AuthService {
 	 * @return
 	 */
 	@Override
-	public OapiUserGetuserinfoResponse getUserDetail(String code) {
+	public OapiUserGetuserinfoResponse getUserDetailByCorp(String code) {
 		DingTalkClient client = new DefaultDingTalkClient(DingtalkConfig.GetUserDetailByCode);
 		OapiUserGetuserinfoRequest request = new OapiUserGetuserinfoRequest();
 		request.setCode(code);

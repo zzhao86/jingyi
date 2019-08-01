@@ -46,7 +46,7 @@ public class DingtalkClientController {
 	public ApiResult getUserDetailByCode(String code) {
 		ApiResult aResult = new ApiResult();
 		try {
-			OapiUserGetuserinfoResponse response = authService.getUserDetail(code);
+			OapiUserGetuserinfoResponse response = authService.getUserDetailByCorp(code);
 			if (response.isSuccess()) {
 				Map<String, Object> map = new HashMap<String, Object>();
 				map.put("userid", response.getUserid());

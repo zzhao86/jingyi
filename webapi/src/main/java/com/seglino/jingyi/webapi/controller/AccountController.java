@@ -24,11 +24,19 @@ import com.seglino.jingyi.webapi.vo.back.user.UserDetailVo;
 public class AccountController {
 
 	private final String BackBaseUrl = "http://192.168.0.8:5052/#/";
+//	private final String ClientBaseUrl = "http://192.168.0.8:5051/#/";
 	private final String BackLoginUrl = BackBaseUrl + "login";
-	
+
 	@Autowired
 	private UserService userService;
 
+	/**
+	 * 钉钉扫码登系统录管理后台
+	 * 
+	 * @param code
+	 * @param state
+	 * @return
+	 */
 	@GetMapping("login/dingtalk_qrcode")
 	public ModelAndView loginByDingtalkQrcode(String code, String state) {
 		RedirectView redirect = new RedirectView();
@@ -47,12 +55,17 @@ public class AccountController {
 		return new ModelAndView(redirect);
 	}
 
+	/**
+	 * 钉钉应用管理后台中免登系统管理后台
+	 * 
+	 * @param code
+	 * @return
+	 */
 	@GetMapping("login/dingtalk_sso")
 	public ModelAndView loginByDingtalkSso(String code) {
 		RedirectView redirect = new RedirectView();
 		try {
 			Subject subject = SecurityUtils.getSubject();
-			subject.getSession().setTimeout(1);
 			CustomToken token = new CustomToken(LoginType.DINGTALK_SSO, code, code, code);
 			subject.login(token);
 			if (subject.isAuthenticated()) {
@@ -64,6 +77,32 @@ public class AccountController {
 			redirect.setUrl(BackLoginUrl);
 		}
 		return new ModelAndView(redirect);
+	}
+
+	/**
+	 * 钉钉企业内部应用免登
+	 * 
+	 * @param code
+	 * @return
+	 */
+	@GetMapping("login/dingtalk_corp")
+	public ApiResult loginByCorp(String code, HttpServletResponse response) {
+		ApiResult aResult = new ApiResult();
+		try {
+			Subject subject = SecurityUtils.getSubject();
+			CustomToken token = new CustomToken(LoginType.DINGTALK_CORP, code, code, code);
+			subject.login(token);
+			if (subject.isAuthenticated()) {
+				Object userid = subject.getPrincipal();
+				User user = userService.detailById(userid);
+				aResult.setData(AutoMapper.mapper(user, UserDetailVo.class));
+			} else {
+				aResult.addError("登录失败");
+			}
+		} catch (Exception e) {
+			aResult.addError(e);
+		}
+		return aResult;
 	}
 
 	@GetMapping("user")
