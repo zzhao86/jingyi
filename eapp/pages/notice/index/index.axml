@@ -10,6 +10,4 @@
 		<view class="notice-cover">
 			<image mode="aspectFill" src="{{baseApiUrl + item.coverUrl}}" class="notice-cover-image"/>
 		</view>
-		<view>
-		</view>
 	</view>
