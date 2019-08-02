@@ -44,7 +44,7 @@ public class NoticeServiceImpl extends BaseServiceImpl<NoticeDao, Notice> implem
 		Map<String, Object> param = new HashMap<String, Object>();
 		param.put("noticeId", id);
 		List<NoticeAttach> attachList = attachService.list(param);
-		dto.setAttacheList(attachList);
+		dto.setAttachList(attachList);
 		return dto;
 	}
 
@@ -62,7 +62,7 @@ public class NoticeServiceImpl extends BaseServiceImpl<NoticeDao, Notice> implem
 		Notice notice = AutoMapper.mapper(dto, Notice.class);
 		notice.setPublishTime(DateUtils.getNow());
 		// 保存提交的附件列表
-		List<NoticeAttach> saveAttachList = AutoMapper.mapperList(dto.getAttacheList(), NoticeAttach.class);
+		List<NoticeAttach> saveAttachList = AutoMapper.mapperList(dto.getAttachList(), NoticeAttach.class);
 		if (StringUtils.isEmpty(notice.getId())) {
 			insert(notice);
 		} else {

@@ -82,7 +82,7 @@ public class NoticeBackController {
 		try {
 			NoticeDetailDto notice = noticeService.detailDto(id);
 			NoticeDetailVo vo = AutoMapper.mapper(notice, NoticeDetailVo.class);
-			vo.setAttachList(AutoMapper.mapperList(notice.getAttacheList(), NoticeAttachVo.class));
+			vo.setAttachList(AutoMapper.mapperList(notice.getAttachList(), NoticeAttachVo.class));
 			aResult.setData(vo);
 		} catch (Exception e) {
 			aResult.addError(e);
@@ -114,7 +114,7 @@ public class NoticeBackController {
 		ApiResult aResult = new ApiResult();
 		try {
 			NoticeDetailDto dto = AutoMapper.mapper(vo, NoticeDetailDto.class);
-			dto.setAttacheList(AutoMapper.mapperList(vo.getAttachList(), NoticeAttach.class));
+			dto.setAttachList(AutoMapper.mapperList(vo.getAttachList(), NoticeAttach.class));
 			int count = noticeService.save(dto);
 			if (count == 0) {
 				aResult.addError("保存失败");

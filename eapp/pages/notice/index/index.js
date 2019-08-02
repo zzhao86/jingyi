@@ -11,47 +11,108 @@ Page({
 				userId: app.globalData.user.id
 			}
 		},
+		total: 0,
 		baseApiUrl: app.globalData.baseApiUrl,
 		list: []
 	},
-	onLoad(query) {
-		// 页面加载
+	/**
+	 * 加载
+	 */
+	loadListData() {
 		http.get('client/notice/list', {
 			params: {
 				params: this.data.params
 			}
 		}).then(res => {
-			this.setData({
-				list: res.data
-			});
+			if (res.isSuccess) {
+				this.setData({
+					list: res.data
+				});
+			}
+			dd.stopPullDownRefresh()
 		})
 	},
+	/**
+	 * 点击查看事件
+	 */
+	onViewClick(e) {
+		let id = e.target.dataset.id;
+		dd.navigateTo({
+			url: `/pages/notice/detail/detail?id=${id}`
+		});
+	},
+	/**
+	 * 封面图片加载错误处理
+	 */
+	onCoverImageError(e) {
+		let item = e.target.dataset.item;
+		let list = new Array();
+		for (let i = 0; i < this.data.list.length; i++) {
+			let o = this.data.list[i];
+			if (item.id == o.id) {
+				o.coverUrl = '/static/images/image.png';
+			}
+			list.push(o);
+		}
+		this.setData({
+			list: list
+		});
+	},
+	/**
+	 * 页面加载
+	 */
+	onLoad(query) {
+		this.loadListData();
+	},
+	/**
+	 * 页面加载完成
+	 */
 	onReady() {
-		// 页面加载完成
+
 	},
+	/**
+	 * 页面显示
+	 */
 	onShow() {
-		// 页面显示
+
 	},
+	/**
+	 * 页面隐藏
+	 */
 	onHide() {
-		// 页面隐藏
+
 	},
+	/**
+	 * 页面被关闭
+	 */
 	onUnload() {
-		// 页面被关闭
 	},
+	/**
+	 * 标题被点击
+	 */
 	onTitleClick() {
-		// 标题被点击
+
 	},
+	/**
+	 * 页面顶部下拉
+	 */
 	onPullDownRefresh() {
-		// 页面被下拉
+		this.loadListData();
 	},
+	/**
+	 * 页面底部上滑
+	 */
 	onReachBottom() {
-		// 页面被拉到底部
+
 	},
+	/**
+	 * 返回自定义分享信息
+	 */
 	onShareAppMessage() {
-		// 返回自定义分享信息
 		return {
 			title: '公告',
 			desc: '公告列表',
+			imageUrl: app.globalData.baseApiUrl + '/static/images/login-bg.jpg',
 			path: '/pages/notice/index/index',
 		};
 	},

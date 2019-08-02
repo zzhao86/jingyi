@@ -1,5 +1,5 @@
 <view>
-	<view class="notice-wrapper" a:for="{{list}}" a:for-index="index", a:for-item="item">
+	<view class="notice-wrapper" a:for="{{list}}" a:for-index="index", a:for-item="item" onTap="onViewClick" data-id="{{item.id}}">
 		<view class="notice-info">
 			<view class="notice-title">{{item.title}}</view>
 			<view class="notice-ext">
@@ -8,6 +8,6 @@
 			</view>
 		</view>
 		<view class="notice-cover">
-			<image mode="aspectFill" src="{{baseApiUrl + item.coverUrl}}" class="notice-cover-image"/>
+			<image src="{{baseApiUrl + item.coverUrl}}" onError="onCoverImageError" mode="aspectFill" class="notice-cover-image" data-item="{{item}}"/>
 		</view>
 	</view>

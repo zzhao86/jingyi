@@ -17,7 +17,7 @@ public class NoticeDetailDto extends BaseEntity {
 	private Integer readCount;
 	private Integer totalCount;
 	private Date publishTime;
-	private List<NoticeAttach> attacheList;
+	private List<NoticeAttach> attachList;
 
 	public String getCategoryId() {
 		return categoryId;
@@ -91,11 +91,11 @@ public class NoticeDetailDto extends BaseEntity {
 		this.publishTime = publishTime;
 	}
 
-	public List<NoticeAttach> getAttacheList() {
-		return attacheList;
+	public List<NoticeAttach> getAttachList() {
+		return attachList;
 	}
 
-	public void setAttacheList(List<NoticeAttach> attacheList) {
-		this.attacheList = attacheList;
+	public void setAttachList(List<NoticeAttach> attachList) {
+		this.attachList = attachList;
 	}
 }
