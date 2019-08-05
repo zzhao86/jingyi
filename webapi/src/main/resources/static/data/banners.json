@@ -3,15 +3,15 @@
   "message": null,
   "data": [
     {
-      "image": "http://localhost:5050/static/images/banner/banner-1.jpg",
+      "image": "/static/images/banner/banner-1.jpg",
       "link": null
     },
     {
-      "image": "http://localhost:5050/static/images/banner/banner-2.jpg",
+      "image": "/static/images/banner/banner-2.jpg",
       "link": null
     },
     {
-      "image": "http://localhost:5050/static/images/banner/banner-3.jpg",
+      "image": "/static/images/banner/banner-3.jpg",
       "link": null
     }
   ]

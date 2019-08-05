@@ -13,7 +13,6 @@ import com.seglino.jingyi.common.utils.AutoMapper;
 import com.seglino.jingyi.notice.dto.NoticeDetailDto;
 import com.seglino.jingyi.notice.pojo.Notice;
 import com.seglino.jingyi.notice.service.NoticeService;
-import com.seglino.jingyi.webapi.HtmlToJson;
 import com.seglino.jingyi.webapi.vo.back.notice.NoticeAttachVo;
 import com.seglino.jingyi.webapi.vo.back.notice.NoticeDetailVo;
 import com.seglino.jingyi.webapi.vo.back.notice.NoticeListVo;
@@ -44,13 +43,8 @@ public class NoticeClientController {
 		ApiResult aResult = new ApiResult();
 		try {
 			NoticeDetailDto notice = noticeService.detailDto(id);
-//			HtmlToJson.Params params = new HtmlToJson.Params();
-//			params.setType("html");
-//			HtmlToJson htmlToJson = HtmlToJson.by(notice.getContent(), params);
-//			String content = htmlToJson.get();
 			NoticeDetailVo vo = AutoMapper.mapper(notice, NoticeDetailVo.class);
 			vo.setAttachList(AutoMapper.mapperList(notice.getAttachList(), NoticeAttachVo.class));
-//			vo.setContent(content);
 			aResult.setData(vo);
 		} catch (Exception e) {
 			aResult.addError(e);

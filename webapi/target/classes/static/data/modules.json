@@ -5,20 +5,20 @@
     {
       "id": 1,
       "name": "智慧办公",
-      "icon": "http://localhost:5050/static/images/module/module-icon-1.png",
-      "background": "http://localhost:5050/static/images/module/module-bg-1.png"
+      "icon": "/static/images/module/module-icon-1.png",
+      "background": "/static/images/module/module-bg-1.png"
     },
     {
       "id": 2,
       "name": "智慧物业",
-      "icon": "http://localhost:5050/static/images/module/module-icon-2.png",
-      "background": "http://localhost:5050/static/images/module/module-bg-2.png"
+      "icon": "/static/images/module/module-icon-2.png",
+      "background": "/static/images/module/module-bg-2.png"
     },
     {
       "id": 3,
       "name": "智慧生活",
-      "icon": "http://localhost:5050/static/images/module/module-icon-3.png",
-      "background": "http://localhost:5050/static/images/module/module-bg-3.png"
+      "icon": "/static/images/module/module-icon-3.png",
+      "background": "/static/images/module/module-bg-3.png"
     }
   ]
 }

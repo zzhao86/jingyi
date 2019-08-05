@@ -4,7 +4,7 @@
     <div class="swiper-container banner">
       <div class="swiper-wrapper">
         <div class="swiper-slide" v-for="(item, index) in banners" :key="index">
-          <img class="banner-image" :src="item.image" alt />
+          <img class="banner-image" :src="$global.baseUrl +item.image" alt />
         </div>
       </div>
       <div class="swiper-pagination"></div>
@@ -36,8 +36,8 @@
       <div class="swiper-container">
         <div class="swiper-wrapper">
           <div class="swiper-slide" v-for="(item, index) in modules" :key="index">
-            <div class="module" v-bind:style="{backgroundImage: 'url(' + item.background + ')'}">
-              <img class="icon" :src="item.icon" alt />
+            <div class="module" v-bind:style="{backgroundImage: 'url(' + $global.baseUrl + item.background + ')'}">
+              <img class="icon" :src="$global.baseUrl + item.icon" alt />
               <div class="name">{{ item.name }}</div>
             </div>
           </div>
@@ -51,10 +51,10 @@
 
     <!-- item start -->
     <div class="item-container">
-      <div class="header">{{current.module.name}}</div>
+      <div class="header">{{ current.module.name }}</div>
       <div class="item-box clearfix">
         <button class="item" v-for="(item, index) in current.items" :key="index" @click="onOpenAppClick(item)">
-          <div class="icon" v-bind:style="{backgroundImage: 'url(' + item.icon + ')'}"></div>
+          <div class="icon" v-bind:style="{backgroundImage: 'url(' + $global.baseUrl + item.icon + ')'}"></div>
           <div class="name">{{ item.name }}</div>
         </button>
       </div>
@@ -135,24 +135,30 @@
       initData: function() {
         const vue = this;
         // 获取banner列表数据
-        vue.$http.get('static/data/banners.json').then(res => {
-          vue.banners = res;
+        vue.$get('static/data/banners.json').then(res => {
+          vue.banners = res.data;
           vue.$nextTick(function() {
             vue.bannerSwiper.init();
           });
         });
 
         // 获取notice列表数据
-        vue.$http.get('static/data/notices.json').then(res => {
-          vue.notices = res;
-          vue.$nextTick(function() {
-            vue.noticeSwiper.init();
+        vue
+          .$get('client/home/notice/list', {
+            params: {
+              userid: vue.$global.user.id
+            }
+          })
+          .then(res => {
+            vue.notices = res.data;
+            vue.$nextTick(function() {
+              vue.noticeSwiper.init();
+            });
           });
-        });
 
         // 获取module列表数据
-        vue.$http.get('static/data/modules.json').then(res => {
-          vue.modules = res;
+        vue.$get('static/data/modules.json').then(res => {
+          vue.modules = res.data;
           if (vue.modules && vue.modules.length > 0) {
             vue.current.module = vue.modules[0];
           }
@@ -162,30 +168,32 @@
         });
 
         // 获取Item列表数据
-        vue.$http.get('static/data/items.json').then(res => {
-          vue.items = res;
-          if (res && res.length > 0) {
-            vue.current.items = res.filter(item => item.module == vue.current.module.id);
+        vue.$get('static/data/items.json').then(res => {
+          vue.items = res.data;
+          if (vue.items && vue.items.length > 0) {
+            vue.current.items = vue.items.filter(item => item.module == vue.current.module.id);
           }
         });
       },
       onOpenNoticeListClick: function() {
-        if (this.$dd.ios || this.$dd.android) {
-          this.$dd.biz.util.openLink({
-            url: 'https://app.dingtalk.com/blackboard/noticeList.html?showmenu=false&dd_progress=false&dd_share=false&corpid=' + this.$global.corpId
-          });
-        } else {
-          location.href = 'https://app.dingtalk.com/index.html?corpId=' + this.$global.corpId;
-        }
+        this.$router.push('/notice');
+        // if (this.$dd.ios || this.$dd.android) {
+        //   this.$dd.biz.util.openLink({
+        //     url: 'https://app.dingtalk.com/blackboard/noticeList.html?showmenu=false&dd_progress=false&dd_share=false&corpid=' + this.$global.corpId
+        //   });
+        // } else {
+        //   location.href = 'https://app.dingtalk.com/index.html?corpId=' + this.$global.corpId;
+        // }
       },
       onOpenNoticeClick: function(item) {
-        if (this.$dd.ios || this.$dd.android) {
-          this.$dd.biz.util.openLink({
-            url: item.url
-          });
-        } else {
-          location.href = item.url;
-        }
+        this.$router.push(`/notice/detail?id=${item.id}`);
+        // if (this.$dd.ios || this.$dd.android) {
+        //   this.$dd.biz.util.openLink({
+        //     url: item.url
+        //   });
+        // } else {
+        //   location.href = item.url;
+        // }
       },
       onOpenAppClick: function(item) {
         const vue = this;

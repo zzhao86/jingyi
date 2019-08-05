@@ -22,37 +22,40 @@
         vue.$router.push('/');
         return;
       }
-
-      var appid = 'dingoahwjazjqdmlt2gs5k';
-      var redirect = encodeURIComponent(this.$global.baseUrl + 'account/login/dingtalk_qrcode');
-      var url = 'https://oapi.dingtalk.com/connect/oauth2/sns_authorize?appid=' + appid + '&response_type=code&scope=snsapi_login&state=STATE&redirect_uri=';
-      var goto = encodeURIComponent(url + redirect);
-      this.$nextTick(function() {
-        var obj = DDLogin({
-          id: 'loginContainer',
-          goto: goto,
-          style: 'border: none; background-color: transparent;',
-          width: '350',
-          height: '300'
-        });
-      });
-
-      var hanndleMessage = function(event) {
-        var origin = event.origin;
-        if (origin == 'https://login.dingtalk.com') {
-          window.location.href = url + redirect + '&loginTmpCode=' + event.data;
-        }
-      };
-      if (typeof window.addEventListener != 'undefined') {
-        window.addEventListener('message', hanndleMessage, false);
-      } else if (typeof window.attachEvent != 'undefined') {
-        window.attachEvent('onmessage', hanndleMessage);
-      }
+      this.onLogin();
     },
     data() {
       return {};
     },
-    methods: {}
+    methods: {
+      onLogin() {
+        var appid = 'dingoahwjazjqdmlt2gs5k';
+        var redirect = encodeURIComponent(this.$global.baseUrl + 'account/login/dingtalk_qrcode');
+        var url = 'https://oapi.dingtalk.com/connect/oauth2/sns_authorize?appid=' + appid + '&response_type=code&scope=snsapi_login&state=STATE&redirect_uri=';
+        var goto = encodeURIComponent(url + redirect);
+        this.$nextTick(function() {
+          var obj = DDLogin({
+            id: 'loginContainer',
+            goto: goto,
+            style: 'border: none; background-color: transparent;',
+            width: '350',
+            height: '300'
+          });
+        });
+
+        var hanndleMessage = function(event) {
+          var origin = event.origin;
+          if (origin == 'https://login.dingtalk.com') {
+            window.location.href = url + redirect + '&loginTmpCode=' + event.data;
+          }
+        };
+        if (typeof window.addEventListener != 'undefined') {
+          window.addEventListener('message', hanndleMessage, false);
+        } else if (typeof window.attachEvent != 'undefined') {
+          window.attachEvent('onmessage', hanndleMessage);
+        }
+      }
+    }
   };
 </script>
 <style scoped>

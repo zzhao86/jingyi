@@ -9,7 +9,7 @@ import com.dingtalk.api.response.OapiSsoGettokenResponse;
 import com.dingtalk.api.response.OapiSsoGetuserinfoResponse;
 import com.dingtalk.api.response.OapiUserGetuserinfoResponse;
 
-public interface AuthService {
+public interface DingtalkAuthService {
 
 	/**
 	 * 获取钉钉AccessToken

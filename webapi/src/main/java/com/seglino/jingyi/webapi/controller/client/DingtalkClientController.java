@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dingtalk.api.response.OapiUserGetuserinfoResponse;
 import com.seglino.jingyi.common.response.ApiResult;
-import com.seglino.jingyi.dingtalk.service.AuthService;
+import com.seglino.jingyi.dingtalk.service.DingtalkAuthService;
 
 @RestController
 @RequestMapping("client/dingtalk")
 public class DingtalkClientController {
 
 	@Autowired
-	private AuthService authService;
+	private DingtalkAuthService authService;
 
 	/**
 	 * jsapi鉴权参数

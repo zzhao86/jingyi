@@ -1,4 +1,0 @@
-<view>
-  <view>{{user.name}}</view>
-	<image mode="scaleToFill" src="{{user.avatar}}"/>
-</view>

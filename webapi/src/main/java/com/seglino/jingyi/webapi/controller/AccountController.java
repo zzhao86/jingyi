@@ -24,7 +24,7 @@ import com.seglino.jingyi.webapi.vo.back.user.UserDetailVo;
 public class AccountController {
 
 	private final String BackBaseUrl = "http://192.168.0.8:5052/#/";
-//	private final String ClientBaseUrl = "http://192.168.0.8:5051/#/";
+	// private final String ClientBaseUrl = "http://192.168.0.8:5051/#/";
 	private final String BackLoginUrl = BackBaseUrl + "login";
 
 	@Autowired
@@ -86,7 +86,7 @@ public class AccountController {
 	 * @return
 	 */
 	@GetMapping("login/dingtalk_corp")
-	public ApiResult loginByCorp(String code, HttpServletResponse response) {
+	public ApiResult loginByCorp(String code) {
 		ApiResult aResult = new ApiResult();
 		try {
 			Subject subject = SecurityUtils.getSubject();

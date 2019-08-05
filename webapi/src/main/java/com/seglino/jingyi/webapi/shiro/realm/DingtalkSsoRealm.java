@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
 import com.dingtalk.api.response.OapiSsoGetuserinfoResponse;
-import com.seglino.jingyi.dingtalk.service.AuthService;
+import com.seglino.jingyi.dingtalk.service.DingtalkAuthService;
 import com.seglino.jingyi.user.pojo.User;
 import com.seglino.jingyi.user.service.UserService;
 import com.seglino.jingyi.webapi.shiro.CustomToken;
@@ -31,7 +31,7 @@ public class DingtalkSsoRealm extends AuthorizingRealm {
 	@Autowired
 	private UserService userService;
 	@Autowired
-	private AuthService authService;
+	private DingtalkAuthService authService;
 
 	@Override
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authToken) throws AuthenticationException {

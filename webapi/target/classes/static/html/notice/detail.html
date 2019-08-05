@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<title>京仪物业管理系统</title>
+<style>
+.title {
+	color: #333;
+	font-size: 18px;
+	text-align: left;
+	font-weight: 400;
+	margin: 10px 0;
+}
+
+.author {
+	font-size: 13px;
+	color: #858e99;
+	margin: 10px 0;
+	text-align: left;
+	overflow: hidden;
+}
+
+.author .name {
+	padding-right: 15px;
+	float: left;
+}
+
+.author .time {
+	float: left;
+}
+
+.content {
+	clear: left;
+	margin-top: 20px;
+	overflow: hidden;
+}
+</style>
+</head>
+<body>
+	<div class="title">123</div>
+	<div class="author">
+		<span class="name">asdf</span>
+		<span class="time">fd</span>
+	</div>
+	<div class="content"></div>
+	<script type="text/javascript" src="https://appx/web-view.min.js"></script>
+	<script type="text/javascript">
+		// 接收来自小程序的消息。
+		dd.onMessage = function(e) {
+			alert(JSON.stringify(e));
+			console.log('document', document);
+			console.log('e', e);
+		}
+	</script>
+</body>
+</html>

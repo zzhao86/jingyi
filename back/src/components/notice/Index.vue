@@ -18,7 +18,7 @@
             <el-button type="text" size="mini" @click="onViewClick(scope.row)">{{ scope.row.title }}</el-button>
           </template>
         </el-table-column>
-        <el-table-column prop="author" label="作者" width="150"></el-table-column>
+        <el-table-column prop="author" label="作者" width="150" show-overflow-tooltip></el-table-column>
         <el-table-column label="状态" width="100">
           <template slot-scope="scope">
             <div class="total-count">共{{ scope.row.totalCount }}人</div>

@@ -6,7 +6,7 @@
       "id": 1,
       "module": 1,
       "name": "考勤",
-      "icon": "http://localhost:5050/static/images/item/item-kaoqin.png",
+      "icon": "/static/images/item/item-kaoqin.png",
       "agentId": "170856029",
       "homepageLink": null
     },
@@ -14,7 +14,7 @@
       "id": 2,
       "module": 1,
       "name": "签到",
-      "icon": "http://localhost:5050/static/images/item/item-qiandao.png",
+      "icon": "/static/images/item/item-qiandao.png",
       "agentId": "170856028",
       "homepageLink": null
     },
@@ -22,7 +22,7 @@
       "id": 3,
       "module": 1,
       "name": "审批",
-      "icon": "http://localhost:5050/static/images/item/item-shenpi.png",
+      "icon": "/static/images/item/item-shenpi.png",
       "agentId": "170856032",
       "homepageLink": null
     },
@@ -30,7 +30,7 @@
       "id": 4,
       "module": 1,
       "name": "日志",
-      "icon": "http://localhost:5050/static/images/item/item-rizhi.png",
+      "icon": "/static/images/item/item-rizhi.png",
       "agentId": "170856030",
       "homepageLink": null
     },
@@ -38,7 +38,7 @@
       "id": 5,
       "module": 1,
       "name": "电话会议",
-      "icon": "http://localhost:5050/static/images/item/item-dianhua.png",
+      "icon": "/static/images/item/item-dianhua.png",
       "agentId": "170856036",
       "homepageLink": null
     },
@@ -46,7 +46,7 @@
       "id": 6,
       "module": 1,
       "name": "视频会议",
-      "icon": "http://localhost:5050/static/images/item/item-shipin.png",
+      "icon": "/static/images/item/item-shipin.png",
       "agentId": "170856037",
       "homepageLink": null
     },
@@ -54,7 +54,7 @@
       "id": 7,
       "module": 1,
       "name": "钉盘",
-      "icon": "http://localhost:5050/static/images/item/item-dingpan.png",
+      "icon": "/static/images/item/item-dingpan.png",
       "agentId": "170856034",
       "homepageLink": null
     },
@@ -62,7 +62,7 @@
       "id": 8,
       "module": 1,
       "name": "钉邮",
-      "icon": "http://localhost:5050/static/images/item/item-dingyou.png",
+      "icon": "/static/images/item/item-dingyou.png",
       "agentId": "170856033",
       "homepageLink": null
     },
@@ -70,7 +70,7 @@
       "id": 9,
       "module": 1,
       "name": "智能人事",
-      "icon": "http://localhost:5050/static/images/item/item-zhinengrenshi.png",
+      "icon": "/static/images/item/item-zhinengrenshi.png",
       "agentId": "188775490",
       "homepageLink": null
     },
@@ -78,7 +78,7 @@
       "id": 10,
       "module": 2,
       "name": "公告",
-      "icon": "http://localhost:5050/static/images/item/item-gonggao.png",
+      "icon": "/static/images/item/item-gonggao.png",
       "agentId": "170856031",
       "homepageLink": null
     },
@@ -86,7 +86,7 @@
       "id": 11,
       "module": 2,
       "name": "客服",
-      "icon": "http://localhost:5050/static/images/item/item-kefu.png",
+      "icon": "/static/images/item/item-kefu.png",
       "agentId": "170856034",
       "homepageLink": null
     },
@@ -94,7 +94,7 @@
       "id": 12,
       "module": 2,
       "name": "物业巡检",
-      "icon": "http://localhost:5050/static/images/item/item-xunjian.png",
+      "icon": "/static/images/item/item-xunjian.png",
       "agentId": null,
       "homepageLink": null
     },
@@ -102,7 +102,7 @@
       "id": 13,
       "module": 2,
       "name": "物业报修",
-      "icon": "http://localhost:5050/static/images/item/item-baoxiu.png",
+      "icon": "/static/images/item/item-baoxiu.png",
       "agentId": null,
       "homepageLink": null
     },
@@ -110,7 +110,7 @@
       "id": 14,
       "module": 2,
       "name": "租户缴费",
-      "icon": "http://localhost:5050/static/images/item/item-jiaofei.png",
+      "icon": "/static/images/item/item-jiaofei.png",
       "agentId": null,
       "homepageLink": "http://yuanqu.meibg.com:8080/#/"
     },
@@ -118,7 +118,7 @@
       "id": 15,
       "module": 2,
       "name": "入驻管理",
-      "icon": "http://localhost:5050/static/images/item/item-ruzhu.png",
+      "icon": "/static/images/item/item-ruzhu.png",
       "agentId": null,
       "homepageLink": null
     },
@@ -126,7 +126,7 @@
       "id": 16,
       "module": 2,
       "name": "食堂点餐",
-      "icon": "http://localhost:5050/static/images/item/item-shitang.png",
+      "icon": "/static/images/item/item-shitang.png",
       "agentId": null,
       "homepageLink": null
     },
@@ -134,7 +134,7 @@
       "id": 17,
       "module": 3,
       "name": "招商",
-      "icon": "http://localhost:5050/static/images/item/item-zhaoshang.png",
+      "icon": "/static/images/item/item-zhaoshang.png",
       "agentId": null,
       "homepageLink": null
     },
@@ -142,7 +142,7 @@
       "id": 18,
       "module": 3,
       "name": "园区天地",
-      "icon": "http://localhost:5050/static/images/item/item-tiandi.png",
+      "icon": "/static/images/item/item-tiandi.png",
       "agentId": null,
       "homepageLink": null
     },
@@ -150,7 +150,7 @@
       "id": 19,
       "module": 3,
       "name": "园区服务",
-      "icon": "http://localhost:5050/static/images/item/item-fuwu.png",
+      "icon": "/static/images/item/item-fuwu.png",
       "agentId": null,
       "homepageLink": null
     },
@@ -158,7 +158,7 @@
       "id": 20,
       "module": 3,
       "name": "访客门禁",
-      "icon": "http://localhost:5050/static/images/item/item-fangke.png",
+      "icon": "/static/images/item/item-fangke.png",
       "agentId": null,
       "homepageLink": null
     },
@@ -166,7 +166,7 @@
       "id": 21,
       "module": 3,
       "name": "停车",
-      "icon": "http://localhost:5050/static/images/item/item-tingche.png",
+      "icon": "/static/images/item/item-tingche.png",
       "agentId": null,
       "homepageLink": null
     },
@@ -174,7 +174,7 @@
       "id": 22,
       "module": 3,
       "name": "阿里商旅",
-      "icon": "http://localhost:5050/static/images/item/item-shanglv.png",
+      "icon": "/static/images/item/item-shanglv.png",
       "agentId": "179784844",
       "homepageLink": null
     },
@@ -182,7 +182,7 @@
       "id": 23,
       "module": 3,
       "name": "园区活动",
-      "icon": "http://localhost:5050/static/images/item/item-huodong.png",
+      "icon": "/static/images/item/item-huodong.png",
       "agentId": "170856040",
       "homepageLink": null
     },
@@ -190,7 +190,7 @@
       "id": 24,
       "module": 3,
       "name": "党建",
-      "icon": "http://localhost:5050/static/images/item/item-dangjian.png",
+      "icon": "/static/images/item/item-dangjian.png",
       "agentId": null,
       "homepageLink": null
     }

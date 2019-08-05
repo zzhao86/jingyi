@@ -14,14 +14,14 @@ import org.springframework.util.StringUtils;
 import com.dingtalk.api.response.OapiGetJsapiTicketResponse;
 import com.dingtalk.api.response.OapiGettokenResponse;
 import com.dingtalk.api.response.OapiSsoGettokenResponse;
-import com.seglino.jingyi.dingtalk.service.AuthService;
+import com.seglino.jingyi.dingtalk.service.DingtalkAuthService;
 
 @Component
 public class DingtalkInit {
 	private Logger logger = LoggerFactory.getLogger(DingtalkInit.class);
 
 	@Autowired
-	private AuthService authService;
+	private DingtalkAuthService authService;
 
 	@PostConstruct
 	public void init() {
@@ -32,11 +32,11 @@ public class DingtalkInit {
 			DingtalkJsapiTicketThread jsapiTicketThread = new DingtalkJsapiTicketThread();
 
 			// 定时获取钉钉AccessToken
-			scheduled.scheduleAtFixedRate(accessTokenThread, 0, 6900, TimeUnit.SECONDS);
+			scheduled.scheduleAtFixedRate(accessTokenThread, 0, 300, TimeUnit.SECONDS);
 			// 定时获取钉钉SsoAccessToken
-			scheduled.scheduleAtFixedRate(ssoAccessTokenThread, 0, 6900, TimeUnit.SECONDS);
+			scheduled.scheduleAtFixedRate(ssoAccessTokenThread, 0, 300, TimeUnit.SECONDS);
 			// 定时获取钉钉JsapiTicket
-			scheduled.scheduleAtFixedRate(jsapiTicketThread, 0, 6900, TimeUnit.SECONDS);
+			scheduled.scheduleAtFixedRate(jsapiTicketThread, 0, 300, TimeUnit.SECONDS);
 		} catch (Exception e) {
 			logger.error("{}", e);
 		}

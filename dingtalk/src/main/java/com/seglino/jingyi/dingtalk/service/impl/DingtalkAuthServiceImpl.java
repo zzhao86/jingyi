@@ -21,16 +21,15 @@ import com.dingtalk.api.response.OapiSnsGetuserinfoBycodeResponse;
 import com.dingtalk.api.response.OapiSsoGettokenResponse;
 import com.dingtalk.api.response.OapiSsoGetuserinfoResponse;
 import com.dingtalk.api.response.OapiUserGetuserinfoResponse;
-import com.dingtalk.oapi.lib.aes.DingTalkEncryptException;
-import com.dingtalk.oapi.lib.aes.DingTalkJsApiSingnature;
+import com.seglino.jingyi.common.encrypt.EncryptUtils;
 import com.seglino.jingyi.dingtalk.config.DingtalkConfig;
-import com.seglino.jingyi.dingtalk.service.AuthService;
+import com.seglino.jingyi.dingtalk.service.DingtalkAuthService;
 import com.seglino.jingyi.dingtalk.utils.DingtalkGlobal;
 import com.taobao.api.ApiException;
 
 @Service
-public class AuthServiceImpl implements AuthService {
-	private Logger logger = LoggerFactory.getLogger(AuthServiceImpl.class);
+public class DingtalkAuthServiceImpl implements DingtalkAuthService {
+	private Logger logger = LoggerFactory.getLogger(DingtalkAuthServiceImpl.class);
 
 	/**
 	 * 获取钉钉AccessToken
@@ -175,7 +174,7 @@ public class AuthServiceImpl implements AuthService {
 		long timeStamp = System.currentTimeMillis() / 1000;
 		String signature = null;
 		try {
-			signature = sign(DingtalkGlobal.JsapiTicket, nonceStr, timeStamp, url);
+			signature = sign(url, nonceStr, timeStamp);
 		} catch (Exception e) {
 			logger.error("{}", e);
 		}
@@ -198,13 +197,9 @@ public class AuthServiceImpl implements AuthService {
 	 * @param url
 	 * @return
 	 */
-	private String sign(String ticket, String nonceStr, long timeStamp, String url) {
-		String sign = "";
-		try {
-			sign = DingTalkJsApiSingnature.getJsApiSingnature(url, nonceStr, timeStamp, ticket);
-		} catch (DingTalkEncryptException e) {
-			logger.error("{}", e);
-		}
-		return sign;
+	private String sign(String url, String nonceStr, long timeStamp) {
+		String plain = "jsapi_ticket=" + DingtalkGlobal.JsapiTicket + "&noncestr=" + nonceStr + "&timestamp=" + String.valueOf(timeStamp) + "&url=" + url;
+		// System.out.println(plain);
+		return EncryptUtils.getSHA1(plain);
 	}
 }

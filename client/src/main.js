@@ -36,7 +36,7 @@ axios.interceptors.response.use(
     if (response.status >= 200 && response.status < 300) {
       let data = response.data;
       if (data.isSuccess) {
-        return Promise.resolve(data.data);
+        return Promise.resolve(data);
       } else {
         return Promise.reject(data);
       }
@@ -56,7 +56,7 @@ new Vue({
   components: { App },
   template: '<App/>',
   created() {
-    var self = this;
+    var vue = this;
     axios.defaults.baseURL = Global.baseUrl;
     axios.defaults.headers.get['Content-Type'] = 'application/x-www-form-urlencoded; charset=utf-8';
 
@@ -64,50 +64,40 @@ new Vue({
     Global.dev = process.env.NODE_ENV == 'development';
     Global.isDingTalkClient = dd.env.platform != 'notInDingTalk';
 
-    Vue.prototype.$http = axios;
+    Vue.prototype.$get = axios.get;
+    Vue.prototype.$post = axios.post;
     Vue.prototype.$global = Global;
     Vue.prototype.$dd = dd;
 
     // 钉钉鉴权
-    self.$http
-      .get('client/dingtalk/jsapi_config', {
+    vue
+      .$get('client/dingtalk/jsapi_config', {
         params: {
-          // url: location.href
-          url: 'http://192.168.0.8:5051'
+          url: location.href.substr(0, location.href.indexOf('#'))
         }
       })
       .then(res => {
-        Global.corpId = res.corpId;
-        // dd.config({
-        //   agentId: res.agentId, // 必填，微应用ID
-        //   corpId: res.corpId, //必填，企业ID
-        //   timeStamp: res.timeStamp, // 必填，生成签名的时间戳
-        //   nonceStr: res.nonceStr, // 必填，生成签名的随机串
-        //   signature: res.signature, // 必填，签名
-        //   type: 0, //选填。0表示微应用的jsapi,1表示服务窗的jsapi；不填默认为0。该参数从dingtalk.js的0.8.3版本开始支持
-        //   jsApiList: ['device.base.getUUID']
-        // });
-
-        // 免登
-        dd.ready(function() {
-          dd.runtime.permission.requestAuthCode({
-            corpId: res.corpId,
-            onSuccess: res => {
-              self.$http
-                .get('client/dingtalk/userinfo_code', {
-                  params: {
-                    code: res.code
-                  }
-                })
-                .then(res => {
-                  alert(JSON.stringify(res));
-                });
-            },
-            onFail: err => {
-              alert(JSON.stringify(err));
-            }
-          });
+        let data = res.data;
+        dd.config({
+          agentId: data.agentId, // 必填，微应用ID
+          corpId: data.corpId, //必填，企业ID
+          timeStamp: data.timeStamp, // 必填，生成签名的时间戳
+          nonceStr: data.nonceStr, // 必填，生成签名的随机串
+          signature: data.signature, // 必填，签名
+          type: 0, //选填。0表示微应用的jsapi,1表示服务窗的jsapi；不填默认为0。该参数从dingtalk.js的0.8.3版本开始支持
+          jsApiList: ['device.base.getUUID']
         });
+        dd.error(error => {
+          alert('钉钉鉴权失败: ' + JSON.stringify(error));
+        });
+        // dd.device.base.getUUID({
+        //   onSuccess: function(data) {
+        //     alert('success: ' + JSON.stringify(data));
+        //   },
+        //   onFail: function(err) {
+        //     alert('fail: ' + JSON.stringify(err));
+        //   }
+        // });
       });
   },
   data() {

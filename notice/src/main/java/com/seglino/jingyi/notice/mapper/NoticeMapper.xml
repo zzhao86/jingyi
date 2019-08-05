@@ -43,7 +43,7 @@
 		<where>
 			<include refid="condition"></include>
 		</where>
-		ORDER BY createTime DESC
+		ORDER BY publishTime DESC
 	</select>
 
 	<!-- 根据条件获取分页列表 -->
@@ -55,7 +55,15 @@
 		<where>
 			<include refid="condition"></include>
 		</where>
-		ORDER BY createTime DESC
+		ORDER BY publishTime DESC
+	</select>
+	
+	<select id="listByClientHome" resultType="com.seglino.jingyi.notice.pojo.Notice">
+		SELECT a.*
+		  FROM tab_notice a JOIN tab_notice_user b
+		 WHERE a.id = b.noticeId AND b.userId = #{userId} AND a.isDeleted = false
+	  ORDER BY publishTime DESC
+	  	 LIMIT 0, 5
 	</select>
 
 	<!-- 根据条件获取详情 -->

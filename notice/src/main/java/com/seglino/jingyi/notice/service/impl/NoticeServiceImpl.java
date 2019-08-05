@@ -131,5 +131,14 @@ public class NoticeServiceImpl extends BaseServiceImpl<NoticeDao, Notice> implem
 		}
 		return 1;
 	}
-	
+
+	/**
+	 * 获取客户端首页前5条公告列表
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	public List<Notice> listByClientHome(String userId){
+		return dao.listByClientHome(userId);
+	}
 }

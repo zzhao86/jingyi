@@ -21,6 +21,11 @@ public class HomeController {
 		return aResult;
 	}
 	
+	@GetMapping("client")
+	public ModelAndView client(String code) {
+		return new ModelAndView(new RedirectView("account/login/dingtalk_corp?code=" + code));		
+	}
+	
 	@GetMapping("back")
 	public ModelAndView back(String code) {
 		return new ModelAndView(new RedirectView("account/login/dingtalk_sso?code=" + code));		
