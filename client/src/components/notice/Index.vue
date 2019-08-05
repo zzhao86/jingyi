@@ -3,14 +3,17 @@
     <div class="notice-wrapper" v-for="(item, index) in listData" :key="index" @click="onViewClick(item.id)">
       <div class="notice-info">
         <div class="notice-title">{{ item.title }}</div>
+        <div class="notice-count">
+          <div>已读{{ item.readCount }}</div>
+          <div>未读{{ item.totalCount - item.readCount }}</div>
+        </div>
         <div class="notice-ext">
           <div class="notice-author">{{ item.author }}</div>
           <div class="notice-date">{{ item.publishTime }}</div>
         </div>
       </div>
       <div class="notice-cover">
-        <!-- <div v-bind:style="'background-image: url('+$global.baseUrl + item.coverUrl+')'" class="notice-cover-image"></div> -->
-        <img :src="$global.baseUrl + item.coverUrl" class="notice-cover-image" />
+        <div v-bind:style="'background-image: url('+$global.baseUrl + item.coverUrl+')'" class="notice-cover-image"></div>
       </div>
     </div>
   </div>
@@ -27,7 +30,7 @@
           index: 1,
           size: 20,
           query: {
-            userId: 'd8bdfb8204fc4499bf379026f6865999'//this.$global.user.id
+            userId: this.$global.user.id
           }
         },
         total: 0,
@@ -71,7 +74,7 @@
     float: left;
     height: 100%;
     margin-left: 15px;
-    width: calc(100vw - 110px);
+    width: calc(100vw - 120px);
   }
 
   .notice-info .notice-title {
@@ -83,15 +86,22 @@
     width: 100%;
   }
 
+  .notice-info .notice-count{
+    margin-top: 5px;
+    display: flex;
+    font-size: 12px;
+    color: #999;
+  }
+
   .notice-info .notice-ext {
-    margin-top: 20px;
+    margin-top: 5px;
     width: 100%;
     display: flex;
+    font-size: 12px;
+    color: #999;
   }
 
   .notice-info .notice-author {
-    color: #999;
-    font-size: 12px;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
@@ -99,8 +109,6 @@
   }
 
   .notice-info .notice-date {
-    color: #999;
-    font-size: 12px;
     width: 150px;
     text-align: right;
   }
@@ -114,9 +122,11 @@
   }
 
   .notice-cover .notice-cover-image {
-    width: 72px;
-    height: 54px;
-    object-fit: cover;
-    border-radius: 5px;
+    width: 80px;
+    height: 60px;
+    display: block;
+    background-size: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
   }
 </style>

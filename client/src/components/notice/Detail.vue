@@ -1,11 +1,13 @@
 <template>
   <div>
-    <div class="title">{{ detail.title }}</div>
-    <div class="author">
-      <span class="name">{{ detail.author }}</span>
-      <span class="time">{{ detail.publishTime }}</span>
+    <div class="container">
+      <div class="title">{{ detail.title }}</div>
+      <div class="author">
+        <span class="name">{{ detail.author }}</span>
+        <span class="time">{{ detail.publishTime }}</span>
+      </div>
+      <div class="content" v-html="detail.content"></div>
     </div>
-    <div class="content" v-html="detail.content"></div>
   </div>
 </template>
 <script>
@@ -40,6 +42,9 @@
   };
 </script>
 <style scoped>
+  .container{
+    padding: 0 10px;
+  }
   .title {
     color: #333;
     font-size: 18px;
