@@ -2,7 +2,7 @@ package com.seglino.jingyi.notice.service;
 
 import com.github.pagehelper.Page;
 import com.seglino.jingyi.common.core.service.BaseService;
-import com.seglino.jingyi.common.request.RequestListParams;
+import com.seglino.jingyi.common.request.RequestPageParams;
 import com.seglino.jingyi.notice.dto.NoticeUserDto;
 import com.seglino.jingyi.notice.pojo.NoticeUser;
 
@@ -14,7 +14,7 @@ public interface NoticeUserService extends BaseService<NoticeUser> {
 	 * @param params
 	 * @return
 	 */
-	public Page<NoticeUserDto> listForUser(RequestListParams params);
+	public Page<NoticeUserDto> listForUser(RequestPageParams params);
 	
 	/**
 	 * 删除公告中所有的接收人

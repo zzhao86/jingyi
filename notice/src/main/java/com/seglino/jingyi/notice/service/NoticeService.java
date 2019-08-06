@@ -2,7 +2,9 @@ package com.seglino.jingyi.notice.service;
 
 import java.util.List;
 
+import com.github.pagehelper.Page;
 import com.seglino.jingyi.common.core.service.BaseService;
+import com.seglino.jingyi.common.request.RequestPageParams;
 import com.seglino.jingyi.notice.dto.NoticeDetailDto;
 import com.seglino.jingyi.notice.pojo.Notice;
 
@@ -27,4 +29,11 @@ public interface NoticeService extends BaseService<Notice> {
 	 * @return
 	 */
 	public List<Notice> listByClientHome(String userId);
+
+	/**
+	 * 获取客户端公告列表
+	 * @param params
+	 * @return
+	 */
+	public Page<Notice> listByUserClient(RequestPageParams params);
 }

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dingtalk.api.response.OapiMessageCorpconversationAsyncsendV2Response;
 import com.github.pagehelper.Page;
-import com.seglino.jingyi.common.request.RequestListParams;
+import com.seglino.jingyi.common.request.RequestPageParams;
 import com.seglino.jingyi.common.response.ApiPageResult;
 import com.seglino.jingyi.common.response.ApiResult;
 import com.seglino.jingyi.common.utils.AutoMapper;
@@ -58,7 +58,7 @@ public class NoticeBackController {
 	 * @return
 	 */
 	@GetMapping("list")
-	public ApiPageResult list(RequestListParams params) {
+	public ApiPageResult list(RequestPageParams params) {
 		ApiPageResult aResult = new ApiPageResult();
 		try {
 			params.addCondition("isDeleted", false);
@@ -96,7 +96,7 @@ public class NoticeBackController {
 	 * @return
 	 */
 	@GetMapping("user_list")
-	public ApiPageResult Userlist(RequestListParams params) {
+	public ApiPageResult Userlist(RequestPageParams params) {
 		ApiPageResult aResult = new ApiPageResult();
 		Page<NoticeUserDto> page = noticeUserService.listForUser(params);
 		aResult.setTotal(page.getTotal());
@@ -210,7 +210,7 @@ public class NoticeBackController {
 			text = notice.getAuthor() + "　" + DateUtils.toString(notice.getPublishTime(), "MM月dd日 HH:mm");
 		}
 		// 获取公告接收人列表，并组合成字符串
-		RequestListParams params = new RequestListParams();
+		RequestPageParams params = new RequestPageParams();
 		params.setIndex(1);
 		params.setSize(9999999);
 		params.addCondition("noticeId", notice.getId());

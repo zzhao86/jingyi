@@ -26,17 +26,24 @@ public class DingtalkInit {
 	@PostConstruct
 	public void init() {
 		try {
-			ScheduledThreadPoolExecutor scheduled = new ScheduledThreadPoolExecutor(1);
 			DingtalkAccessTokenThread accessTokenThread = new DingtalkAccessTokenThread();
+			accessTokenThread.run();
 			DingtalkSsoAccessTokenThread ssoAccessTokenThread = new DingtalkSsoAccessTokenThread();
+			ssoAccessTokenThread.run();
 			DingtalkJsapiTicketThread jsapiTicketThread = new DingtalkJsapiTicketThread();
+			jsapiTicketThread.run();
 
+			long accessTokenDelay = DingtalkGlobal.AccessTokenExpiresIn - 300;
+			long ssoTokenDelay = DingtalkGlobal.SsoAccessTokenExpiresIn - 300;
+			long jsapiTicketDelay = DingtalkGlobal.JsapiTicketExpiresIn - 300;
+
+			ScheduledThreadPoolExecutor scheduled = new ScheduledThreadPoolExecutor(1);
 			// 定时获取钉钉AccessToken
-			scheduled.scheduleAtFixedRate(accessTokenThread, 0, 300, TimeUnit.SECONDS);
+			scheduled.scheduleAtFixedRate(accessTokenThread, accessTokenDelay, accessTokenDelay, TimeUnit.SECONDS);
 			// 定时获取钉钉SsoAccessToken
-			scheduled.scheduleAtFixedRate(ssoAccessTokenThread, 0, 300, TimeUnit.SECONDS);
+			scheduled.scheduleAtFixedRate(ssoAccessTokenThread, ssoTokenDelay, ssoTokenDelay, TimeUnit.SECONDS);
 			// 定时获取钉钉JsapiTicket
-			scheduled.scheduleAtFixedRate(jsapiTicketThread, 0, 300, TimeUnit.SECONDS);
+			scheduled.scheduleAtFixedRate(jsapiTicketThread, jsapiTicketDelay, jsapiTicketDelay, TimeUnit.SECONDS);
 		} catch (Exception e) {
 			logger.error("{}", e);
 		}
@@ -46,7 +53,7 @@ public class DingtalkInit {
 		@Override
 		public void run() {
 			synchronized (this) {
-				while (StringUtils.isEmpty(DingtalkGlobal.AccessToken)) {
+				while (true) {
 					try {
 						OapiGettokenResponse response = authService.getAccessToken();
 						if (response.isSuccess()) {
@@ -70,7 +77,7 @@ public class DingtalkInit {
 		@Override
 		public void run() {
 			synchronized (this) {
-				while (StringUtils.isEmpty(DingtalkGlobal.SsoAccessToken)) {
+				while (true) {
 					try {
 						OapiSsoGettokenResponse response = authService.getSsoAccessToken();
 						if (response.isSuccess()) {
@@ -94,7 +101,7 @@ public class DingtalkInit {
 		@Override
 		public void run() {
 			synchronized (this) {
-				while (StringUtils.isEmpty(DingtalkGlobal.JsapiTicket)) {
+				while (true) {
 					try {
 						if (StringUtils.isEmpty(DingtalkGlobal.AccessToken))
 							continue;

@@ -1,26 +1,28 @@
 <template>
-  <div>
-    <div class="notice-wrapper" v-for="(item, index) in listData" :key="index" @click="onViewClick(item.id)">
-      <div class="notice-info">
-        <div class="notice-title">{{ item.title }}</div>
-        <div class="notice-count">
-          <div>已读{{ item.readCount }}</div>
-          <div>未读{{ item.totalCount - item.readCount }}</div>
+  <div class="notice-container">
+    <mt-loadmore ref="loadmore" :top-method="flushListData" :bottom-method="loadMoreData" :bottomAllLoaded="params.index >= pageCount">
+      <div class="notice-wrapper" v-for="(item, index) in listData" :key="index" @click="onViewClick(item.id)">
+        <div class="notice-info">
+          <div class="notice-title">{{ item.title }}</div>
+          <div class="notice-count">已读{{ item.readCount }}，未读{{ item.totalCount - item.readCount }}</div>
+          <div class="notice-ext">
+            <div class="notice-author">{{ item.author }}</div>
+            <div class="notice-date">{{ item.publishTime }}</div>
+          </div>
         </div>
-        <div class="notice-ext">
-          <div class="notice-author">{{ item.author }}</div>
-          <div class="notice-date">{{ item.publishTime }}</div>
+        <div class="notice-cover">
+          <div v-bind:style="'background-image: url('+$global.baseUrl + item.coverUrl+')'" class="notice-cover-image"></div>
         </div>
       </div>
-      <div class="notice-cover">
-        <div v-bind:style="'background-image: url('+$global.baseUrl + item.coverUrl+')'" class="notice-cover-image"></div>
-      </div>
-    </div>
+    </mt-loadmore>
   </div>
 </template>
-<script>
+<script>import Mint from 'mint-ui';
   export default {
     name: 'NoticeIndex',
+    comonpents: {
+      
+    },
     created() {
       this.loadListData();
     },
@@ -28,12 +30,14 @@
       return {
         params: {
           index: 1,
-          size: 20,
+          size: 10,
           query: {
-            userId: this.$global.user.id
+            userId: 'd8bdfb8204fc4499bf379026f6865999' //this.$global.user.id
           }
         },
+        pageCount: 0,
         total: 0,
+        loading: true,
         listData: []
       };
     },
@@ -42,14 +46,35 @@
         this.$get('client/notice/list', {
           params: this.params
         }).then(res => {
+          this.loading = false;
+          const loadmore = this.$refs.loadmore;
+          loadmore.onTopLoaded();
+          loadmore.onBottomLoaded();
           if (res.isSuccess) {
             for (let i = 0; i < res.data.length; i++) {
               this.listData.push(res.data[i]);
             }
+            this.pageCount = res.pageCount;
             this.total = res.total;
           }
         });
       },
+      // 下拉刷新
+      flushListData() {
+        this.params.index = 1;
+        this.listData = [];
+        this.loadListData();
+      },
+      // 上滑加载更多
+      loadMoreData() {
+        if (this.params.index >= this.pageCount) {
+          return;
+        }
+        this.loading = true;
+        this.params.index++;
+        this.loadListData();
+      },
+      // 跳转详情页
       onViewClick(id) {
         this.$router.push(`/notice/detail?id=${id}`);
       }
@@ -57,6 +82,12 @@
   };
 </script>
 <style scoped>
+  .notice-container {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 100vh;
+  }
+
   .notice-wrapper {
     width: 100vw;
     padding: 10px 0;
@@ -86,11 +117,10 @@
     width: 100%;
   }
 
-  .notice-info .notice-count{
+  .notice-info .notice-count {
     margin-top: 5px;
-    display: flex;
     font-size: 12px;
-    color: #999;
+    color: #3296fa;
   }
 
   .notice-info .notice-ext {

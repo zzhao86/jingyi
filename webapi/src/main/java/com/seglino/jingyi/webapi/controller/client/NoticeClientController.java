@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pagehelper.Page;
-import com.seglino.jingyi.common.request.RequestListParams;
+import com.seglino.jingyi.common.request.RequestPageParams;
 import com.seglino.jingyi.common.response.ApiPageResult;
 import com.seglino.jingyi.common.response.ApiResult;
 import com.seglino.jingyi.common.utils.AutoMapper;
@@ -25,11 +25,12 @@ public class NoticeClientController {
 	private NoticeService noticeService;
 
 	@GetMapping("list")
-	public ApiPageResult list(RequestListParams params) {
+	public ApiPageResult list(RequestPageParams params) {
 		ApiPageResult aResult = new ApiPageResult();
 		try {
 			params.addCondition("isDeleted", false);
-			Page<Notice> page = noticeService.page(params);
+			Page<Notice> page = noticeService.listByUserClient(params);
+			aResult.setPageCount(page.getPages());
 			aResult.setTotal(page.getTotal());
 			aResult.setData(AutoMapper.mapperList(page, NoticeListVo.class));
 		} catch (Exception e) {

@@ -13,6 +13,7 @@
     "axios": "^0.19.0",
     "dingtalk-jsapi": "^2.7.6",
     "font-awesome": "^4.7.0",
+    "mint-ui": "^2.2.13",
     "swiper": "^4.5.0",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"

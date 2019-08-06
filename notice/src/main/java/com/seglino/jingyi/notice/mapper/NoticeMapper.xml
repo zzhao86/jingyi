@@ -58,6 +58,13 @@
 		ORDER BY publishTime DESC
 	</select>
 	
+	<select id="listByUserClient" resultType="com.seglino.jingyi.notice.pojo.Notice">
+		SELECT a.*
+		  FROM tab_notice a JOIN tab_notice_user b
+		 WHERE a.id = b.noticeId AND b.userId = #{userId} AND a.isDeleted = false
+	  ORDER BY publishTime DESC
+	</select>
+	
 	<select id="listByClientHome" resultType="com.seglino.jingyi.notice.pojo.Notice">
 		SELECT a.*
 		  FROM tab_notice a JOIN tab_notice_user b

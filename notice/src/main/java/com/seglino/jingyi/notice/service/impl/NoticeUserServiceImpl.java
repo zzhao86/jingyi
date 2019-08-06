@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.seglino.jingyi.common.core.service.BaseServiceImpl;
-import com.seglino.jingyi.common.request.RequestListParams;
+import com.seglino.jingyi.common.request.RequestPageParams;
 import com.seglino.jingyi.notice.dao.NoticeUserDao;
 import com.seglino.jingyi.notice.dto.NoticeUserDto;
 import com.seglino.jingyi.notice.pojo.NoticeUser;
@@ -36,7 +36,7 @@ public class NoticeUserServiceImpl extends BaseServiceImpl<NoticeUserDao, Notice
 	 * @param params
 	 * @return
 	 */
-	public Page<NoticeUserDto> listForUser(RequestListParams params) {
+	public Page<NoticeUserDto> listForUser(RequestPageParams params) {
 		PageHelper.startPage(params.getIndex(), params.getSize());
 		Map<String, Object> param = params.getCondition();
 		return dao.listForUser(param);

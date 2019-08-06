@@ -8,7 +8,7 @@ import org.springframework.util.StringUtils;
 
 import com.alibaba.fastjson.JSONObject;
 
-public class RequestListParams implements Serializable {
+public class RequestPageParams implements Serializable {
 	private static final long serialVersionUID = -1369080387086490091L;
 
 	private int index = 1;

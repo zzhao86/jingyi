@@ -14,7 +14,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.seglino.jingyi.common.core.dao.BaseDao;
 import com.seglino.jingyi.common.core.po.BaseEntity;
-import com.seglino.jingyi.common.request.RequestListParams;
+import com.seglino.jingyi.common.request.RequestPageParams;
 import com.seglino.jingyi.common.utils.DateUtils;
 
 @Service
@@ -175,7 +175,7 @@ public abstract class BaseServiceImpl<D extends BaseDao<T>, T extends BaseEntity
 	 * @return
 	 */
 	@Override
-	public Page<T> page(RequestListParams params) {
+	public Page<T> page(RequestPageParams params) {
 		PageHelper.startPage(params.getIndex(), params.getSize());
 		return dao.page(params.getCondition());
 	}

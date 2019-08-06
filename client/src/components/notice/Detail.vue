@@ -42,7 +42,7 @@
   };
 </script>
 <style scoped>
-  .container{
+  .container {
     padding: 0 10px;
   }
   .title {

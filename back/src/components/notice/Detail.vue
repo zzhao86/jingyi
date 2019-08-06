@@ -53,7 +53,7 @@
     <!-- 预览Modal -->
     <el-dialog title="预览" append-to-body :visible.sync="dialogPreviewVisible" custom-class="preview-dialog" width="375px">
       <div class="prview-body">
-        <iframe id="previewIframe" frameborder="0" width="375" height="600" @load="onPreviewIframeLoaded" src="../../../static/html/NoticePreview.html"></iframe>
+        <iframe id="previewIframe" frameborder="0" width="360" height="640" @load="onPreviewIframeLoaded" src="../../../static/html/NoticePreview.html"></iframe>
       </div>
     </el-dialog>
 

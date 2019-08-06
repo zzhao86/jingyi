@@ -10,7 +10,10 @@ import org.springframework.util.StringUtils;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.seglino.jingyi.common.core.service.BaseServiceImpl;
+import com.seglino.jingyi.common.request.RequestPageParams;
 import com.seglino.jingyi.common.utils.AutoMapper;
 import com.seglino.jingyi.common.utils.DateUtils;
 import com.seglino.jingyi.notice.dao.NoticeDao;
@@ -73,7 +76,7 @@ public class NoticeServiceImpl extends BaseServiceImpl<NoticeDao, Notice> implem
 		if (!StringUtils.isEmpty(dto.getScopeJson())) {
 			// 删除所有接收人，重新添加
 			noticeUserService.deleteByNoticeId(notice.getId().toString());
-			
+
 			JSONArray array = JSONObject.parseArray(dto.getScopeJson());
 			for (Object object : array) {
 				JSONObject json = (JSONObject) object;
@@ -86,9 +89,9 @@ public class NoticeServiceImpl extends BaseServiceImpl<NoticeDao, Notice> implem
 					noticeUser.setUserId(id);
 					noticeUserService.insert(noticeUser);
 				} else if ("dept".equals(type)) {
-					//类型是dept，添加部门下所有的用户
+					// 类型是dept，添加部门下所有的用户
 					List<User> list = userService.listByDept(id, true);
-					for(User user : list) {
+					for (User user : list) {
 						NoticeUser noticeUser = new NoticeUser();
 						noticeUser.setNoticeId(notice.getId().toString());
 						noticeUser.setUserId(user.getId().toString());
@@ -138,7 +141,18 @@ public class NoticeServiceImpl extends BaseServiceImpl<NoticeDao, Notice> implem
 	 * @param userId
 	 * @return
 	 */
-	public List<Notice> listByClientHome(String userId){
+	public List<Notice> listByClientHome(String userId) {
 		return dao.listByClientHome(userId);
+	}
+
+	/**
+	 * 获取客户端公告列表
+	 * 
+	 * @param params
+	 * @return
+	 */
+	public Page<Notice> listByUserClient(RequestPageParams params) {
+		PageHelper.startPage(params.getIndex(), params.getSize());
+		return dao.listByUserClient(params.getCondition());
 	}
 }

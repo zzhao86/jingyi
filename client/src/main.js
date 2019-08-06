@@ -6,6 +6,9 @@ import axios from 'axios';
 import * as dd from 'dingtalk-jsapi';
 import 'font-awesome/css/font-awesome.min.css';
 
+// Mint UI框架
+import 'mint-ui/lib/style.css';
+
 //全局变量
 import Global from './Global.vue';
 
@@ -16,13 +19,9 @@ Vue.config.productionTip = false;
  */
 axios.interceptors.request.use(
   function(config) {
-    // vue.$vux.loading.show({
-    //   text: 'Loading'
-    // });
     return config;
   },
   function(error) {
-    vue.$vux.loading.hide();
     return Promise.reject(error);
   }
 );
@@ -32,7 +31,6 @@ axios.interceptors.request.use(
  */
 axios.interceptors.response.use(
   function(response) {
-    // vue.$vux.loading.hide();
     if (response.status >= 200 && response.status < 300) {
       let data = response.data;
       if (data.isSuccess) {
@@ -45,12 +43,11 @@ axios.interceptors.response.use(
     }
   },
   function(error) {
-    // vue.$vux.loading.hide();
     return Promise.reject(error);
   }
 );
 
-new Vue({
+const vue = new Vue({
   el: '#app',
   router,
   components: { App },
