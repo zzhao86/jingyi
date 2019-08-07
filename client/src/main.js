@@ -7,7 +7,9 @@ import * as dd from 'dingtalk-jsapi';
 import 'font-awesome/css/font-awesome.min.css';
 
 // Mint UI框架
+import Mint from 'mint-ui';
 import 'mint-ui/lib/style.css';
+Vue.use(Mint);
 
 //全局变量
 import Global from './Global.vue';
@@ -86,6 +88,21 @@ const vue = new Vue({
         });
         dd.error(error => {
           alert('钉钉鉴权失败: ' + JSON.stringify(error));
+        });
+        dd.biz.util.downloadFile({
+          url: 'http://static.dingtalk.com/media/lADOADTWJM0C2M0C7A_748_728.jpg_60x60q90.jpg', //要下载的文件的url
+          name: '一个图片.jpg', //定义下载文件名字
+          onProgress: function(msg) {
+            // 文件下载进度回调
+            alert(1);
+          },
+          onSuccess: function(result) {
+            alert(12);
+            alert(JSON.stringify(result));
+          },
+          onFail: function() {
+            alert(123);
+          }
         });
         // dd.device.base.getUUID({
         //   onSuccess: function(data) {

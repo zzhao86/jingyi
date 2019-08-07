@@ -1,27 +1,30 @@
 <template>
-  <div class="notice-container">
-    <mt-loadmore ref="loadmore" :top-method="flushListData" :bottom-method="loadMoreData" :bottomAllLoaded="params.index >= pageCount">
-      <div class="notice-wrapper" v-for="(item, index) in listData" :key="index" @click="onViewClick(item.id)">
-        <div class="notice-info">
-          <div class="notice-title">{{ item.title }}</div>
-          <div class="notice-count">已读{{ item.readCount }}，未读{{ item.totalCount - item.readCount }}</div>
-          <div class="notice-ext">
-            <div class="notice-author">{{ item.author }}</div>
-            <div class="notice-date">{{ item.publishTime }}</div>
-          </div>
-        </div>
-        <div class="notice-cover">
-          <div v-bind:style="'background-image: url('+$global.baseUrl + item.coverUrl+')'" class="notice-cover-image"></div>
+  <div class="notice-container" v-infinite-scroll="loadMoreData" infinite-scroll-distance="100" infinite-scroll-disabled="loading">
+    <div class="notice-wrapper" v-for="(item, index) in listData" :key="index" @click="onViewClick(item.id)">
+      <div class="notice-info">
+        <div class="notice-title">{{ item.title }}</div>
+        <div class="notice-count">已读{{ item.readCount }}，未读{{ item.totalCount - item.readCount }}</div>
+        <div class="notice-ext">
+          <div class="notice-author">{{ item.author }}</div>
+          <div class="notice-date">{{ item.publishTime }}</div>
         </div>
       </div>
-    </mt-loadmore>
+      <div class="notice-cover">
+        <div v-bind:style="'background-image: url('+$global.baseUrl + item.coverUrl+')'" class="notice-cover-image"></div>
+      </div>
+    </div>
+    <list-loading v-show="loading"></list-loading>
+    <divider v-show="isLoadAll"></divider>
   </div>
 </template>
-<script>import Mint from 'mint-ui';
+<script>
+  import Divider from '../utils/components/Divider';
+  import ListLoading from '../utils/components/ListLoading';
   export default {
     name: 'NoticeIndex',
-    comonpents: {
-      
+    components: {
+      Divider,
+      ListLoading
     },
     created() {
       this.loadListData();
@@ -32,12 +35,13 @@
           index: 1,
           size: 10,
           query: {
-            userId: 'd8bdfb8204fc4499bf379026f6865999' //this.$global.user.id
+            userId: this.$global.user.id
           }
         },
         pageCount: 0,
         total: 0,
         loading: true,
+        isLoadAll: false,
         listData: []
       };
     },
@@ -47,9 +51,6 @@
           params: this.params
         }).then(res => {
           this.loading = false;
-          const loadmore = this.$refs.loadmore;
-          loadmore.onTopLoaded();
-          loadmore.onBottomLoaded();
           if (res.isSuccess) {
             for (let i = 0; i < res.data.length; i++) {
               this.listData.push(res.data[i]);
@@ -59,15 +60,10 @@
           }
         });
       },
-      // 下拉刷新
-      flushListData() {
-        this.params.index = 1;
-        this.listData = [];
-        this.loadListData();
-      },
       // 上滑加载更多
       loadMoreData() {
         if (this.params.index >= this.pageCount) {
+          this.isLoadAll = true;
           return;
         }
         this.loading = true;
@@ -83,22 +79,19 @@
 </script>
 <style scoped>
   .notice-container {
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
     height: 100vh;
+    background-color: #f3f3f3;
   }
 
   .notice-wrapper {
     width: 100vw;
     padding: 10px 0;
     background-color: #fff;
-    border-bottom: solid 10px #efefef;
+    margin-top: 10px;
     overflow: hidden;
     clear: both;
-  }
-
-  .notice-wrapper:first-child {
-    border-top: solid 10px #efefef;
   }
 
   .notice-info {
