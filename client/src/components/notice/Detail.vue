@@ -1,23 +1,22 @@
 <template>
-  <div>
-    <div class="container">
-      <div class="title">{{ detail.title }}</div>
-      <div class="author">
-        <span class="name">{{ detail.author }}</span>
-        <span class="time">{{ detail.publishTime }}</span>
-      </div>
-      <div class="content" v-html="detail.content"></div>
-      <div class="attach-container">
-        <div class="attach-header">附件：</div>
-        <ul class="attach-wrapper">
-          <li v-for="(item, index) in detail.attachList" :key="index">
-            <div class="attach-name" :href="$global.baseUrl + item.attachUrl" @click="download(item)">
-              <i class="fa" v-bind:class="convert(item.attachName)"></i>
-              <span>{{ item.attachName }}</span>
-            </div>
-          </li>
-        </ul>
-      </div>
+  <div class="container">
+    <div class="title">{{ detail.title }}</div>
+    <div class="author">
+      <span class="name">{{ detail.author }}</span>
+      <span class="time">{{ detail.publishTime }}</span>
+    </div>
+    <div class="count" @click="onShowReadListClick">已读{{ detail.readCount }}，未读{{ detail.totalCount - detail.readCount }}</div>
+    <div class="content" v-html="detail.content"></div>
+    <div class="attach-container" v-show="detail.attachList && detail.attachList.length > 0">
+      <div class="attach-header">附件：</div>
+      <ul class="attach-wrapper">
+        <li v-for="(item, index) in detail.attachList" :key="index">
+          <a class="attach-name" :href="$global.baseUrl + item.attachUrl" :title="item.attachName">
+            <i class="fa" v-bind:class="convert(item.attachName)"></i>
+            <span>{{ item.attachName }}</span>
+          </a>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
@@ -49,24 +48,11 @@
           }
         });
       },
-      download(item) {
-        var url = this.$global.baseUrl + item.attachUrl;
-        alert(JSON.stringify(this.$dd.biz));
-        this.$dd.biz.util.downloadFile({
-          url: url, //要下载的文件的url
-          name: item.attachName, //定义下载文件名字
-          onProgress: function(msg) {
-            alert(JSON.stringify(msg));
-          },
-          onSuccess: function(result) {
-            alert('下载成功');
-            alert(JSON.stringify(result));
-          },
-          onFail: function() {
-            alert('下载出错');
-          }
-        });
+      // 查看已读未读列表
+      onShowReadListClick() {
+        this.$router.push('/notice/readlist?id=' + this.id);
       },
+      // 附件图标转换
       convert(name) {
         var icon = 'fa-file-o';
         if (!name) return icon;
@@ -109,7 +95,9 @@
   .container {
     padding: 0 10px;
     height: 100vh;
-    overflow-y: auto;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
   }
   .title {
     color: #333;
@@ -134,6 +122,12 @@
 
   .author .time {
     float: left;
+  }
+
+  .count {
+    padding: 10px 0;
+    font-size: 12px;
+    color: #3296fa;
   }
 
   .content {

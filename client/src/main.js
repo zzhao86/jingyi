@@ -77,6 +77,7 @@ const vue = new Vue({
       })
       .then(res => {
         let data = res.data;
+        vue.$global.corpId = data.corpId;
         dd.config({
           agentId: data.agentId, // 必填，微应用ID
           corpId: data.corpId, //必填，企业ID
@@ -84,25 +85,10 @@ const vue = new Vue({
           nonceStr: data.nonceStr, // 必填，生成签名的随机串
           signature: data.signature, // 必填，签名
           type: 0, //选填。0表示微应用的jsapi,1表示服务窗的jsapi；不填默认为0。该参数从dingtalk.js的0.8.3版本开始支持
-          jsApiList: ['device.base.getUUID']
+          jsApiList: ['device.base.getUUID', 'biz.cspace.saveFile', 'biz.cspace.preview']
         });
         dd.error(error => {
           alert('钉钉鉴权失败: ' + JSON.stringify(error));
-        });
-        dd.biz.util.downloadFile({
-          url: 'http://static.dingtalk.com/media/lADOADTWJM0C2M0C7A_748_728.jpg_60x60q90.jpg', //要下载的文件的url
-          name: '一个图片.jpg', //定义下载文件名字
-          onProgress: function(msg) {
-            // 文件下载进度回调
-            alert(1);
-          },
-          onSuccess: function(result) {
-            alert(12);
-            alert(JSON.stringify(result));
-          },
-          onFail: function() {
-            alert(123);
-          }
         });
         // dd.device.base.getUUID({
         //   onSuccess: function(data) {

@@ -83,6 +83,7 @@
     overflow-x: hidden;
     height: 100vh;
     background-color: #f3f3f3;
+    -webkit-overflow-scrolling: touch;
   }
 
   .notice-wrapper {

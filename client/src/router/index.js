@@ -6,6 +6,7 @@ import Login from '@/components/Login';
 import Home from '@/components/Home';
 import NoticeIndex from '@/components/notice/Index';
 import NoticeDetail from '@/components/notice/Detail';
+import NoticeReadList from '@/components/notice/ReadList';
 
 Vue.use(Router);
 
@@ -36,6 +37,14 @@ const router = new Router({
       path: '/notice/detail',
       name: 'NoticeDetail',
       component: NoticeDetail,
+      meta: {
+        // requireAuth: true
+      }
+    },
+    {
+      path: '/notice/readlist',
+      name: 'NoticeReadList',
+      component: NoticeReadList,
       meta: {
         // requireAuth: true
       }

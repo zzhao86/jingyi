@@ -11,11 +11,14 @@ import com.seglino.jingyi.common.response.ApiPageResult;
 import com.seglino.jingyi.common.response.ApiResult;
 import com.seglino.jingyi.common.utils.AutoMapper;
 import com.seglino.jingyi.notice.dto.NoticeDetailDto;
+import com.seglino.jingyi.notice.dto.NoticeUserDto;
 import com.seglino.jingyi.notice.pojo.Notice;
 import com.seglino.jingyi.notice.service.NoticeService;
+import com.seglino.jingyi.notice.service.NoticeUserService;
 import com.seglino.jingyi.webapi.vo.back.notice.NoticeAttachVo;
 import com.seglino.jingyi.webapi.vo.back.notice.NoticeDetailVo;
 import com.seglino.jingyi.webapi.vo.back.notice.NoticeListVo;
+import com.seglino.jingyi.webapi.vo.back.notice.NoticeUserListVo;
 
 @RestController
 @RequestMapping("client/notice")
@@ -23,6 +26,8 @@ public class NoticeClientController {
 
 	@Autowired
 	private NoticeService noticeService;
+	@Autowired
+	private NoticeUserService noticeUserService;
 
 	@GetMapping("list")
 	public ApiPageResult list(RequestPageParams params) {
@@ -50,6 +55,20 @@ public class NoticeClientController {
 		} catch (Exception e) {
 			aResult.addError(e);
 		}
+		return aResult;
+	}
+
+	/**
+	 * 告公接收人列表
+	 * 
+	 * @return
+	 */
+	@GetMapping("user_list")
+	public ApiPageResult Userlist(RequestPageParams params) {
+		ApiPageResult aResult = new ApiPageResult();
+		Page<NoticeUserDto> page = noticeUserService.listForUser(params);
+		aResult.setTotal(page.getTotal());
+		aResult.setData(AutoMapper.mapperList(page, NoticeUserListVo.class));
 		return aResult;
 	}
 }

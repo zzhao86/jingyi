@@ -120,7 +120,7 @@ public class NoticeBackController {
 				aResult.addError("保存失败");
 			} else {
 				// 保存成功之后，给所有接收人发送钉钉工作通知
-				sendDingtalkWorkMessage(dto.getId().toString());
+//				sendDingtalkWorkMessage(dto.getId().toString());
 			}
 		} catch (Exception e) {
 			aResult.addError(e);
