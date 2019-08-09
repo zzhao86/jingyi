@@ -198,6 +198,7 @@
           for (let i = 0; i < res.data.length; i++) {
             let data = res.data[i];
             this.detailData.attachList.push({
+              attachId: data.id,
               attachName: data.name,
               attachUrl: data.url
             });

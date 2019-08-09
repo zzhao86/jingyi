@@ -16,7 +16,6 @@
     text-align: center;
     height: 50px;
     line-height: 50px;
-    background-color: #f3f3f3;
   }
   .infinite-loading .mint-spinner-fading-circle {
     display: inline-block;

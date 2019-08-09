@@ -5,6 +5,7 @@ import com.seglino.jingyi.common.core.po.BaseEntity;
 public class NoticeFile extends BaseEntity {
 	private static final long serialVersionUID = -413137793333530247L;
 	private String noticeId;
+	private String fileId;
 	private String fileName;
 	private String fileUrl;
 
@@ -14,6 +15,14 @@ public class NoticeFile extends BaseEntity {
 
 	public void setNoticeId(String noticeId) {
 		this.noticeId = noticeId;
+	}
+
+	public String getFileId() {
+		return fileId;
+	}
+
+	public void setFileId(String fileId) {
+		this.fileId = fileId;
 	}
 
 	public String getFileName() {

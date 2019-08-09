@@ -55,6 +55,7 @@ public class FilesServiceImpl extends BaseServiceImpl<FilesDao, Files> implement
 			if (null != multipartFile) {
 				String md5 = EncryptUtils.getFileMD5(multipartFile.getInputStream());
 				String name = multipartFile.getOriginalFilename();
+				long size = multipartFile.getSize();
 				String ext = name.substring(name.lastIndexOf("."));
 				String path = rootPath + relativePath;
 				String fileName = md5 + ext;
@@ -71,7 +72,9 @@ public class FilesServiceImpl extends BaseServiceImpl<FilesDao, Files> implement
 					files = new Files();
 					files.setName(name);
 					files.setType(ext);
+					files.setSize(size);
 					files.setMD5(md5);
+					
 					files.setUrl(relativePath + fileName);
 					int count = this.insert(files);
 					if (count == 1) {

@@ -1,7 +1,7 @@
 <template>
-  <div class="container">
+  <div class="readlist-container">
     <mt-navbar v-model="activeTab">
-      <mt-tab-item v-for="(tab, index) in tabs" :key="index" :id="tab.id">{{ tab.label }}({{ count.readed }})</mt-tab-item>
+      <mt-tab-item v-for="(tab, index) in tabs" :key="index" :id="tab.id">{{ tab.label }}（{{ count[tab.id] }}）</mt-tab-item>
     </mt-navbar>
     <mt-tab-container v-model="activeTab">
       <mt-tab-container-item v-for="(tab, index) in tabs" :key="index" :id="tab.id">
@@ -12,6 +12,7 @@
               <div class="avatar" v-else>{{ getUserName(user.name) }}</div>
               <span>{{ user.name }}</span>
             </li>
+            <list-loading v-show="loading"></list-loading>
           </ul>
         </div>
       </mt-tab-container-item>
@@ -19,12 +20,20 @@
   </div>
 </template>
 <script>
+  import ListLoading from '../utils/components/ListLoading';
   export default {
     name: 'NoticeReadList',
+    components: {
+      ListLoading
+    },
     created() {
       const query = this.$route.query;
       if (query.id) {
         this.id = query.id;
+      }
+      if (query.total && query.readed) {
+        this.count.readed = query.readed;
+        this.count.unread = query.total - query.readed;
       }
       this.loadListData();
     },
@@ -35,7 +44,7 @@
         params: {
           unread: {
             index: 1,
-            size: 100,
+            size: 40,
             query: {
               noticeId: this.id,
               isRead: false
@@ -43,13 +52,14 @@
           },
           readed: {
             index: 1,
-            size: 100,
+            size: 40,
             query: {
               noticeId: this.id,
               isRead: true
             }
           }
         },
+        loading: false,
         dialogVisible: this.visible,
         tabs: [
           {
@@ -65,6 +75,10 @@
           unread: [],
           readed: []
         },
+        pageCount: {
+          readed: 0,
+          unread: 0
+        },
         count: {
           readed: 0,
           unread: 0
@@ -77,6 +91,7 @@
         this.params.readed.query.noticeId = val;
       },
       activeTab: function(val, old) {
+        this.listData[val] = [];
         this.loadListData();
       }
     },
@@ -85,16 +100,28 @@
         this.$get('client/notice/user_list', {
           params: this.params[this.activeTab]
         }).then(res => {
-          this.listData[this.activeTab] = res.data;
-          this.count[this.activeTab] = res.total;
+          this.loading = false;
+          if (res.isSuccess) {
+            this.count[this.activeTab] = res.total;
+            this.pageCount[this.activeTab] = res.pageCount;
+            var list = this.listData[this.activeTab];
+            for (let i = 0; i < res.data.length; i++) {
+              list.push(res.data[i]);
+            }
+          }
         });
       },
       loadListMoreData() {
+        if (this.params[this.activeTab].index >= this.pageCount[this.activeTab]) {
+          return;
+        }
+        this.loading = true;
         this.params[this.activeTab].index++;
+        this.loadListData();
       },
       getUserName: function(name) {
-        if (name && name.length > 3) {
-          return name.substr(name.length - 3, 3);
+        if (name && name.length > 2) {
+          return name.substr(name.length - 2, 2);
         } else {
           return name;
         }
@@ -103,7 +130,7 @@
   };
 </script>
 <style scoped>
-  .container {
+  .readlist-container {
     position: fixed;
     top: 0;
     left: 0;
@@ -111,7 +138,8 @@
     height: 100%;
     -webkit-overflow-scrolling: touch;
   }
-  .container .mint-navbar .mint-tab-item.is-selected {
+
+  .readlist-container .mint-navbar .mint-tab-item.is-selected {
     z-index: 1;
   }
 
@@ -148,6 +176,7 @@
     background-color: #3296fa;
     color: #fff;
     font-size: 12px;
+    font-weight: 600;
   }
   .user-list-container .user-list span {
     display: block;
@@ -160,5 +189,10 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     line-height: 20px;
+  }
+</style>
+<style>
+  .readlist-container .mint-tab-item .mint-tab-item-label {
+    font-size: 14px;
   }
 </style>

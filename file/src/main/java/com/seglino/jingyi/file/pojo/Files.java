@@ -4,9 +4,10 @@ import com.seglino.jingyi.common.core.po.BaseEntity;
 
 public class Files extends BaseEntity {
 	private static final long serialVersionUID = -362360550891641022L;
-	
+
 	private String name;
 	private String type;
+	private Long size;
 	private String url;
 	private String MD5;
 
@@ -24,6 +25,14 @@ public class Files extends BaseEntity {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public Long getSize() {
+		return size;
+	}
+
+	public void setSize(Long size) {
+		this.size = size;
 	}
 
 	public String getUrl() {

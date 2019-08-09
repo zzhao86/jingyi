@@ -8,6 +8,7 @@
 	<sql id="column">
 		id,
 		noticeId,
+		attachId,
 		attachName,
 		attachUrl,
 		createTime,
@@ -35,6 +36,20 @@
 			<include refid="condition"></include>
 		</where>
 		ORDER BY createTime DESC
+	</select>
+	
+	<!-- 根据条件获取列表，包含附件文件信息 -->
+	<select id="listForFileDetail" resultType="com.seglino.jingyi.notice.dto.NoticeAttachDto">
+		SELECT a.id,
+			   a.attachId,
+			   a.attachName,
+			   a.attachUrl,
+			   b.size as attachSize,
+			   b.type as attachType
+		  FROM tab_notice_attach a
+		  JOIN tab_files b on a.attachId = b.id
+		 WHERE a.noticeId = #{noticeId}
+		ORDER BY a.createTime DESC
 	</select>
 
 	<!-- 根据条件获取详情 -->
@@ -64,6 +79,7 @@
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="id != null">id,</if>
 			<if test="noticeId != null">noticeId,</if>
+			<if test="attachId != null">attachId,</if>
 			<if test="attachName != null">attachName,</if>
 			<if test="attachUrl != null">attachUrl,</if>
 			<if test="createTime != null">createTime,</if>
@@ -78,6 +94,7 @@
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="id != null">#{id},</if>
 			<if test="noticeId != null">#{noticeId},</if>
+			<if test="attachId != null">#{attachId},</if>
 			<if test="attachName != null">#{attachName},</if>
 			<if test="attachUrl != null">#{attachUrl},</if>
 			<if test="createTime != null">#{createTime},</if>
@@ -96,6 +113,7 @@
 		<include refid="tableName"></include>
 		<set>
 			<if test="noticeId != null">noticeId = #{noticeId},</if>
+			<if test="attachId != null">attachId = #{attachId},</if>
 			<if test="attachName != null">attachName = #{attachName},</if>
 			<if test="attachUrl != null">attachUrl = #{attachUrl},</if>
 			<if test="createTime != null">createTime = #{createTime},</if>

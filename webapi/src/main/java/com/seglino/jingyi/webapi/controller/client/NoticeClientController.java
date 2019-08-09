@@ -15,10 +15,10 @@ import com.seglino.jingyi.notice.dto.NoticeUserDto;
 import com.seglino.jingyi.notice.pojo.Notice;
 import com.seglino.jingyi.notice.service.NoticeService;
 import com.seglino.jingyi.notice.service.NoticeUserService;
-import com.seglino.jingyi.webapi.vo.back.notice.NoticeAttachVo;
-import com.seglino.jingyi.webapi.vo.back.notice.NoticeDetailVo;
-import com.seglino.jingyi.webapi.vo.back.notice.NoticeListVo;
-import com.seglino.jingyi.webapi.vo.back.notice.NoticeUserListVo;
+import com.seglino.jingyi.webapi.vo.client.notice.NoticeAttachVo;
+import com.seglino.jingyi.webapi.vo.client.notice.NoticeDetailVo;
+import com.seglino.jingyi.webapi.vo.client.notice.NoticeListVo;
+import com.seglino.jingyi.webapi.vo.client.notice.NoticeUserListVo;
 
 @RestController
 @RequestMapping("client/notice")
@@ -67,6 +67,7 @@ public class NoticeClientController {
 	public ApiPageResult Userlist(RequestPageParams params) {
 		ApiPageResult aResult = new ApiPageResult();
 		Page<NoticeUserDto> page = noticeUserService.listForUser(params);
+		aResult.setPageCount(page.getPages());
 		aResult.setTotal(page.getTotal());
 		aResult.setData(AutoMapper.mapperList(page, NoticeUserListVo.class));
 		return aResult;

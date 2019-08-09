@@ -17,6 +17,7 @@ import com.seglino.jingyi.common.request.RequestPageParams;
 import com.seglino.jingyi.common.utils.AutoMapper;
 import com.seglino.jingyi.common.utils.DateUtils;
 import com.seglino.jingyi.notice.dao.NoticeDao;
+import com.seglino.jingyi.notice.dto.NoticeAttachDto;
 import com.seglino.jingyi.notice.dto.NoticeDetailDto;
 import com.seglino.jingyi.notice.pojo.Notice;
 import com.seglino.jingyi.notice.pojo.NoticeAttach;
@@ -44,9 +45,7 @@ public class NoticeServiceImpl extends BaseServiceImpl<NoticeDao, Notice> implem
 	public NoticeDetailDto detailDto(String id) {
 		Notice notice = this.detailById(id);
 		NoticeDetailDto dto = AutoMapper.mapper(notice, NoticeDetailDto.class);
-		Map<String, Object> param = new HashMap<String, Object>();
-		param.put("noticeId", id);
-		List<NoticeAttach> attachList = attachService.list(param);
+		List<NoticeAttachDto> attachList = attachService.listForFileDetail(id);
 		dto.setAttachList(attachList);
 		return dto;
 	}

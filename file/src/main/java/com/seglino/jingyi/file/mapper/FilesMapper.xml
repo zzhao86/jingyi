@@ -9,6 +9,7 @@
 		id,
 		name,
 		type,
+		size,
 		MD5,
 		url,
 		createTime,
@@ -68,6 +69,7 @@
 			<if test="id != null">id,</if>
 			<if test="name != null">name,</if>
 			<if test="type != null">type,</if>
+			<if test="size != null">size,</if>
 			<if test="MD5 != null">MD5,</if>
 			<if test="url != null">url,</if>
 			<if test="createTime != null">createTime,</if>
@@ -83,6 +85,7 @@
 			<if test="id != null">#{id},</if>
 			<if test="name != null">#{name},</if>
 			<if test="type != null">#{type},</if>
+			<if test="size != null">#{size},</if>
 			<if test="MD5 != null">#{MD5},</if>
 			<if test="url != null">#{url},</if>
 			<if test="createTime != null">#{createTime},</if>
@@ -101,7 +104,8 @@
 		<include refid="tableName"></include>
 		<set>
 			<if test="name != null">name = #{name},</if>
-			<if test="type != null">tel = #{type},</if>
+			<if test="type != null">type = #{type},</if>
+			<if test="size != null">size = #{size},</if>
 			<if test="MD5 != null">MD5 = #{MD5},</if>
 			<if test="url != null">url = #{url},</if>
 			<if test="createTime != null">createTime = #{createTime},</if>

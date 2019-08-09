@@ -1,4 +1,4 @@
-package com.seglino.jingyi.webapi.vo.back.notice;
+package com.seglino.jingyi.webapi.vo.client.notice;
 
 import java.util.ArrayList;
 import java.util.Date;

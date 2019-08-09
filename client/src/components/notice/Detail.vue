@@ -1,6 +1,11 @@
 <template>
   <div class="container">
-    <div class="title">{{ detail.title }}</div>
+    <div class="title">
+      <span class="name">{{ detail.title }}</span>
+      <div class="reply">
+        <mt-button type="primary" :plain="true" size="small" @click.native="onReplyClick">回复</mt-button>
+      </div>
+    </div>
     <div class="author">
       <span class="name">{{ detail.author }}</span>
       <span class="time">{{ detail.publishTime }}</span>
@@ -11,9 +16,12 @@
       <div class="attach-header">附件：</div>
       <ul class="attach-wrapper">
         <li v-for="(item, index) in detail.attachList" :key="index">
-          <a class="attach-name" :href="$global.baseUrl + item.attachUrl" :title="item.attachName">
-            <i class="fa" v-bind:class="convert(item.attachName)"></i>
-            <span>{{ item.attachName }}</span>
+          <a class="attach-info" :href="$global.baseUrl + item.attachUrl" :title="item.attachName">
+            <i class="icon fa" v-bind:class="convert(item.attachType)"></i>
+            <div class="attach">
+              <div class="name">{{ item.attachName }}</div>
+              <div class="size">{{ item.size }}</div>
+            </div>
           </a>
         </li>
       </ul>
@@ -50,35 +58,40 @@
       },
       // 查看已读未读列表
       onShowReadListClick() {
-        this.$router.push('/notice/readlist?id=' + this.id);
+        this.$router.push(`/notice/readlist?id=${this.id}&total=${this.detail.totalCount}&$readed={this.detail.readCount}`);
       },
+      // 回复
+      onReplyClick() {},
       // 附件图标转换
-      convert(name) {
+      convert(type) {
         var icon = 'fa-file-o';
-        if (!name) return icon;
-        var ext = name.substring(name.lastIndexOf('.') + 1);
-        switch (ext) {
-          case 'png':
-          case 'jpg':
-          case 'jpeg':
-          case 'gif':
-          case 'bmp':
+        if (!type) return icon;
+        switch (type) {
+          case '.png':
+          case '.jpg':
+          case '.jpeg':
+          case '.gif':
+          case '.bmp':
             icon = 'fa-file-picture-o default';
             break;
-          case 'pdf':
+          case '.pdf':
             icon = 'fa-file-pdf-o orange';
             break;
-          case 'doc':
-          case 'docx':
+          case '.doc':
+          case '.docx':
             icon = 'fa-file-word-o blue';
             break;
-          case 'xls':
-          case 'xlsx':
+          case '.xls':
+          case '.xlsx':
             icon = 'fa-file-excel-o green';
             break;
-          case 'ppt':
-          case 'pptx':
+          case '.ppt':
+          case '.pptx':
             icon = 'fa-file-powerpoint-o orange';
+            break;
+          case '.zip':
+          case '.rar':
+            icon = 'fa-file-zip-o brown';
             break;
           case 'txt':
             icon = 'fa-file-text-o default';
@@ -101,10 +114,20 @@
   }
   .title {
     color: #333;
+    margin: 10px 0;
+    overflow: hidden;
+    display: flex;
+  }
+  .title .name {
+    display: inline-block;
     font-size: 18px;
     text-align: left;
     font-weight: 400;
-    margin: 10px 0;
+    flex: 1;
+  }
+  .title .reply {
+    width: 80px;
+    text-align: right;
   }
 
   .author {
@@ -150,24 +173,41 @@
     padding: 0;
     margin-bottom: 10px;
   }
-  .attach-wrapper .attach-name {
-    color: #333;
+  .attach-wrapper .attach-info {
+    display: flex;
     text-decoration: none;
-    height: 30px;
   }
-  .attach-wrapper .attach-name .fa {
+  .attach-wrapper .attach {
+    flex: 1;
+    margin-left: 10px;
+    font-family: 'Microsoft Yahei';
+  }
+  .attach-wrapper .attach .name {
+    color: #333;
+    margin-top: -3px;
+  }
+  .attach-wrapper .attach .size {
+    color: #999;
+    font-size: 11px;
+  }
+  .attach-wrapper .attach-info .icon {
     font-size: 30px;
+    width: 32px;
+    height: 32px;
   }
-  .attach-wrapper .attach-name .fa.green {
+  .attach-wrapper .attach-info .icon.green {
     color: #39825a;
   }
-  .attach-wrapper .attach-name .fa.orange {
+  .attach-wrapper .attach-info .icon.orange {
     color: #dc6141;
   }
-  .attach-wrapper .attach-name .fa.blue {
+  .attach-wrapper .attach-info .icon.blue {
     color: #4269a5;
   }
-  .attach-wrapper .attach-name .fa.default {
+  .attach-wrapper .attach-info .icon.brown {
+    color: #e56e4d;
+  }
+  .attach-wrapper .attach-info .icon.default {
     color: #65676b;
   }
 </style>

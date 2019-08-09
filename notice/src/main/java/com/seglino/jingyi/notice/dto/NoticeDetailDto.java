@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import com.seglino.jingyi.common.core.po.BaseEntity;
-import com.seglino.jingyi.notice.pojo.NoticeAttach;
 
 public class NoticeDetailDto extends BaseEntity {
 	private static final long serialVersionUID = -1033000765514197178L;
@@ -17,7 +16,7 @@ public class NoticeDetailDto extends BaseEntity {
 	private Integer readCount;
 	private Integer totalCount;
 	private Date publishTime;
-	private List<NoticeAttach> attachList;
+	private List<NoticeAttachDto> attachList;
 
 	public String getCategoryId() {
 		return categoryId;
@@ -91,11 +90,11 @@ public class NoticeDetailDto extends BaseEntity {
 		this.publishTime = publishTime;
 	}
 
-	public List<NoticeAttach> getAttachList() {
+	public List<NoticeAttachDto> getAttachList() {
 		return attachList;
 	}
 
-	public void setAttachList(List<NoticeAttach> attachList) {
+	public void setAttachList(List<NoticeAttachDto> attachList) {
 		this.attachList = attachList;
 	}
 }

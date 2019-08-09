@@ -13,7 +13,7 @@
         <div v-bind:style="'background-image: url('+$global.baseUrl + item.coverUrl+')'" class="notice-cover-image"></div>
       </div>
     </div>
-    <list-loading v-show="loading"></list-loading>
+    <list-loading v-show="loading && !isLoadAll"></list-loading>
     <divider v-show="isLoadAll"></divider>
   </div>
 </template>
@@ -33,7 +33,7 @@
       return {
         params: {
           index: 1,
-          size: 10,
+          size: 20,
           query: {
             userId: this.$global.user.id
           }
@@ -68,7 +68,9 @@
         }
         this.loading = true;
         this.params.index++;
-        this.loadListData();
+        setTimeout(() => {
+          this.loadListData();
+        }, 1000);
       },
       // 跳转详情页
       onViewClick(id) {
@@ -78,6 +80,9 @@
   };
 </script>
 <style scoped>
+  body {
+    background-color: #f3f3f3;
+  }
   .notice-container {
     overflow-y: auto;
     overflow-x: hidden;
@@ -114,7 +119,7 @@
   .notice-info .notice-count {
     margin-top: 5px;
     font-size: 12px;
-    color: #3296fa;
+    color: #999;
   }
 
   .notice-info .notice-ext {

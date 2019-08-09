@@ -8,6 +8,7 @@
 	<sql id="column">
 		id,
 		noticeId,
+		fileId,
 		fileName,
 		fileUrl,
 		createTime,
@@ -63,7 +64,8 @@
 		<include refid="tableName"></include>
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="id != null">id,</if>
-			<if test="noticeId, != null">noticeId,</if>
+			<if test="noticeId != null">noticeId,</if>
+			<if test="fileId != null">fileId,</if>
 			<if test="fileName != null">fileName,</if>
 			<if test="fileUrl != null">fileUrl,</if>
 			<if test="createTime != null">createTime,</if>
@@ -78,6 +80,7 @@
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="id != null">#{id},</if>
 			<if test="noticeId != null">#{noticeId},</if>
+			<if test="fileId != null">#{fileId},</if>
 			<if test="fileName != null">#{fileName},</if>
 			<if test="fileUrl != null">#{fileUrl},</if>
 			<if test="createTime != null">#{createTime},</if>
@@ -96,6 +99,7 @@
 		<include refid="tableName"></include>
 		<set>
 			<if test="noticeId != null">noticeId = #{noticeId},</if>
+			<if test="fileId != null">fileId = #{fileId},</if>
 			<if test="fileName != null">fileName = #{fileName},</if>
 			<if test="fileUrl != null">fileUrl = #{fileUrl},</if>
 			<if test="createTime != null">createTime = #{createTime},</if>
