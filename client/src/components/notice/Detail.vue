@@ -48,7 +48,8 @@
       loadDetailData() {
         this.$get('/client/notice/detail', {
           params: {
-            id: this.id
+            id: this.id,
+            userid: this.$global.user.id
           }
         }).then(res => {
           if (res.isSuccess) {
@@ -58,10 +59,12 @@
       },
       // 查看已读未读列表
       onShowReadListClick() {
-        this.$router.push(`/notice/readlist?id=${this.id}&total=${this.detail.totalCount}&$readed={this.detail.readCount}`);
+        this.$router.push(`/notice/readlist?id=${this.id}`);
       },
       // 回复
-      onReplyClick() {},
+      onReplyClick() {
+        this.$router.push(`/notice/reply?id=${this.id}`);
+      },
       // 附件图标转换
       convert(type) {
         var icon = 'fa-file-o';

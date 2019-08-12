@@ -32,8 +32,18 @@ public interface NoticeService extends BaseService<Notice> {
 
 	/**
 	 * 获取客户端公告列表
+	 * 
 	 * @param params
 	 * @return
 	 */
 	public Page<Notice> listByUserClient(RequestPageParams params);
+
+	/**
+	 * 读取公告，将公告的状态设为已读
+	 * 
+	 * @param id 公告ID
+	 * @param userid 接收人ID
+	 * @return
+	 */
+	public int read(String id, String userid);
 }

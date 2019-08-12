@@ -7,6 +7,7 @@ import Home from '@/components/Home';
 import NoticeIndex from '@/components/notice/Index';
 import NoticeDetail from '@/components/notice/Detail';
 import NoticeReadList from '@/components/notice/ReadList';
+import NoticeReply from '@/components/notice/Reply';
 
 Vue.use(Router);
 
@@ -22,7 +23,7 @@ const router = new Router({
       name: 'Home',
       component: Home,
       meta: {
-        // requireAuth: true
+        requireAuth: true
       }
     },
     {
@@ -30,7 +31,7 @@ const router = new Router({
       name: 'NoticeIndex',
       component: NoticeIndex,
       meta: {
-        // requireAuth: true
+        requireAuth: true
       }
     },
     {
@@ -38,7 +39,7 @@ const router = new Router({
       name: 'NoticeDetail',
       component: NoticeDetail,
       meta: {
-        // requireAuth: true
+        requireAuth: true
       }
     },
     {
@@ -46,7 +47,15 @@ const router = new Router({
       name: 'NoticeReadList',
       component: NoticeReadList,
       meta: {
-        // requireAuth: true
+        requireAuth: true
+      }
+    },
+    {
+      path: '/notice/reply',
+      name: 'NoticeReply',
+      component: NoticeReply,
+      meta: {
+        requireAuth: true
       }
     }
   ]

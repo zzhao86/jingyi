@@ -8,7 +8,7 @@ public class NoticeUser extends BaseEntity {
 	private String noticeId;
 	private String userId;
 	private String ddUserId;
-	private String isRead;
+	private Boolean isRead;
 	private String readTime;
 
 	public String getNoticeId() {
@@ -35,11 +35,11 @@ public class NoticeUser extends BaseEntity {
 		this.ddUserId = ddUserId;
 	}
 
-	public String getIsRead() {
+	public Boolean getIsRead() {
 		return isRead;
 	}
 
-	public void setIsRead(String isRead) {
+	public void setIsRead(Boolean isRead) {
 		this.isRead = isRead;
 	}
 

@@ -154,4 +154,36 @@ public class NoticeServiceImpl extends BaseServiceImpl<NoticeDao, Notice> implem
 		PageHelper.startPage(params.getIndex(), params.getSize());
 		return dao.listByUserClient(params.getCondition());
 	}
+
+	/**
+	 * 读取公告，将公告的状态设为已读
+	 * 
+	 * @param id 公告ID
+	 * @param userid 接收人ID
+	 * @return
+	 */
+	public int read(String id, String userid) {
+		Notice notice = detailById(id);
+		if (null == notice) {
+			return -1;
+		}
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("noticeId", id);
+		param.put("userId", userid);
+		NoticeUser noticeUser = noticeUserService.detail(param);
+		if (null == noticeUser && !getUserid().equals(notice.getCreateUid())) {
+			return -2;
+		} else if (noticeUser.getIsRead()) {
+			return 0;
+		} else {
+			// 更新Notice表的已读计数
+			notice.setReadCount(notice.getReadCount() + 1);
+			update(notice);
+
+			// 更新NoticeUser的读取状态和读取时间
+			noticeUser.setIsRead(true);
+			noticeUser.setReadTime(DateUtils.getDate());
+			return noticeUserService.update(noticeUser);
+		}
+	}
 }

@@ -17,7 +17,7 @@
     // 用户账号信息
     user: {
       get: () => {
-        let session = localStorage.getItem(userSessionKey);
+        let session = sessionStorage.getItem(userSessionKey);
         if (session) {
           return JSON.parse(session);
         } else {
@@ -25,7 +25,7 @@
         }
       },
       set: obj => {
-        localStorage.setItem(userSessionKey, JSON.stringify(obj));
+        sessionStorage.setItem(userSessionKey, JSON.stringify(obj));
       }
     },
     // 钉钉企业ID
@@ -45,7 +45,7 @@
     // 钉钉是否已鉴权
     isPermission: {
       get: () => {
-        let session = localStorage.getItem(isPermissionSessionKey);
+        let session = sessionStorage.getItem(isPermissionSessionKey);
         if (session) {
           return session;
         } else {
@@ -53,7 +53,7 @@
         }
       },
       set: val => {
-        localStorage.setItem(isPermissionSessionKey, val);
+        sessionStorage.setItem(isPermissionSessionKey, val);
       }
     }
   });

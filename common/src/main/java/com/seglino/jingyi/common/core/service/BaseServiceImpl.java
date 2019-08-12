@@ -180,7 +180,7 @@ public abstract class BaseServiceImpl<D extends BaseDao<T>, T extends BaseEntity
 		return dao.page(params.getCondition());
 	}
 
-	private String getUserid() {
+	public String getUserid() {
 		Subject subject = SecurityUtils.getSubject();
 		if (subject.isAuthenticated()) {
 			return subject.getPrincipal().toString();

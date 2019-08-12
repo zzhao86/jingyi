@@ -31,10 +31,6 @@
       if (query.id) {
         this.id = query.id;
       }
-      if (query.total && query.readed) {
-        this.count.readed = query.readed;
-        this.count.unread = query.total - query.readed;
-      }
       this.loadListData();
     },
     data() {
@@ -105,8 +101,10 @@
             this.count[this.activeTab] = res.total;
             this.pageCount[this.activeTab] = res.pageCount;
             var list = this.listData[this.activeTab];
-            for (let i = 0; i < res.data.length; i++) {
-              list.push(res.data[i]);
+            this.count.readed = res.data.readCount;
+            this.count.unread = res.data.totalCount - res.data.readCount;
+            for (let i = 0; i < res.data.list.length; i++) {
+              list.push(res.data.list[i]);
             }
           }
         });

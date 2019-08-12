@@ -1,5 +1,5 @@
 <template>
-  <div>{{ code }}</div>
+  <!-- <div>{{ msg }}</div> -->
 </template>
 <script>
   export default {
@@ -14,7 +14,7 @@
     },
     data() {
       return {
-        code: ''
+        msg: ''
       };
     },
     methods: {
@@ -25,7 +25,7 @@
           vue.$dd.runtime.permission.requestAuthCode({
             corpId: vue.$global.corpId,
             onSuccess: res => {
-              vue.code = res.code;
+              vue.msg = res.code;
               vue
                 .$get('account/login/dingtalk_corp', {
                   params: {
@@ -33,6 +33,7 @@
                   }
                 })
                 .then(res => {
+                  vue.msg = JSON.stringify(res);
                   if (res.isSuccess) {
                     vue.$global.user = res.data;
                     vue.$router.push('/');

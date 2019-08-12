@@ -21,6 +21,7 @@ Vue.config.productionTip = false;
  */
 axios.interceptors.request.use(
   function(config) {
+    config.withCredentials = true;
     return config;
   },
   function(error) {
