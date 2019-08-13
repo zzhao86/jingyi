@@ -68,6 +68,7 @@ router.beforeEach((to, from, next) => {
     if (Global.user) {
       next();
     } else {
+      sessionStorage.setItem('REDIRECT', to.fullPath);
       next({
         path: '/login',
         query: { redirect: escape(to.fullPath) } // 将跳转的路由path作为参数，登录成功后跳转到该路由

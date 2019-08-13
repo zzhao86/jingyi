@@ -49,9 +49,6 @@ public class DingtalkCorpRealm extends AuthorizingRealm {
 			if (null == user) {
 				throw new AuthenticationException("用户不存在");
 			}
-			if (user.getType() >= 2) {
-				throw new AuthenticationException("用户权限不足");
-			}
 			if (user.getIsDeleted()) {
 				throw new DisabledAccountException("账号已被禁用");
 			}

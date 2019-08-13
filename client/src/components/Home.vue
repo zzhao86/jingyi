@@ -254,7 +254,7 @@
 
   .notice-box {
     margin-top: -4px;
-    background-color: #3296fa;
+    background-color: #5ca8f3;
     position: relative;
     color: #fff;
   }

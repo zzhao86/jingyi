@@ -32,6 +32,11 @@ public class ShiroConfiguration {
 
 		// 权限控制map.
 		Map<String, String> filterChainDefinitionMap = new HashMap<String, String>();
+		// 此处需要添加一个kickout，上面添加的自定义拦截器才能生效
+		// 表示需要认证才可以访问
+		filterChainDefinitionMap.put("/back/**", "authc");
+		filterChainDefinitionMap.put("/client/**", "authc");
+		
 		// 客户端钉钉鉴权
 		filterChainDefinitionMap.put("/client/dingtalk/jsapi_config", "anon");
 		
@@ -43,11 +48,6 @@ public class ShiroConfiguration {
 		
 		// 测试方法
 		filterChainDefinitionMap.put("/test/**", "anon");
-
-		// 此处需要添加一个kickout，上面添加的自定义拦截器才能生效
-		// 表示需要认证才可以访问
-		filterChainDefinitionMap.put("/back/**", "authc");
-		filterChainDefinitionMap.put("/client/**", "authc");
 		filter.setFilterChainDefinitionMap(filterChainDefinitionMap);
 		return filter;
 	}

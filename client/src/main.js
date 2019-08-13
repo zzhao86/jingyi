@@ -86,10 +86,12 @@ const vue = new Vue({
           nonceStr: data.nonceStr, // 必填，生成签名的随机串
           signature: data.signature, // 必填，签名
           type: 0, //选填。0表示微应用的jsapi,1表示服务窗的jsapi；不填默认为0。该参数从dingtalk.js的0.8.3版本开始支持
-          jsApiList: ['device.base.getUUID', 'biz.cspace.saveFile', 'biz.cspace.preview']
+          jsApiList: ['device.base.getUUID']
+        }).catch(error => {
+          alert(`获取钉钉配置失败：${JSON.stringify(error)}`);
         });
         dd.error(error => {
-          alert('钉钉鉴权失败: ' + JSON.stringify(error));
+          alert(`钉钉鉴权失败: ${JSON.stringify(error)}`);
         });
         // dd.device.base.getUUID({
         //   onSuccess: function(data) {
