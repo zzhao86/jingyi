@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seglino.jingyi.notice.dao.NoticeReplyDao">
+	<!-- 数据表名 -->
+	<sql id="tableName">tab_notice_reply</sql>
+	
+	<!-- 数据字段 -->
+	<sql id="column">
+		id,
+		noticeId,
+		userId,
+		fileId,
+		fileName,
+		fileUrl,
+		content,
+		createTime,
+		createUid,
+		modifyTime,
+		modifyUid,
+		deleteTime,
+		deleteUid,
+		isDeleted
+	</sql>
+	
+	<!-- 查询条件 -->
+	<sql id="condition">
+		<if test="noticeId != null"> and noticeId = #{noticeId}</if>
+		<if test="userId != null"> and userId = #{userId}</if>
+		<if test="isDeleted != null"> and isDeleted = #{isDeleted}</if>
+	</sql>
+
+	<!-- 根据条件获取列表 -->
+	<select id="list" resultType="com.seglino.jingyi.notice.pojo.NoticeReply">
+		SELECT
+		<include refid="column"></include>
+		FROM
+		<include refid="tableName"></include>
+		<where>
+			<include refid="condition"></include>
+		</where>
+		ORDER BY createTime DESC
+	</select>
+
+	<!-- 根据条件获取详情 -->
+	<select id="detail" resultType="com.seglino.jingyi.notice.pojo.NoticeReply">
+		SELECT
+		<include refid="column"></include>
+		FROM
+		<include refid="tableName"></include>
+		<where>
+			<include refid="condition"></include>
+		</where>
+	</select>
+	
+	<!-- 获取公告回复分页列表 -->
+	<select id="listForPage" resultType="com.seglino.jingyi.notice.dto.NoticeReplyDto">
+		SELECT a.id,
+			   a.content,
+			   a.fileName,
+			   a.fileUrl,
+			   b.name as userName,
+			   b.avatar as userAvatar,
+			   c.size as fileSize,
+			   c.type as fileType
+		  FROM tab_notice_reply a
+		  JOIN tab_user b ON a.userId = b.id
+		  JOIN tab_files c ON a.fileId = c.id
+		 WHERE a.noticeId = #{noticeId}
+	  ORDER BY a.createTime DESC
+	</select>
+	
+	<!-- 根据条件获取数据总数 -->
+	<select id="count" resultType="com.seglino.jingyi.notice.pojo.NoticeReply">
+		SELECT COUNT(*) FROM
+		<include refid="tableName"></include>
+		<where>
+			<include refid="condition"></include>
+		</where>
+	</select>
+
+	<!-- 插入 -->
+	<insert id="insert" parameterType="com.seglino.jingyi.notice.pojo.NoticeReply">
+		INSERT INTO
+		<include refid="tableName"></include>
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">id,</if>
+			<if test="noticeId != null">noticeId,</if>
+			<if test="userId != null">userId,</if>
+			<if test="fileId != null">fileId,</if>
+			<if test="fileName != null">fileName,</if>
+			<if test="fileUrl != null">fileUrl,</if>
+			<if test="createTime != null">createTime,</if>
+			<if test="createUid != null">createUid,</if>
+			<if test="modifyTime != null">modifyTime,</if>
+			<if test="modifyUid != null">modifyUid,</if>
+			<if test="deleteTime != null">deleteTime,</if>
+			<if test="deleteUid != null">deleteUid,</if>
+			<if test="isDeleted != null">isDeleted,</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">#{id},</if>
+			<if test="noticeId != null">#{noticeId},</if>
+			<if test="userId != null">#{userId},</if>
+			<if test="fileId != null">#{fileId},</if>
+			<if test="fileName != null">#{fileName},</if>
+			<if test="fileUrl != null">#{fileUrl},</if>
+			<if test="createTime != null">#{createTime},</if>
+			<if test="createUid != null">#{createUid},</if>
+			<if test="modifyTime != null">#{modifyTime},</if>
+			<if test="modifyUid != null">#{modifyUid},</if>
+			<if test="deleteTime != null">#{deleteTime},</if>
+			<if test="deleteUid != null">#{deleteUid},</if>
+			<if test="isDeleted != null">#{isDeleted},</if>
+		</trim>
+	</insert>
+
+	<!-- 修改 -->
+	<update id="update" parameterType="com.seglino.jingyi.notice.pojo.NoticeReply">
+		UPDATE
+		<include refid="tableName"></include>
+		<set>
+			<if test="noticeId != null">noticeId = #{noticeId},</if>
+			<if test="userId != null">userId = #{userId},</if>
+			<if test="fileId != null">fileId = #{fileId},</if>
+			<if test="fileName != null">fileName = #{fileName},</if>
+			<if test="fileUrl != null">fileUrl = #{fileUrl},</if>
+			<if test="content != null">content = #{content},</if>
+			<if test="createTime != null">createTime = #{createTime},</if>
+			<if test="createUid != null">createUid = #{createUid},</if>
+			<if test="modifyTime != null">modifyTime = #{modifyTime},</if>
+			<if test="modifyUid != null">modifyUid = #{modifyUid},</if>
+			<if test="deleteTime != null">deleteTime = #{deleteTime},</if>
+			<if test="deleteUid != null">deleteUid = #{deleteUid},</if>
+			<if test="isDeleted != null">isDeleted = #{isDeleted},</if>
+		</set>
+		<where>
+			id = #{id}
+		</where>
+	</update>
+	
+	<!-- 物理删除 -->
+	<delete id="delete" parameterType="Object">
+		DELETE FROM
+		<include refid="tableName" />
+		<where>
+			id = #{id}
+		</where>
+	</delete>
+</mapper>

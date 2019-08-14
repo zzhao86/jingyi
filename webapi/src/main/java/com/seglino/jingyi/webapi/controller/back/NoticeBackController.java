@@ -28,15 +28,18 @@ import com.seglino.jingyi.file.dto.FileType;
 import com.seglino.jingyi.file.pojo.Files;
 import com.seglino.jingyi.file.service.FilesService;
 import com.seglino.jingyi.notice.dto.NoticeDetailDto;
+import com.seglino.jingyi.notice.dto.NoticeReplyDto;
 import com.seglino.jingyi.notice.dto.NoticeUserDto;
 import com.seglino.jingyi.notice.pojo.Notice;
 import com.seglino.jingyi.notice.pojo.NoticeAttach;
+import com.seglino.jingyi.notice.service.NoticeReplyService;
 import com.seglino.jingyi.notice.service.NoticeService;
 import com.seglino.jingyi.notice.service.NoticeUserService;
 import com.seglino.jingyi.webapi.vo.FilesVo;
 import com.seglino.jingyi.webapi.vo.back.notice.NoticeAttachVo;
 import com.seglino.jingyi.webapi.vo.back.notice.NoticeDetailVo;
 import com.seglino.jingyi.webapi.vo.back.notice.NoticeListVo;
+import com.seglino.jingyi.webapi.vo.back.notice.NoticeReplyListVo;
 import com.seglino.jingyi.webapi.vo.back.notice.NoticeUserListVo;
 
 @RestController
@@ -49,6 +52,8 @@ public class NoticeBackController {
 	private FilesService filesService;
 	@Autowired
 	private NoticeUserService noticeUserService;
+	@Autowired
+	private NoticeReplyService noticeReplyService;
 	@Autowired
 	private DingtalkMessageService dingtalkMessageService;
 
@@ -188,6 +193,20 @@ public class NoticeBackController {
 		ApiResult aResult = new ApiResult();
 		try {
 			noticeService.deleteBatch(ids);
+		} catch (Exception e) {
+			aResult.addError(e);
+		}
+		return aResult;
+	}
+	
+	@GetMapping("reply_list")
+	public ApiPageResult replyList(RequestPageParams params) {
+		ApiPageResult aResult = new ApiPageResult();
+		try {
+			Page<NoticeReplyDto> pages = noticeReplyService.listForPage(params);
+			aResult.setPageCount(pages.getPages());
+			aResult.setTotal(pages.getTotal());
+			aResult.setData(AutoMapper.mapperList(pages.getResult(), NoticeReplyListVo.class));
 		} catch (Exception e) {
 			aResult.addError(e);
 		}

@@ -68,6 +68,7 @@ const vue = new Vue({
     Vue.prototype.$post = axios.post;
     Vue.prototype.$global = Global;
     Vue.prototype.$dd = dd;
+    vue.$global.corpId = null;
 
     // 钉钉鉴权
     vue

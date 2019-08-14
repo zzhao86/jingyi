@@ -32,7 +32,7 @@
             <div class="options-buttons">
               <el-button type="primary" size="mini" @click="onEditClick(scope.row)">编辑</el-button>
               <el-button type="danger" size="mini" @click="onDeleteClick(scope.row)">删除</el-button>
-              <el-button type="success" size="mini" @click="onFilesClick(scope.row)">文件列表</el-button>
+              <el-button type="success" size="mini" @click="onReplyClick(scope.row)">回复列表</el-button>
             </div>
           </template>
         </el-table-column>
@@ -141,6 +141,9 @@
             }
           });
         });
+      },
+      onReplyClick: function(row) {
+        this.$router.push('notice/reply?id=' + row.id);
       },
       onTableSelectionChange: function(selection) {
         this.tableSelected = selection;

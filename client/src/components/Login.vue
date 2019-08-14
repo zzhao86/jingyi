@@ -23,7 +23,7 @@
         // 免登
         vue.$dd.ready(function() {
           let interval = setInterval(() => {
-            if (vue.$global.corpId && vue.$global.corpId == 'null') {
+            if (vue.$global.corpId) {
               clearInterval(interval);
               vue.$dd.runtime.permission.requestAuthCode({
                 corpId: vue.$global.corpId,

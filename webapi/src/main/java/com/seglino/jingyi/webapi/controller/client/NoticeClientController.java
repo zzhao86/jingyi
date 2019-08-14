@@ -24,11 +24,14 @@ import com.seglino.jingyi.file.service.FilesService;
 import com.seglino.jingyi.notice.dto.NoticeDetailDto;
 import com.seglino.jingyi.notice.dto.NoticeUserDto;
 import com.seglino.jingyi.notice.pojo.Notice;
+import com.seglino.jingyi.notice.pojo.NoticeReply;
+import com.seglino.jingyi.notice.service.NoticeReplyService;
 import com.seglino.jingyi.notice.service.NoticeService;
 import com.seglino.jingyi.notice.service.NoticeUserService;
 import com.seglino.jingyi.webapi.vo.client.notice.NoticeAttachVo;
 import com.seglino.jingyi.webapi.vo.client.notice.NoticeDetailVo;
 import com.seglino.jingyi.webapi.vo.client.notice.NoticeListVo;
+import com.seglino.jingyi.webapi.vo.client.notice.NoticeReplySaveVo;
 import com.seglino.jingyi.webapi.vo.client.notice.NoticeUserListVo;
 
 @RestController
@@ -39,6 +42,8 @@ public class NoticeClientController {
 	private NoticeService noticeService;
 	@Autowired
 	private NoticeUserService noticeUserService;
+	@Autowired
+	private NoticeReplyService noticeReplyService;
 	@Autowired
 	private FilesService filesService;
 
@@ -106,15 +111,25 @@ public class NoticeClientController {
 	}
 
 	@PostMapping("reply")
-	public ApiResult reply(HttpServletRequest request) {
+	public ApiResult reply(NoticeReplySaveVo vo, HttpServletRequest request) {
 		ApiResult aResult = new ApiResult();
 		try {
 			List<Files> list = filesService.upload(request, FileType.FILE);
-			
-		} catch (Exception e) {
+			if (null != list && list.size() > 0) {
+				Files files = list.get(0);
+				NoticeReply entity = AutoMapper.mapper(vo, NoticeReply.class);
+				entity.setFileId(files.getId().toString());
+				entity.setFileName(files.getName());
+				entity.setFileUrl(files.getUrl());
+				int count = noticeReplyService.insert(entity);
+				if (count <= 0) {
+					aResult.addError("回复失败");
+				}
+			}
+
+		} catch (IllegalStateException | IOException e) {
 			aResult.addError(e);
 		}
-
 		return aResult;
 	}
 }

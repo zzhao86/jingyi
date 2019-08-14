@@ -100,6 +100,7 @@
             icon = 'fa-file-text-o default';
             break;
           default:
+            icon = 'fa-file-o';
             break;
         }
         return icon;
@@ -144,10 +145,16 @@
   .author .name {
     padding-right: 15px;
     float: left;
+    max-width: calc(100% - 140px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .author .time {
     float: left;
+    width: 120px;
+    text-align: right;
   }
 
   .count {
