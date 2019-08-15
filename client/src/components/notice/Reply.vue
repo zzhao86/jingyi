@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <mt-field label="内容" placeholder="请输入回复内容，200字以内" type="textarea" rows="4" v-model="detail.content"></mt-field>
+    <mt-field label="内容" placeholder="请输入回复内容，200字以内" type="textarea" rows="4" v-model="detail.content" attr="{maxlength: 200}"></mt-field>
     <mt-field label="附件" placeholder="选择要上传的附件" readonly @click.native="onUploadClick" v-model="detail.file.name">
       <label ref="fileUpload">
         <!-- <input

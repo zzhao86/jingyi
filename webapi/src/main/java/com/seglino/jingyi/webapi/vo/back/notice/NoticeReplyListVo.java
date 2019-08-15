@@ -10,6 +10,7 @@ public class NoticeReplyListVo extends BaseVo {
 	private String fileType;
 	private String userName;
 	private String userAvatar;
+	private String replyTime;
 
 	public String getContent() {
 		return content;
@@ -65,5 +66,13 @@ public class NoticeReplyListVo extends BaseVo {
 
 	public void setUserAvatar(String userAvatar) {
 		this.userAvatar = userAvatar;
+	}
+
+	public String getReplyTime() {
+		return replyTime;
+	}
+
+	public void setReplyTime(String replyTime) {
+		this.replyTime = replyTime;
 	}
 }

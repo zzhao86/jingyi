@@ -9,6 +9,7 @@ public class NoticeReplyDto {
 	private String fileType;
 	private String userName;
 	private String userAvatar;
+	private String replyTime;
 
 	public String getId() {
 		return id;
@@ -72,5 +73,13 @@ public class NoticeReplyDto {
 
 	public void setUserAvatar(String userAvatar) {
 		this.userAvatar = userAvatar;
+	}
+
+	public String getReplyTime() {
+		return replyTime;
+	}
+
+	public void setReplyTime(String replyTime) {
+		this.replyTime = replyTime;
 	}
 }

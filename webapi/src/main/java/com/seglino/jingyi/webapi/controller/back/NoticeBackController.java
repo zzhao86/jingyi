@@ -5,6 +5,7 @@ import java.net.URLEncoder;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -32,6 +33,7 @@ import com.seglino.jingyi.notice.dto.NoticeReplyDto;
 import com.seglino.jingyi.notice.dto.NoticeUserDto;
 import com.seglino.jingyi.notice.pojo.Notice;
 import com.seglino.jingyi.notice.pojo.NoticeAttach;
+import com.seglino.jingyi.notice.pojo.NoticeReply;
 import com.seglino.jingyi.notice.service.NoticeReplyService;
 import com.seglino.jingyi.notice.service.NoticeService;
 import com.seglino.jingyi.notice.service.NoticeUserService;
@@ -59,6 +61,7 @@ public class NoticeBackController {
 
 	/**
 	 * 获取分页列表
+	 * 
 	 * @param params
 	 * @return
 	 */
@@ -78,6 +81,7 @@ public class NoticeBackController {
 
 	/**
 	 * 获取详情
+	 * 
 	 * @param id
 	 * @return
 	 */
@@ -111,6 +115,7 @@ public class NoticeBackController {
 
 	/**
 	 * 保存
+	 * 
 	 * @param vo
 	 * @return
 	 */
@@ -125,7 +130,7 @@ public class NoticeBackController {
 				aResult.addError("保存失败");
 			} else {
 				// 保存成功之后，给所有接收人发送钉钉工作通知
-//				sendDingtalkWorkMessage(dto.getId().toString());
+				// sendDingtalkWorkMessage(dto.getId().toString());
 			}
 		} catch (Exception e) {
 			aResult.addError(e);
@@ -135,6 +140,7 @@ public class NoticeBackController {
 
 	/**
 	 * 上传封面
+	 * 
 	 * @param request
 	 * @return
 	 */
@@ -152,6 +158,7 @@ public class NoticeBackController {
 
 	/**
 	 * 上传附件
+	 * 
 	 * @param request
 	 * @return
 	 */
@@ -169,6 +176,7 @@ public class NoticeBackController {
 
 	/**
 	 * 删除
+	 * 
 	 * @param id
 	 * @return
 	 */
@@ -182,9 +190,10 @@ public class NoticeBackController {
 		}
 		return aResult;
 	}
-	
+
 	/**
-	 * 批量删除	
+	 * 批量删除
+	 * 
 	 * @param ids
 	 * @return
 	 */
@@ -198,7 +207,7 @@ public class NoticeBackController {
 		}
 		return aResult;
 	}
-	
+
 	@GetMapping("reply_list")
 	public ApiPageResult replyList(RequestPageParams params) {
 		ApiPageResult aResult = new ApiPageResult();
@@ -213,8 +222,20 @@ public class NoticeBackController {
 		return aResult;
 	}
 
+	@GetMapping("download")
+	public void download(String id, HttpServletResponse response) {
+		if (StringUtils.isEmpty(id)) {
+			return;
+		}
+		NoticeReply reply = noticeReplyService.detailById(id);
+		if (null != reply) {
+			filesService.download(reply.getFileUrl(), reply.getFileName(), response);
+		}
+	}
+
 	/**
 	 * 给公告接收人发送钉钉工作消息
+	 * 
 	 * @param notice
 	 * @return
 	 * @throws UnsupportedEncodingException

@@ -1,15 +1,27 @@
 package com.seglino.jingyi.file.service.impl;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -74,7 +86,7 @@ public class FilesServiceImpl extends BaseServiceImpl<FilesDao, Files> implement
 					files.setType(ext);
 					files.setSize(size);
 					files.setMD5(md5);
-					
+
 					files.setUrl(relativePath + fileName);
 					int count = this.insert(files);
 					if (count == 1) {
@@ -94,4 +106,79 @@ public class FilesServiceImpl extends BaseServiceImpl<FilesDao, Files> implement
 		return list;
 	}
 
+	/**
+	 * 下载文件
+	 * 
+	 * @param url 文件相对路径
+	 * @param fileName 文件名称
+	 * @param response
+	 * @return
+	 */
+	public HttpServletResponse download(String url, String fileName, HttpServletResponse response) {
+		String path = ApplicationUtils.getRootPath() + url;
+		String zipFileName = ApplicationUtils.getRootPath() + "/upload/temp/" + UUID.randomUUID() + ".zip";
+		InputStream bis = null;
+		ZipOutputStream zos = null;
+
+		try {
+			File sourceFile = new File(path);
+			File zipFile = new File(zipFileName);
+			zos = new ZipOutputStream(new FileOutputStream(zipFile));
+
+			ZipEntry entry = new ZipEntry(fileName);
+			zos.putNextEntry(entry);
+			bis = new BufferedInputStream(new FileInputStream(sourceFile));
+
+			byte[] bytes = new byte[bis.available()];
+			bis.read(bytes);
+			zos.write(bytes);
+			bis.close();
+			zos.closeEntry();
+			zos.close();
+
+			response = downloadFile(zipFileName, fileName.substring(0, fileName.lastIndexOf(".")) + ".zip", response);
+			zipFile.delete();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (null != bis)
+					bis.close();
+				if (null != zos)
+					zos.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return response;
+	}
+
+	private HttpServletResponse downloadFile(String filePath, String name, HttpServletResponse response) {
+		OutputStream os = null;
+		InputStream bis = null;
+		try {
+			response.reset();
+			os = new BufferedOutputStream(response.getOutputStream());
+			bis = new BufferedInputStream(new FileInputStream(filePath));
+			byte[] bytes = new byte[bis.available()];
+			os.write(bytes);
+			response.addHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(name, "UTF-8"));
+			response.addHeader("Content-Length", String.valueOf(bis.available()));
+			response.setContentType("application/octet-stream; charset=utf-8");
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (null != os) {
+					os.flush();
+					os.close();
+				}
+				if (null != bis)
+					bis.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return response;
+	}
 }
