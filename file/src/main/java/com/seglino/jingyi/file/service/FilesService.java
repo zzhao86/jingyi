@@ -27,7 +27,14 @@ public interface FilesService extends BaseService<Files> {
 	 * @param url 文件相对路径
 	 * @param fileName 文件名称
 	 * @param response
-	 * @return
 	 */
-	public HttpServletResponse download(String url, String fileName, HttpServletResponse response);
+	public void download(String url, String fileName, HttpServletResponse response);
+	
+	/**
+	 * 下载ZIP文件
+	 * @param url 文件相对路径
+	 * @param fileName 文件名称
+	 * @param response
+	 */
+	public void downloadZip(String url, String fileName, HttpServletResponse response);
 }

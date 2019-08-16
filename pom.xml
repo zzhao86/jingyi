@@ -166,6 +166,13 @@
 				<artifactId>commons-fileupload</artifactId>
 				<version>1.4</version>
 			</dependency>
+
+			<!-- Office转PDF -->
+			<dependency>
+				<groupId>org.jodconverter</groupId>
+				<artifactId>jodconverter-local</artifactId>
+				<version>4.2.2</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 

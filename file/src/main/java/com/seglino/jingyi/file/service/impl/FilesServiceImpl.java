@@ -31,6 +31,7 @@ import com.seglino.jingyi.common.core.service.BaseServiceImpl;
 import com.seglino.jingyi.common.encrypt.EncryptUtils;
 import com.seglino.jingyi.common.utils.ApplicationUtils;
 import com.seglino.jingyi.common.utils.DateUtils;
+import com.seglino.jingyi.common.utils.ZipUtils;
 import com.seglino.jingyi.file.dao.FilesDao;
 import com.seglino.jingyi.file.dto.FileType;
 import com.seglino.jingyi.file.pojo.Files;
@@ -112,32 +113,66 @@ public class FilesServiceImpl extends BaseServiceImpl<FilesDao, Files> implement
 	 * @param url 文件相对路径
 	 * @param fileName 文件名称
 	 * @param response
-	 * @return
 	 */
-	public HttpServletResponse download(String url, String fileName, HttpServletResponse response) {
-		String path = ApplicationUtils.getRootPath() + url;
-		String zipFileName = ApplicationUtils.getRootPath() + "/upload/temp/" + UUID.randomUUID() + ".zip";
-		InputStream bis = null;
-		ZipOutputStream zos = null;
+	public void download(String url, String fileName, HttpServletResponse response) {
+		String sourceFilePath = ApplicationUtils.getRootPath() + url;
 
+		BufferedInputStream bis = null;
+		BufferedOutputStream bos = null;
 		try {
-			File sourceFile = new File(path);
-			File zipFile = new File(zipFileName);
-			zos = new ZipOutputStream(new FileOutputStream(zipFile));
+			response.reset();
+			response.addHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8"));
+			response.setCharacterEncoding("UTF-8");
 
-			ZipEntry entry = new ZipEntry(fileName);
-			zos.putNextEntry(entry);
-			bis = new BufferedInputStream(new FileInputStream(sourceFile));
+			File file = new File(sourceFilePath);
+			bis = new BufferedInputStream(new FileInputStream(file));
+			bos = new BufferedOutputStream(response.getOutputStream());
 
-			byte[] bytes = new byte[bis.available()];
-			bis.read(bytes);
-			zos.write(bytes);
-			bis.close();
-			zos.closeEntry();
-			zos.close();
+			byte[] buffer = new byte[1024];
+			int length;
+			while ((length = bis.read(buffer)) != -1) {
+				bos.write(buffer, 0, length);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (null != bis)
+					bis.close();
+				if (null != bos)
+					bos.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
-			response = downloadFile(zipFileName, fileName.substring(0, fileName.lastIndexOf(".")) + ".zip", response);
-			zipFile.delete();
+	/**
+	 * 下载ZIP文件
+	 * 
+	 * @param url 文件相对路径
+	 * @param fileName 文件名称
+	 * @param response
+	 */
+	public void downloadZip(String url, String fileName, HttpServletResponse response) {
+		String sourceFilePath = ApplicationUtils.getRootPath() + url;
+		BufferedInputStream bis = null;
+		ZipOutputStream zos = null;
+		try {
+			String zipFileName = fileName.substring(0, fileName.lastIndexOf(".")) + ".zip";
+			response.reset();
+			response.addHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(zipFileName, "UTF-8"));
+			response.setCharacterEncoding("UTF-8");
+
+			File file = new File(sourceFilePath);
+			bis = new BufferedInputStream(new FileInputStream(file));
+			zos = new ZipOutputStream(response.getOutputStream());
+			zos.putNextEntry(new ZipEntry(fileName));
+			int length;
+			byte[] buffer = new byte[1024];
+			while ((length = bis.read(buffer)) != -1) {
+				zos.write(buffer, 0, length);
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -146,39 +181,9 @@ public class FilesServiceImpl extends BaseServiceImpl<FilesDao, Files> implement
 					bis.close();
 				if (null != zos)
 					zos.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		return response;
-	}
-
-	private HttpServletResponse downloadFile(String filePath, String name, HttpServletResponse response) {
-		OutputStream os = null;
-		InputStream bis = null;
-		try {
-			response.reset();
-			os = new BufferedOutputStream(response.getOutputStream());
-			bis = new BufferedInputStream(new FileInputStream(filePath));
-			byte[] bytes = new byte[bis.available()];
-			os.write(bytes);
-			response.addHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(name, "UTF-8"));
-			response.addHeader("Content-Length", String.valueOf(bis.available()));
-			response.setContentType("application/octet-stream; charset=utf-8");
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (null != os) {
-					os.flush();
-					os.close();
-				}
-				if (null != bis)
-					bis.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
-		return response;
 	}
 }

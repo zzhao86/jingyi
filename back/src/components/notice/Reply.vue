@@ -115,15 +115,7 @@
         this.detail = row;
       },
       onDownLoadClick: function(row) {
-        window.location.href= `${this.$global.baseUrl}back/notice/download?id=${row.id}`
-        // open(`${this.$global.baseUrl}back/notice/download?url=${row.fileUrl}`);
-        // this.$get('back/notice/download', {
-        //   params: {
-        //     id: row.id
-        //   }
-        // }).then(res => {
-        //   console.log(res);
-        // });
+        window.location.href = `${this.$global.baseUrl}back/notice/download?id=${row.id}`;
       },
       onTableSelectionChange: function(selection) {
         this.tableSelected = selection;
