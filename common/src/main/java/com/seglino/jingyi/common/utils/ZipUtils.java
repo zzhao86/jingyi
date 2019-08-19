@@ -5,6 +5,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -36,6 +39,23 @@ public class ZipUtils {
 	 * @return ZIP包文件全路径
 	 */
 	public static File compress(File[] files) {
+		if (null == files || files.length == 0) {
+			return null;
+		}
+		Map<String, File> map = new HashMap<String, File>();
+		for (int i = 0; i < files.length; i++) {
+			map.put(i + "*", files[i]);
+		}
+		return compress(map);
+	}
+
+	/**
+	 * 压缩文件或文件夹到ZIP包
+	 * 
+	 * @param fileMap Key：文件名称，Value：文件对象
+	 * @return
+	 */
+	public static File compress(Map<String, File> fileMap) {
 		String path = ApplicationUtils.getRootPath() + "/upload/file/" + DateUtils.getNowString("yyyyMMdd") + "/";
 		String fileName = UUID.randomUUID().toString().replace("-", "") + ".zip";
 		String fileFullPath = path + fileName;
@@ -48,10 +68,15 @@ public class ZipUtils {
 		ZipOutputStream zos = null;
 		try {
 			File zipFile = new File(fileFullPath);
-			for (File file : files) {
-				fos = new FileOutputStream(zipFile);
-				zos = new ZipOutputStream(fos);
-				compressByType(file, zos, "");
+			fos = new FileOutputStream(zipFile);
+			zos = new ZipOutputStream(fos);
+			for (Entry<String, File> entry : fileMap.entrySet()) {
+				String name = entry.getKey();
+				File file = entry.getValue();
+				if (name.contains("*")) {
+					name = file.getName();
+				}
+				compressByType(file, name, zos, "");
 			}
 			return zipFile;
 		} catch (IOException e) {
@@ -72,27 +97,27 @@ public class ZipUtils {
 	/**
 	 * 压缩目标类型，是文件或是文件夹
 	 */
-	private static void compressByType(File file, ZipOutputStream zos, String basePath) {
+	private static void compressByType(File file, String fileName, ZipOutputStream zos, String basePath) {
 		if (!file.exists())
 			return;
 		// 判断压缩目标是文件还是文件夹
 		if (file.isFile()) {
 			// 压缩目标是文件
-			compressFile(file, zos, basePath);
+			compressFile(file, fileName, zos, basePath);
 		} else if (file.isDirectory()) {
 			// 压缩目标是文件夹
-			compressDirectory(file, zos, basePath);
+			compressDirectory(file, fileName, zos, basePath);
 		}
 	}
 
 	/**
 	 * 压缩文件
 	 */
-	private static void compressFile(File source, ZipOutputStream zos, String basePath) {
+	private static void compressFile(File source, String fileName, ZipOutputStream zos, String basePath) {
 		BufferedInputStream bis = null;
 		try {
 			bis = new BufferedInputStream(new FileInputStream(source));
-			ZipEntry entry = new ZipEntry(basePath + source.getName());
+			ZipEntry entry = new ZipEntry(basePath + fileName);
 			zos.putNextEntry(entry);
 
 			int count;
@@ -116,7 +141,7 @@ public class ZipUtils {
 	/**
 	 * 压缩文件夹
 	 */
-	private static void compressDirectory(File source, ZipOutputStream zos, String basePath) {
+	private static void compressDirectory(File source, String fileName, ZipOutputStream zos, String basePath) {
 		String path = basePath + source.getName() + File.separator;
 		File[] files = source.listFiles();
 		if (files.length == 0) {
@@ -128,7 +153,7 @@ public class ZipUtils {
 			}
 		}
 		for (File file : files) {
-			compressByType(file, zos, path);
+			compressByType(file, fileName, zos, path);
 		}
 	}
 }

@@ -3,7 +3,7 @@
     <div class="main-header">
       <div class="title">公告回复列表</div>
       <div class="buttons">
-        <el-button type="primary" size="small">批量下载附件</el-button>
+        <el-button type="primary" size="small" @click="onBatchDownloadClick">批量下载附件</el-button>
         <el-button type="success" size="small">下载全部附件</el-button>
       </div>
     </div>
@@ -18,7 +18,11 @@
             <el-button type="text" class="table-reply-content" @click="onViewClick(scope.row)">{{ scope.row.content }}</el-button>
           </template>
         </el-table-column>
-        <el-table-column prop="fileName" label="附件" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="fileName" label="附件" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <el-button type="text" class="table-reply-content" @click="onViewerClick(scope.row)">{{ scope.row.fileName }}</el-button>
+          </template>
+        </el-table-column>
         <el-table-column prop="userName" label="回复人" width="150" show-overflow-tooltip></el-table-column>
         <el-table-column prop="replyTime" label="回复时间" width="150"></el-table-column>
         <el-table-column label="操作" width="80">
@@ -114,8 +118,35 @@
         this.dialogVisible = true;
         this.detail = row;
       },
+      onViewerClick: function(row) {
+        var reg = /(.doc|.docx|.xls|.xlsx|.ppt|.pptx)$/;
+        if (reg.test(row.fileType)) {
+          this.$get('back/notice/viewer', {
+            params: {
+              path: row.fileUrl
+            }
+          }).then(res => {
+            if (res.isSuccess) {
+              open(`../../../static/lib/pdfjs/web/viewer.html?file=${encodeURIComponent(this.$global.baseUrl + res.data)}`);
+            }
+          });
+        } else {
+          open(this.$global.baseUrl + row.fileUrl);
+        }
+      },
       onDownLoadClick: function(row) {
         window.location.href = `${this.$global.baseUrl}back/notice/download?id=${row.id}`;
+      },
+      onBatchDownloadClick: function() {
+        var urls = '';
+        for (let i = 0; i < this.tableSelected.length; i++) {
+          var item = this.tableSelected[i];
+          if (i > 0) {
+            urls += ',';
+          }
+          urls += item.id;
+        }
+        window.location.href = `${this.$global.baseUrl}back/notice/downloads?ids=${urls}`;
       },
       onTableSelectionChange: function(selection) {
         this.tableSelected = selection;

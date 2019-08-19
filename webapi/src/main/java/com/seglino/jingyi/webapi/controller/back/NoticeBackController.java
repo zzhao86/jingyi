@@ -2,11 +2,15 @@ package com.seglino.jingyi.webapi.controller.back;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.shiro.authc.DisabledAccountException;
+import org.apache.tomcat.util.bcel.Const;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +24,7 @@ import com.github.pagehelper.Page;
 import com.seglino.jingyi.common.request.RequestPageParams;
 import com.seglino.jingyi.common.response.ApiPageResult;
 import com.seglino.jingyi.common.response.ApiResult;
+import com.seglino.jingyi.common.utils.ApplicationUtils;
 import com.seglino.jingyi.common.utils.AutoMapper;
 import com.seglino.jingyi.common.utils.DateUtils;
 import com.seglino.jingyi.dingtalk.dto.DingtalkWorkMessageDto;
@@ -47,7 +52,6 @@ import com.seglino.jingyi.webapi.vo.back.notice.NoticeUserListVo;
 @RestController
 @RequestMapping("back/notice")
 public class NoticeBackController {
-
 	@Autowired
 	private NoticeService noticeService;
 	@Autowired
@@ -222,6 +226,12 @@ public class NoticeBackController {
 		return aResult;
 	}
 
+	/**
+	 * 下载回复的文件
+	 * 
+	 * @param id
+	 * @param response
+	 */
 	@GetMapping("download")
 	public void download(String id, HttpServletResponse response) {
 		if (StringUtils.isEmpty(id)) {
@@ -229,8 +239,61 @@ public class NoticeBackController {
 		}
 		NoticeReply reply = noticeReplyService.detailById(id);
 		if (null != reply) {
-			filesService.download(reply.getFileUrl(), reply.getFileName(), response);
+			String zipFileName = reply.getFileName().substring(0, reply.getFileName().lastIndexOf(".")) + ".zip";
+			Map<String, String> fileMap = new HashMap<String, String>();
+			fileMap.put(reply.getFileName(), reply.getFileUrl());
+			filesService.downloadZip(fileMap, zipFileName, response);
 		}
+	}
+
+	/**
+	 * 批量下载回复的文件
+	 * 
+	 * @param id
+	 * @param response
+	 */
+	@GetMapping("downloads")
+	public void downloads(String ids, HttpServletResponse response) {
+		if (StringUtils.isEmpty(ids)) {
+			return;
+		}
+		String[] array = ids.split(",");
+		if (null != array && array.length > 0) {
+			Map<String, String> fileMap = new HashMap<String, String>();
+			String zipFileName = "公告回复附件." + DateUtils.getNowString("yyy.MM.dd.HH.mm") + ".zip";
+			int index = 0;
+			for (int i = 0; i < array.length; i++) {
+				String id = array[i];
+				NoticeReply reply = noticeReplyService.detailById(id);
+				if (fileMap.containsKey(reply.getFileName())) {
+					String name = reply.getFileName().substring(0, reply.getFileName().lastIndexOf("."));
+					String ext = reply.getFileName().substring(reply.getFileName().lastIndexOf("."));
+					fileMap.put(name + "(" + (++index) + ")" + ext, reply.getFileUrl());
+				} else {
+					fileMap.put(reply.getFileName(), reply.getFileUrl());
+				}
+			}
+			if (fileMap.size() > 0) {
+				filesService.downloadZip(fileMap, zipFileName, response);
+			}
+		}
+	}
+
+	/**
+	 * 在线预览office文档
+	 * 
+	 * @param path
+	 * @return
+	 */
+	@GetMapping("viewer")
+	public ApiResult viewer(String path) {
+		ApiResult aResult = new ApiResult();
+		try {
+			aResult.setData(filesService.toPDF(path));
+		} catch (Exception e) {
+			aResult.addError(e);
+		}
+		return aResult;
 	}
 
 	/**

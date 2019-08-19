@@ -5,6 +5,7 @@ import Login from "@/components/Login";
 import NoticeIndex from "@/components/notice/Index";
 import NoticeDetail from "@/components/notice/Detail";
 import NoticeReply from "@/components/notice/Reply";
+import NoticeReplyViewer from "@/components/notice/Viewer";
 import SettingsIndex from "@/components/settings/Index";
 import UserIndex from "@/components/user/Index";
 import UserDetail from "@/components/user/Detail";
@@ -43,6 +44,11 @@ const router = new Router({
       path: "/notice/reply",
       name: "NoticeReply",
       component: NoticeReply
+    },
+    {
+      path: "/notice/viewer",
+      name: "NoticeReplyViewer",
+      component: NoticeReplyViewer
     },
     {
       path: "/settings",
