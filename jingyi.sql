@@ -11,11 +11,86 @@
  Target Server Version : 50718
  File Encoding         : 65001
 
- Date: 16/08/2019 17:35:09
+ Date: 20/08/2019 17:34:32
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for tab_assets
+-- ----------------------------
+DROP TABLE IF EXISTS `tab_assets`;
+CREATE TABLE `tab_assets`  (
+  `id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '主键',
+  `categoryId` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '资产分类ID',
+  `code` bigint(20) NULL DEFAULT NULL COMMENT '资产编码',
+  `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '资产名称',
+  `imageUrl` varchar(300) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '资产图片',
+  `owner` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '资产所属',
+  `admin` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '管理员',
+  `brand` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '品牌',
+  `model` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '型号',
+  `status` int(11) NULL DEFAULT NULL COMMENT '资产状态。100、空闲；200、领用待签字；300、已领用；400、退库待签字；500、借用待签字；600、借用中；700、归还待签字；800、调拨中；900、待验收；1000、处置待确认；1100、处置待审核；1200、信息变更待审核',
+  `useStatus` int(11) NULL DEFAULT NULL COMMENT '使用状态。100、正常；200、故障；300、维修中',
+  `positionId` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '所在位置',
+  `useTerm` int(11) NULL DEFAULT NULL COMMENT '预计使用期限，单位：月',
+  `amount` decimal(8, 2) NULL DEFAULT NULL COMMENT '金额',
+  `startDate` datetime(0) NULL DEFAULT NULL COMMENT '购置/起租日期',
+  `purchasingMethod` int(11) NULL DEFAULT NULL COMMENT '购置方式。1、采购；2、租赁',
+  `orderCode` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '订单号',
+  `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `serialNum` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '序列号',
+  `supplier` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '供应商',
+  `supplierContact` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '联系人',
+  `supplierMobile` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '联系方式',
+  `maintDate` datetime(0) NULL DEFAULT NULL COMMENT '维保到期日期',
+  `maintNotes` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '维保说明',
+  `createTime` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `createUid` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
+  `modifyTime` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
+  `modifyUid` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '修改人',
+  `deleteTime` datetime(0) NULL DEFAULT NULL COMMENT '删除时间',
+  `deleteUid` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '删除人',
+  `isDeleted` tinyint(4) NULL DEFAULT 0 COMMENT '是否删除',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '资产表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for tab_assets_category
+-- ----------------------------
+DROP TABLE IF EXISTS `tab_assets_category`;
+CREATE TABLE `tab_assets_category`  (
+  `id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '主键',
+  `name` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '分类名称',
+  `parentId` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '上级分类',
+  `createTime` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `createUid` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
+  `modifyTime` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
+  `modifyUid` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '修改人',
+  `deleteTime` datetime(0) NULL DEFAULT NULL COMMENT '删除时间',
+  `deleteUid` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '删除人',
+  `isDeleted` tinyint(4) NULL DEFAULT 0 COMMENT '是否删除',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '资产类型表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for tab_assets_position
+-- ----------------------------
+DROP TABLE IF EXISTS `tab_assets_position`;
+CREATE TABLE `tab_assets_position`  (
+  `id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '主键',
+  `name` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '位置名称',
+  `parentId` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '上级位置',
+  `createTime` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `createUid` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
+  `modifyTime` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
+  `modifyUid` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '修改人',
+  `deleteTime` datetime(0) NULL DEFAULT NULL COMMENT '删除时间',
+  `deleteUid` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '删除人',
+  `isDeleted` tinyint(4) NULL DEFAULT 0 COMMENT '是否删除',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '资产位置管理表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for tab_dept
@@ -279,9 +354,9 @@ CREATE TABLE `tab_notice_reply`  (
 -- ----------------------------
 INSERT INTO `tab_notice_reply` VALUES ('222c657602ed4714b31e437ed1f54963', '4e6251f3bae5453292fe5a26f1dee2ba', 'd8bdfb8204fc4499bf379026f6865999', 'b9187d09740f4694a36d3d57856fd963', '保密协议.docx', '/upload/file/20190815/a76953d6fa1a3e3ec135483c895f268d.docx', '3123', '2019-08-15 14:36:17', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
 INSERT INTO `tab_notice_reply` VALUES ('49752b1b034a4681aa51f26ab21b7b44', '4e6251f3bae5453292fe5a26f1dee2ba', 'd8bdfb8204fc4499bf379026f6865999', 'd878a23e95924fba94dc7abe371a4d22', '惠买系统对接报价.xlsx', '/upload/file/20190815/fee356d886882e3f1a6446930a70c372.xlsx', '沙发上的', '2019-08-15 14:35:13', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `tab_notice_reply` VALUES ('63c0571b945b438eaabf2cd2730f2ae6', '4e6251f3bae5453292fe5a26f1dee2ba', 'd8bdfb8204fc4499bf379026f6865999', 'd07e41f86ed44721b7df54db3c623f82', 'D34DB3D3-41D0-4BA0-BB16-EF1D2CA268FF.jpeg', '/upload/file/20190814/14a7f6e642a07c10cd06e7e4e167e844.jpeg', '发的3123下次比萨发送', '2019-08-14 10:59:20', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tab_notice_reply` VALUES ('63c0571b945b438eaabf2cd2730f2ae6', '4e6251f3bae5453292fe5a26f1dee2ba', 'd8bdfb8204fc4499bf379026f6865999', 'd07e41f86ed44721b7df54db3c623f82', 'D34DB3D3-41D0-4BA0-BB16-EF1D2CA268F.jpeg', '/upload/file/20190814/14a7f6e642a07c10cd06e7e4e167e844.jpeg', '发的3123下次比萨发送', '2019-08-14 10:59:20', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
 INSERT INTO `tab_notice_reply` VALUES ('b40a7ac43e774d5ea43579acbb95b9db', '4e6251f3bae5453292fe5a26f1dee2ba', 'd8bdfb8204fc4499bf379026f6865999', 'fc39f224d14642258da2ab3dfc192f4f', '中铁建物业钉钉内部APP.pptx', '/upload/file/20190815/6066ed734700c90f96b5bec54bd8fac4.pptx', '不不不不不不不不', '2019-08-15 14:39:16', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `tab_notice_reply` VALUES ('c296a73d0090456bbe219e5fbfd37b4f', '4e6251f3bae5453292fe5a26f1dee2ba', 'd8bdfb8204fc4499bf379026f6865999', 'd07e41f86ed44721b7df54db3c623f82', '287EA441-0139-441F-AF19-E203AA9166CF.jpeg', '/upload/file/20190814/14a7f6e642a07c10cd06e7e4e167e844.jpeg', '续租啊啊发斯蒂芬sad', '2019-08-14 11:41:43', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tab_notice_reply` VALUES ('c296a73d0090456bbe219e5fbfd37b4f', '4e6251f3bae5453292fe5a26f1dee2ba', 'd8bdfb8204fc4499bf379026f6865999', 'd07e41f86ed44721b7df54db3c623f82', 'D34DB3D3-41D0-4BA0-BB16-EF1D2CA268F.jpeg', '/upload/file/20190814/14a7f6e642a07c10cd06e7e4e167e844.jpeg', '续租啊啊发斯蒂芬sad', '2019-08-14 11:41:43', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
 INSERT INTO `tab_notice_reply` VALUES ('e11947636fd54cb891373a2fcc16ba5d', '4e6251f3bae5453292fe5a26f1dee2ba', 'd8bdfb8204fc4499bf379026f6865999', 'd349a5737e0a46bc99f2e3e3ddf0806b', '嘉丰达报价单.xlsx', '/upload/file/20190815/2cbded27cb058e565d8cf2b8d8d77ef6.xlsx', '123123', '2019-08-15 14:37:05', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
 INSERT INTO `tab_notice_reply` VALUES ('f1bcdf52d3a34d2085f81bab11fc7906', '4e6251f3bae5453292fe5a26f1dee2ba', 'd8bdfb8204fc4499bf379026f6865999', '98c8113064374d889abaa571bbaa20f1', '111.pptx', '/upload/file/20190814/e34bf7be97a1270eba02b5df0b804190.pptx', '阿道夫地方潍坊地方ad 范文芳爱疯爱疯为爱疯分潍坊阿道夫 额啊啊发爱疯ef啊阿道夫', '2019-08-14 11:51:17', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
 INSERT INTO `tab_notice_reply` VALUES ('f75ad70d03034bdb85649d53aad15962', '4e6251f3bae5453292fe5a26f1dee2ba', 'd8bdfb8204fc4499bf379026f6865999', '13106d5d15744896b5b2fb372b473230', '178B153F-D2A2-491A-9C84-DBEC4DE15EB1.jpeg', '/upload/file/20190814/ed8c1a09d33b4f3e000d59eb0db78c62.jpeg', '艾德阿分为发的发的发的分无法爱疯的发符文工房个好干活和缴费好几样 让他人为 说不能环境就统一艾德阿分为发的发的发的分无法爱疯的发符文工房个好干活和缴费好几样 让他人为 说不能环境就统一艾德阿分为发的发的发的分无法爱疯的发符文工房个好干活和缴费好几样 让他人为 说不能环境就统一艾德阿分为发的发的发的分无法爱疯的发符文工房个好干活和缴费好几样 让他人为 说不能环境就统一', '2019-08-14 11:57:33', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
