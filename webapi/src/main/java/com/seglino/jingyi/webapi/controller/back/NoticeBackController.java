@@ -2,6 +2,7 @@ package com.seglino.jingyi.webapi.controller.back;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,8 +10,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.shiro.authc.DisabledAccountException;
-import org.apache.tomcat.util.bcel.Const;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +23,6 @@ import com.github.pagehelper.Page;
 import com.seglino.jingyi.common.request.RequestPageParams;
 import com.seglino.jingyi.common.response.ApiPageResult;
 import com.seglino.jingyi.common.response.ApiResult;
-import com.seglino.jingyi.common.utils.ApplicationUtils;
 import com.seglino.jingyi.common.utils.AutoMapper;
 import com.seglino.jingyi.common.utils.DateUtils;
 import com.seglino.jingyi.dingtalk.dto.DingtalkWorkMessageDto;
@@ -134,7 +132,7 @@ public class NoticeBackController {
 				aResult.addError("保存失败");
 			} else {
 				// 保存成功之后，给所有接收人发送钉钉工作通知
-				// sendDingtalkWorkMessage(dto.getId().toString());
+				sendDingtalkWorkMessage(dto.getId().toString());
 			}
 		} catch (Exception e) {
 			aResult.addError(e);
@@ -237,12 +235,16 @@ public class NoticeBackController {
 		if (StringUtils.isEmpty(id)) {
 			return;
 		}
-		NoticeReply reply = noticeReplyService.detailById(id);
-		if (null != reply) {
-			String zipFileName = reply.getFileName().substring(0, reply.getFileName().lastIndexOf(".")) + ".zip";
-			Map<String, String> fileMap = new HashMap<String, String>();
-			fileMap.put(reply.getFileName(), reply.getFileUrl());
-			filesService.downloadZip(fileMap, zipFileName, response);
+		try {
+			NoticeReply reply = noticeReplyService.detailById(id);
+			if (null != reply) {
+				String zipFileName = reply.getFileName().substring(0, reply.getFileName().lastIndexOf(".")) + ".zip";
+				Map<String, String> fileMap = new HashMap<String, String>();
+				fileMap.put(reply.getFileName(), reply.getFileUrl());
+				filesService.downloadZip(fileMap, zipFileName, response);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -257,26 +259,67 @@ public class NoticeBackController {
 		if (StringUtils.isEmpty(ids)) {
 			return;
 		}
-		String[] array = ids.split(",");
-		if (null != array && array.length > 0) {
-			Map<String, String> fileMap = new HashMap<String, String>();
-			String zipFileName = "公告回复附件." + DateUtils.getNowString("yyy.MM.dd.HH.mm") + ".zip";
-			int index = 0;
-			for (int i = 0; i < array.length; i++) {
-				String id = array[i];
-				NoticeReply reply = noticeReplyService.detailById(id);
-				if (fileMap.containsKey(reply.getFileName())) {
-					String name = reply.getFileName().substring(0, reply.getFileName().lastIndexOf("."));
-					String ext = reply.getFileName().substring(reply.getFileName().lastIndexOf("."));
-					fileMap.put(name + "(" + (++index) + ")" + ext, reply.getFileUrl());
-				} else {
-					fileMap.put(reply.getFileName(), reply.getFileUrl());
+		try {
+			String[] array = ids.split(",");
+			if (null != array && array.length > 0) {
+				List<NoticeReply> list = new ArrayList<NoticeReply>();
+				for (int i = 0; i < array.length; i++) {
+					String id = array[i];
+					NoticeReply reply = noticeReplyService.detailById(id);
+					list.add(reply);
+				}
+				Map<String, String> fileMap = convertZipFileMap(list);
+				if (fileMap.size() > 0) {
+					String zipFileName = "公告回复附件." + DateUtils.getNowString("yyy.MM.dd.HH.mm") + ".zip";
+					filesService.downloadZip(fileMap, zipFileName, response);
 				}
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 下载所有回复的附件
+	 * 
+	 * @param id
+	 */
+	@GetMapping("download_all")
+	public void downloadAll(String id, HttpServletResponse response) {
+		try {
+			Map<String, Object> param = new HashMap<String, Object>();
+			param.put("noticeId", id);
+			param.put("isDeleted", false);
+			List<NoticeReply> list = noticeReplyService.list(param);
+			Map<String, String> fileMap = convertZipFileMap(list);
 			if (fileMap.size() > 0) {
+				String zipFileName = "公告回复附件." + DateUtils.getNowString("yyy.MM.dd.HH.mm") + ".zip";
 				filesService.downloadZip(fileMap, zipFileName, response);
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * 将回复列表转换成ZIP压缩包需要的map数组
+	 * 
+	 * @param list
+	 * @return
+	 */
+	private Map<String, String> convertZipFileMap(List<NoticeReply> list) {
+		Map<String, String> fileMap = new HashMap<String, String>();
+		int index = 0;
+		for (NoticeReply reply : list) {
+			if (fileMap.containsKey(reply.getFileName())) {
+				String name = reply.getFileName().substring(0, reply.getFileName().lastIndexOf("."));
+				String ext = reply.getFileName().substring(reply.getFileName().lastIndexOf("."));
+				fileMap.put(name + "(" + (++index) + ")" + ext, reply.getFileUrl());
+			} else {
+				fileMap.put(reply.getFileName(), reply.getFileUrl());
+			}
+		}
+		return fileMap;
 	}
 
 	/**

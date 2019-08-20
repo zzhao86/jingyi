@@ -4,7 +4,7 @@
       <div class="title">通知公告管理</div>
       <div class="buttons">
         <el-button type="primary" size="small" @click="onAddClick">新建</el-button>
-        <el-button type="danger" size="small" :disabled="deleteButtonState" @click="onDeleteBatchClick">删除</el-button>
+        <el-button type="danger" size="small" :disabled="!tableSelected || tableSelected.length == 0" @click="onDeleteBatchClick">删除</el-button>
       </div>
     </div>
     <div class="main-container">
@@ -68,7 +68,6 @@
         tableData: [],
         maxHeight: 500,
         tableSelected: [],
-        deleteButtonState: true,
         read: {
           visible: false,
           readCount: 0,
@@ -147,7 +146,6 @@
       },
       onTableSelectionChange: function(selection) {
         this.tableSelected = selection;
-        this.deleteButtonState = selection.length == 0;
       },
       onReadListShowClick: function(row) {
         this.read.id = row.id;

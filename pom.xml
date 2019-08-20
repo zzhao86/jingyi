@@ -12,6 +12,7 @@
 		<module>user</module>
 		<module>ueditor</module>
 		<module>file</module>
+		<module>assets</module>
 	</modules>
 
 	<properties>
@@ -96,6 +97,11 @@
 			<dependency>
 				<groupId>com.seglino</groupId>
 				<artifactId>file</artifactId>
+				<version>${app.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.seglino</groupId>
+				<artifactId>assets</artifactId>
 				<version>${app.version}</version>
 			</dependency>
 

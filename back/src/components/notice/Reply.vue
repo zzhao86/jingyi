@@ -3,8 +3,8 @@
     <div class="main-header">
       <div class="title">公告回复列表</div>
       <div class="buttons">
-        <el-button type="primary" size="small" @click="onBatchDownloadClick">批量下载附件</el-button>
-        <el-button type="success" size="small">下载全部附件</el-button>
+        <el-button type="primary" size="small" :disabled="!tableSelected || tableSelected.length == 0" @click="onBatchDownloadClick">批量下载附件</el-button>
+        <el-button type="success" size="small" @click="onDownloadAllClick">下载全部附件</el-button>
       </div>
     </div>
     <div class="main-container">
@@ -28,29 +28,32 @@
         <el-table-column label="操作" width="80">
           <template slot-scope="scope">
             <div class="options-buttons">
-              <el-button type="primary" size="mini" @click="onDownLoadClick(scope.row)">下载附件</el-button>
+              <el-button type="primary" size="mini" @click="onDownloadClick(scope.row)">下载附件</el-button>
             </div>
           </template>
         </el-table-column>
       </el-table>
       <pagination :params="params" :total="total" @page-change="onPageChange" @size-change="onSizeChange"></pagination>
 
-      <el-dialog title="公告回复详情" :visible.sync="dialogVisible" width="500px" append-to-body>
+      <el-dialog title="公告回复详情" :visible.sync="dialogVisible" width="600px" append-to-body>
         <el-form :model="detail" label-width="100px">
           <el-form-item label="回复人">
             <div class="reply-user">
               <div class="avatar-wrapper">
                 <img class="avatar" :src="detail.userAvatar" v-if="!detail.userAvatar" />
-                <div class="avatar-icon" v-else>{{ userNameConvert(detail.userName) }}</div>
+                <div class="avatar-icon" v-else>{{ userNameAvatar(detail.userName) }}</div>
               </div>
               <div class="name">{{ detail.userName }}</div>
             </div>
+          </el-form-item>
+          <el-form-item label="回复时间">
+            <div>{{ detail.replyTime }}</div>
           </el-form-item>
           <el-form-item label="回复内容">
             <el-input type="textarea" v-model="detail.content" rows="6" resize="none" readonly></el-input>
           </el-form-item>
           <el-form-item label="附件">
-            <div class="attach-wrapper">
+            <div class="attach-wrapper" @click="onViewerClick(detail)">
               <div class="icon fa" v-bind:class="fileIconConvert(detail.fileType)"></div>
               <div class="name">{{ detail.fileName }}</div>
             </div>
@@ -114,10 +117,12 @@
         this.params.size = size;
         this.loadTableData();
       },
+      // 查看回复详情
       onViewClick: function(row) {
         this.dialogVisible = true;
         this.detail = row;
       },
+      // 附件预览
       onViewerClick: function(row) {
         var reg = /(.doc|.docx|.xls|.xlsx|.ppt|.pptx)$/;
         if (reg.test(row.fileType)) {
@@ -134,9 +139,11 @@
           open(this.$global.baseUrl + row.fileUrl);
         }
       },
-      onDownLoadClick: function(row) {
+      // 下载附件
+      onDownloadClick: function(row) {
         window.location.href = `${this.$global.baseUrl}back/notice/download?id=${row.id}`;
       },
+      // 批量下载附件
       onBatchDownloadClick: function() {
         var urls = '';
         for (let i = 0; i < this.tableSelected.length; i++) {
@@ -148,14 +155,19 @@
         }
         window.location.href = `${this.$global.baseUrl}back/notice/downloads?ids=${urls}`;
       },
+      // 下载所有附件
+      onDownloadAllClick: function() {
+        window.location.href = `${this.$global.baseUrl}back/notice/download_all?id=${this.params.query.noticeId}`;
+      },
       onTableSelectionChange: function(selection) {
         this.tableSelected = selection;
-        this.deleteButtonState = selection.length == 0;
       },
-      userNameConvert: function(name) {
+      // 用户头像姓名
+      userNameAvatar: function(name) {
         if (!name) return '';
         return name.substring(name.length - 2);
       },
+      // 文件ICON
       fileIconConvert: function(type) {
         var icon = 'fa-file-o';
         if (!type) return icon;
@@ -260,6 +272,14 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     margin-left: 10px;
+    color: #409eff;
+  }
+  .attach-wrapper .name:hover {
+    color: #66b1ff;
+  }
+  .attach-wrapper .name:focus,
+  .attach-wrapper .name:active {
+    color: #3a8ee6;
   }
   .attach-wrapper .icon.green {
     color: #39825a;

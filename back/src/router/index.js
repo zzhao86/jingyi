@@ -1,68 +1,92 @@
-import Vue from "vue";
-import Router from "vue-router";
-import Home from "@/components/Home";
-import Login from "@/components/Login";
-import NoticeIndex from "@/components/notice/Index";
-import NoticeDetail from "@/components/notice/Detail";
-import NoticeReply from "@/components/notice/Reply";
-import NoticeReplyViewer from "@/components/notice/Viewer";
-import SettingsIndex from "@/components/settings/Index";
-import UserIndex from "@/components/user/Index";
-import UserDetail from "@/components/user/Detail";
+import Vue from 'vue';
+import Router from 'vue-router';
+import Home from '@/components/Home';
+import Login from '@/components/Login';
+import NoticeIndex from '@/components/notice/Index';
+import NoticeDetail from '@/components/notice/Detail';
+import NoticeReply from '@/components/notice/Reply';
+import NoticeReplyViewer from '@/components/notice/Viewer';
+import AssetsIndex from '@/components/assets/Index';
+import AssetsDetail from '@/components/assets/Detail';
+import AssetsCategory from '@/components/assets/Category';
+import AssetsPosition from '@/components/assets/Position';
+import SettingsIndex from '@/components/settings/Index';
+import UserIndex from '@/components/user/Index';
+import UserDetail from '@/components/user/Detail';
 
 Vue.use(Router);
 
 const router = new Router({
   routes: [
     {
-      path: "/",
-      name: "Home",
+      path: '/',
+      name: 'Home',
       component: Home,
       meta: {
         requireAuth: false
       }
     },
     {
-      path: "/login",
-      name: "Login",
+      path: '/login',
+      name: 'Login',
       component: Login,
       meta: {
         requireAuth: false
       }
     },
     {
-      path: "/notice",
-      name: "NoticeIndex",
+      path: '/notice',
+      name: 'NoticeIndex',
       component: NoticeIndex
     },
     {
-      path: "/notice/detail/:mode",
-      name: "NoticeDetail",
+      path: '/notice/detail/:mode',
+      name: 'NoticeDetail',
       component: NoticeDetail
     },
     {
-      path: "/notice/reply",
-      name: "NoticeReply",
+      path: '/notice/reply',
+      name: 'NoticeReply',
       component: NoticeReply
     },
     {
-      path: "/notice/viewer",
-      name: "NoticeReplyViewer",
+      path: '/notice/viewer',
+      name: 'NoticeReplyViewer',
       component: NoticeReplyViewer
     },
     {
-      path: "/settings",
-      name: "SettingsIndex",
+      path: '/assets',
+      name: 'AssetsIndex',
+      component: AssetsIndex
+    },
+    {
+      path: '/assets/detail/:mode',
+      name: 'AssetsDetail',
+      component: AssetsDetail
+    },
+    {
+      path: '/assets/category',
+      name: 'AssetsCategory',
+      component: AssetsCategory
+    },
+    {
+      path: '/assets/position',
+      name: 'AssetsPosition',
+      component: AssetsPosition
+    },
+    {
+      path: '/settings',
+      name: 'SettingsIndex',
       component: SettingsIndex
     },
     {
-      path: "/user",
-      name: "UserIndex",
+      path: '/user',
+      name: 'UserIndex',
       component: UserIndex
     },
     {
-      path: "/user/detail/:mode",
-      name: "UserDetail",
+      path: '/user/detail/:mode',
+      name: 'UserDetail',
       component: UserDetail
     }
   ]
