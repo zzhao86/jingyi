@@ -1,6 +1,6 @@
-package com.seglino.jingyi.common.core.vo;
+package com.seglino.jingyi.common.core.dto;
 
-public abstract class BaseVo {
+public abstract class BaseDto {
 	private Object id;
 
 	public Object getId() {

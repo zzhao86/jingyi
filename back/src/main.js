@@ -23,6 +23,11 @@ Vue.directive('auto-height', tableAutoHeight);
 
 Vue.config.productionTip = false;
 Vue.use(ElementUI);
+// console.log(ElementUI.Dialog.props)
+ElementUI.Dialog.props.closeOnClickModal.default = false;
+ElementUI.Dialog.props.appendToBody.default = true;
+ElementUI.Link.props.underline.default = false;
+
 
 axios.defaults.baseURL = Global.baseUrl;
 axios.defaults.headers.get['Content-Type'] = 'application/x-www-form-urlencoded; charset=utf-8;';
@@ -110,9 +115,13 @@ var vue = new Vue({
     Vue.prototype.$success = function(message, callback) {
       this.$message({
         message: message,
+        duration: 2000,
+        showClose: true,
         type: 'success',
         onClose: () => {
-          callback();
+          if (callback) {
+            callback();
+          }
         }
       });
     };

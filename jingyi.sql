@@ -11,7 +11,7 @@
  Target Server Version : 50718
  File Encoding         : 65001
 
- Date: 20/08/2019 17:34:32
+ Date: 21/08/2019 17:33:43
 */
 
 SET NAMES utf8mb4;
@@ -73,6 +73,22 @@ CREATE TABLE `tab_assets_category`  (
   `isDeleted` tinyint(4) NULL DEFAULT 0 COMMENT '是否删除',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '资产类型表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of tab_assets_category
+-- ----------------------------
+INSERT INTO `tab_assets_category` VALUES ('030f3bdd24674e4da7c287a87a262a8c', '台式机', '86171f1f011e411ab81b0eeadb0351a7', '2019-08-21 15:04:03', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tab_assets_category` VALUES ('465b809194e644cc8bd856a63f872b96', '平板电脑', '86171f1f011e411ab81b0eeadb0351a7', '2019-08-21 15:05:18', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tab_assets_category` VALUES ('4e06de32e04d44d3b647cf62704800c4', '打印机', 'f5d6ad2b76584d4c9f70321807e9438c', '2019-08-21 15:06:32', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tab_assets_category` VALUES ('53646e53afb943e4b94544fa0cc9c4c7', '显示器', '86171f1f011e411ab81b0eeadb0351a7', '2019-08-21 15:04:36', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tab_assets_category` VALUES ('7a2a531aa172464493f55e391314abf4', '电视/大屏', 'f5d6ad2b76584d4c9f70321807e9438c', '2019-08-21 15:07:04', 'd8bdfb8204fc4499bf379026f6865999', '2019-08-21 16:21:40', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, 0);
+INSERT INTO `tab_assets_category` VALUES ('86171f1f011e411ab81b0eeadb0351a7', '办公电脑', '0', '2019-08-21 14:35:48', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tab_assets_category` VALUES ('9fbde4c1eb7c446abcf2760080cc53bf', '笔记本电脑', '86171f1f011e411ab81b0eeadb0351a7', '2019-08-21 14:38:52', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tab_assets_category` VALUES ('a0513c3c3fb5486e84f23496f982a805', '服务器', '86171f1f011e411ab81b0eeadb0351a7', '2019-08-21 15:05:04', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tab_assets_category` VALUES ('a0629c3bd6194204867025b30cdd2c58', '投影仪', 'f5d6ad2b76584d4c9f70321807e9438c', '2019-08-21 15:06:18', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tab_assets_category` VALUES ('e9c29f8248fa43a7a9b301b77042a1f3', '空气净化器', 'f5d6ad2b76584d4c9f70321807e9438c', '2019-08-21 15:06:43', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tab_assets_category` VALUES ('f19762cde7504609b53c417faaa7097f', '主机', '86171f1f011e411ab81b0eeadb0351a7', '2019-08-21 15:04:54', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tab_assets_category` VALUES ('f5d6ad2b76584d4c9f70321807e9438c', '办公设备', '0', '2019-08-21 15:05:54', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
 
 -- ----------------------------
 -- Table structure for tab_assets_position

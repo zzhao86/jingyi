@@ -1,18 +1,11 @@
 package com.seglino.jingyi.assets.dto;
 
-public class AssetsCategoryListDto {
-	private String id;
+import com.seglino.jingyi.common.core.dto.BaseDto;
+
+public class AssetsCategoryListDto extends BaseDto {
 	private String name;
 	private String parentId;
 	private String parentName;
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
 
 	public String getName() {
 		return name;

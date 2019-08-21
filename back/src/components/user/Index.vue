@@ -30,7 +30,7 @@
           </el-table-column>
           <el-table-column prop="name" label="姓名">
             <template slot-scope="scope">
-              <el-button type="text" size="mini" @click="onViewClick(scope.row)">{{scope.row.name}}</el-button>
+              <el-link type="primary" @click="onViewClick(scope.row)">{{scope.row.name}}</el-link>
             </template>
           </el-table-column>
           <el-table-column prop="mobile" label="手机号" width="150"></el-table-column>

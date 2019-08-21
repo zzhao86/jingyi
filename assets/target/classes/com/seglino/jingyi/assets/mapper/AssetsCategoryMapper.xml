@@ -3,7 +3,7 @@
 <mapper namespace="com.seglino.jingyi.assets.dao.AssetsCategoryDao">
 	<!-- 数据表名 -->
 	<sql id="tableName">tab_assets_category</sql>
-	
+
 	<!-- 数据字段 -->
 	<sql id="column">
 		id,
@@ -17,7 +17,7 @@
 		deleteUid,
 		isDeleted
 	</sql>
-	
+
 	<!-- 查询条件 -->
 	<sql id="condition">
 		<if test="id != null"> and id = #{id}</if>
@@ -39,19 +39,31 @@
 	</select>
 
 	<!-- 根据条件获取分页列表 -->
-	<select id="pageByIndex" resultType="com.seglino.jingyi.assets.dto.AssetsCategoryListDto">		
+	<select id="pageByIndex" resultType="com.seglino.jingyi.assets.dto.AssetsCategoryListDto">
 		SELECT id,
-					 name,
-					 parentId,
-					 (SELECT name FROM tab_assets_category WHERE id = a.parentId) AS parentName	
-			FROM tab_assets_category a
-		<include refid="tableName"></include>
+		name,
+		parentId,
+		(SELECT name FROM tab_assets_category WHERE id = a.parentId) AS parentName
+		FROM tab_assets_category a
 		<where>
 			<include refid="condition"></include>
 		</where>
 		ORDER BY createTime DESC
 	</select>
-	
+
+	<select id="tree" resultType="com.seglino.jingyi.assets.dto.AssetsCategoryTreeDto">
+		SELECT id,
+		name as label,
+		id as value,
+		(SELECT COUNT(*) FROM tab_assets_category where parentId = a.id) AS childCount
+		FROM tab_assets_category a
+		<where>
+			<if test="parentId != null"> parentId = #{parentId}</if>
+			<if test="parentId == null or parentId == ''"> parentId is null</if>
+		</where>
+		ORDER BY createTime DESC
+	</select>
+
 	<!-- 根据条件获取详情 -->
 	<select id="detail" resultType="com.seglino.jingyi.assets.pojo.AssetsCategory">
 		SELECT
@@ -62,7 +74,7 @@
 			<include refid="condition"></include>
 		</where>
 	</select>
-		
+
 	<!-- 根据条件获取数据总数 -->
 	<select id="count" resultType="com.seglino.jingyi.assets.pojo.AssetsCategory">
 		SELECT COUNT(*) FROM
@@ -122,7 +134,7 @@
 			id = #{id}
 		</where>
 	</update>
-	
+
 	<!-- 物理删除 -->
 	<delete id="delete" parameterType="Object">
 		DELETE FROM

@@ -13,14 +13,14 @@
         <el-table-column align="center" label="序号" width="50">
           <template slot-scope="scope">{{ scope.$index + (params.index - 1) * params.size + 1 }}</template>
         </el-table-column>
-        <el-table-column prop="content" label="回复内容" show-overflow-tooltip>
+        <el-table-column prop="content" label="回复内容">
           <template slot-scope="scope">
-            <el-button type="text" class="table-reply-content" @click="onViewClick(scope.row)">{{ scope.row.content }}</el-button>
+            <el-link type="primary" class="table-reply-content" @click="onViewClick(scope.row)">{{ scope.row.content }}</el-link>
           </template>
         </el-table-column>
         <el-table-column prop="fileName" label="附件" show-overflow-tooltip>
           <template slot-scope="scope">
-            <el-button type="text" class="table-reply-content" @click="onViewerClick(scope.row)">{{ scope.row.fileName }}</el-button>
+            <el-link type="primary" class="table-reply-content" @click="onViewerClick(scope.row)">{{ scope.row.fileName }}</el-link>
           </template>
         </el-table-column>
         <el-table-column prop="userName" label="回复人" width="150" show-overflow-tooltip></el-table-column>
@@ -218,7 +218,7 @@
     white-space: nowrap;
     color: #409eff;
     cursor: pointer;
-    text-align: left;
+    display: block;
   }
   .table-reply-content:hover {
     color: #66b1ff;

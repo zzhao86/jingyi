@@ -15,7 +15,7 @@
         </el-table-column>
         <el-table-column prop="title" label="标题">
           <template slot-scope="scope">
-            <el-button type="text" size="mini" @click="onViewClick(scope.row)">{{ scope.row.title }}</el-button>
+            <el-link type="primary" @click="onViewClick(scope.row)">{{ scope.row.title }}</el-link>
           </template>
         </el-table-column>
         <el-table-column prop="author" label="作者" width="150" show-overflow-tooltip></el-table-column>
@@ -23,7 +23,7 @@
           <template slot-scope="scope">
             <div class="total-count">共{{ scope.row.totalCount }}人</div>
             <!-- <div class="read-count">已读{{ scope.row.readCount }}人</div> -->
-            <el-button type="text" class="read-count" size="mini" @click="onReadListShowClick(scope.row)">已读{{ scope.row.readCount }}人</el-button>
+            <el-link type="primary" class="read-count" @click="onReadListShowClick(scope.row)">已读{{ scope.row.readCount }}人</el-link>
           </template>
         </el-table-column>
         <el-table-column prop="publishTime" label="发布时间" width="150"></el-table-column>
