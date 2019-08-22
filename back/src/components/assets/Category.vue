@@ -9,27 +9,32 @@
     </div>
 
     <div class="main-container">
-      <el-table :data="tableData" ref="table" stripe v-auto-height :max-height="maxHeight">
-        <el-table-column align="center" label="序号" width="50">
-          <template slot-scope="scope">{{ scope.$index + (params.index - 1) * params.size + 1 }}</template>
-        </el-table-column>
-        <el-table-column prop="name" label="分类名称">
-          <template slot-scope="scope">
-            <el-link type="primary" @click="onViewClick(scope.row)">{{ scope.row.name }}</el-link>
-          </template>
-        </el-table-column>
-        <el-table-column prop="parentName" label="上级分类"></el-table-column>
-        <el-table-column label="操作" width="100">
-          <template slot-scope="scope">
-            <div class="options-buttons">
-              <el-button type="primary" size="mini" @click="onEditClick(scope.row)">编辑</el-button>
-              <el-button type="danger" size="mini" @click="onDeleteClick(scope.row)">删除</el-button>
-            </div>
-          </template>
-        </el-table-column>
-      </el-table>
-      <pagination :params="params" :total="total" @page-change="onPageChange" @size-change="onSizeChange"></pagination>
+      <div class="tree-container">
+        <el-tree ref="tree" :data="treeData" node-key="id" default-expand-all :expand-on-click-node="false" highlight-current @node-click="onTreeNodeClick"></el-tree>
+      </div>
 
+      <div class="main-table">
+        <el-table :data="tableData" ref="table" stripe v-auto-height :max-height="maxHeight">
+          <el-table-column align="center" label="序号" width="50">
+            <template slot-scope="scope">{{ scope.$index + (params.index - 1) * params.size + 1 }}</template>
+          </el-table-column>
+          <el-table-column prop="name" label="分类名称">
+            <template slot-scope="scope">
+              <el-link type="primary" @click="onViewClick(scope.row)">{{ scope.row.name }}</el-link>
+            </template>
+          </el-table-column>
+          <el-table-column prop="parentName" label="上级分类"></el-table-column>
+          <el-table-column label="操作" width="100">
+            <template slot-scope="scope">
+              <div class="options-buttons">
+                <el-button type="primary" size="mini" @click="onEditClick(scope.row)">编辑</el-button>
+                <el-button type="danger" size="mini" @click="onDeleteClick(scope.row)">删除</el-button>
+              </div>
+            </template>
+          </el-table-column>
+        </el-table>
+        <pagination :params="params" :total="total" @page-change="onPageChange" @size-change="onSizeChange"></pagination>
+      </div>
       <!-- 详情Dialog -->
       <el-dialog title="资产详情" :visible.sync="dialogDetailVisible" :before-close="onDialogDetailClose">
         <el-form :model="detail" ref="form" :rules="rules" :disabled="detailFormDisabled" label-width="100px">
@@ -58,11 +63,12 @@
 <script>
   import Pagination from '../utils/components/Pagination';
   export default {
-    name: 'AssetsCategroy',
+    name: 'AssetsCategory',
     components: {
       Pagination
     },
     created() {
+      this.loadTreeData();
       this.loadTableData();
     },
     data() {
@@ -75,6 +81,7 @@
           }
         },
         total: 0,
+        treeData: [],
         tableData: [],
         maxHeight: 500,
         detail: {},
@@ -110,6 +117,19 @@
           }
         });
       },
+      // 加载Tree数据
+      loadTreeData() {
+        this.$get('back/assets/category/tree').then(res => {
+          if (res.isSuccess) {
+            res.data.unshift({
+              id: null,
+              label: '所有分类',
+              value: null
+            });
+            this.treeData = res.data;
+          }
+        });
+      },
       onPageChange(index) {
         this.params.index = index;
         this.loadTableData();
@@ -121,6 +141,12 @@
       // 刷新列表数据
       flushTableData() {
         this.params.index = 1;
+        this.loadTableData();
+      },
+      // Tree节点点击事件
+      onTreeNodeClick(data, node, store) {
+        this.params.index = 1;
+        this.params.query.parentId = data.id;
         this.loadTableData();
       },
       // 加载资产分类Cascader数据
@@ -192,7 +218,7 @@
       // 删除按钮事件
       onDeleteClick(row) {
         const vue = this;
-        this.$confirm(`确定要删除资产分类 “${row.name}” 吗？`, () => {
+        this.$confirm(`确定要删除资产分类 “${row.name}” 及其所有下级分类吗？`, () => {
           vue
             .$get('back/assets/category/delete', {
               params: {
@@ -208,6 +234,7 @@
       // 关闭详情弹窗事件
       onDialogDetailClose() {
         this.detail = {};
+        this.$refs['form'].clearValidate();
         this.dialogDetailVisible = false;
       },
       // 详情保存

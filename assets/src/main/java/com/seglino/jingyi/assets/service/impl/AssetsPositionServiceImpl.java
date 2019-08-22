@@ -9,17 +9,17 @@ import org.springframework.stereotype.Service;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.seglino.jingyi.assets.dao.AssetsCategoryDao;
-import com.seglino.jingyi.assets.dto.AssetsCategoryListDto;
-import com.seglino.jingyi.assets.dto.AssetsCategoryTreeDto;
-import com.seglino.jingyi.assets.pojo.AssetsCategory;
-import com.seglino.jingyi.assets.service.AssetsCategoryService;
+import com.seglino.jingyi.assets.dao.AssetsPositionDao;
+import com.seglino.jingyi.assets.dto.AssetsPositionListDto;
+import com.seglino.jingyi.assets.dto.AssetsPositionTreeDto;
+import com.seglino.jingyi.assets.pojo.AssetsPosition;
+import com.seglino.jingyi.assets.service.AssetsPositionService;
 import com.seglino.jingyi.assets.service.AssetsService;
 import com.seglino.jingyi.common.core.service.BaseServiceImpl;
 import com.seglino.jingyi.common.request.RequestPageParams;
 
 @Service
-public class AssetsCategoryServiceImpl extends BaseServiceImpl<AssetsCategoryDao, AssetsCategory> implements AssetsCategoryService {
+public class AssetsPositionServiceImpl extends BaseServiceImpl<AssetsPositionDao, AssetsPosition> implements AssetsPositionService {
 
 	@Autowired
 	private AssetsService assetsService;
@@ -30,7 +30,7 @@ public class AssetsCategoryServiceImpl extends BaseServiceImpl<AssetsCategoryDao
 	 * @param params
 	 * @return
 	 */
-	public Page<AssetsCategoryListDto> pageByIndex(RequestPageParams params) {
+	public Page<AssetsPositionListDto> pageByIndex(RequestPageParams params) {
 		PageHelper.startPage(params.getIndex(), params.getSize());
 		return dao.pageByIndex(params.getCondition());
 	}
@@ -40,10 +40,10 @@ public class AssetsCategoryServiceImpl extends BaseServiceImpl<AssetsCategoryDao
 	 * 
 	 * @return
 	 */
-	public List<AssetsCategoryTreeDto> treeData(String parentId) {
-		List<AssetsCategoryTreeDto> list = dao.tree(parentId);
+	public List<AssetsPositionTreeDto> treeData(String parentId) {
+		List<AssetsPositionTreeDto> list = dao.tree(parentId);
 		if (null != list && list.size() > 0) {
-			for (AssetsCategoryTreeDto dto : list) {
+			for (AssetsPositionTreeDto dto : list) {
 				if (dto.getChildCount() > 0) {
 					dto.setChildren(treeData(dto.getId().toString()));
 				}
@@ -56,14 +56,14 @@ public class AssetsCategoryServiceImpl extends BaseServiceImpl<AssetsCategoryDao
 	public int deletePhysical(Object id) {
 		int result = 1;
 		// 递归获取所有的子类
-		List<AssetsCategory> children = allChildren(id);
-		for (AssetsCategory category : children) {
+		List<AssetsPosition> children = allChildren(id);
+		for (AssetsPosition position : children) {
 			// 判断是否有资产关联
 			Map<String, Object> param = new HashMap<String, Object>();
-			param.put("categoryId", category.getId());
+			param.put("positionId", position.getId());
 			int count = assetsService.count(param);
 			if (count == 0) {
-				super.deletePhysical(category.getId());
+				super.deletePhysical(position.getId());
 			} else {
 				result++;
 			}
@@ -80,14 +80,14 @@ public class AssetsCategoryServiceImpl extends BaseServiceImpl<AssetsCategoryDao
 	 * @param parentId
 	 * @return
 	 */
-	private List<AssetsCategory> allChildren(Object parentId) {
+	private List<AssetsPosition> allChildren(Object parentId) {
 		Map<String, Object> param = new HashMap<String, Object>();
 		param.put("parentId", parentId);
 		param.put("isSelf", false);
-		List<AssetsCategory> list = list(param);
+		List<AssetsPosition> list = list(param);
 		for (int i = 0; i < list.size(); i++) {
-			AssetsCategory category = list.get(i);
-			List<AssetsCategory> children = allChildren(category.getId());
+			AssetsPosition position = list.get(i);
+			List<AssetsPosition> children = allChildren(position.getId());
 			if (null != children && children.size() > 0) {
 				list.addAll(children);
 			}

@@ -160,6 +160,22 @@ body {
   background-color: #fff;
 }
 
+.main-container {
+  display: flex;
+  height: 100%;
+}
+.tree-container {
+  width: 200px;
+  height: calc(100vh - 164px);
+  margin-right: 20px;
+  border: solid 1px #ebeef5;
+}
+.main-table {
+  flex: 1;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
 .table-page {
   position: fixed;
   bottom: 20px;

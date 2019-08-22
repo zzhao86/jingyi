@@ -30,7 +30,7 @@
           </el-table-column>
           <el-table-column prop="name" label="姓名">
             <template slot-scope="scope">
-              <el-link type="primary" @click="onViewClick(scope.row)">{{scope.row.name}}</el-link>
+              <el-link type="primary" @click="onViewClick(scope.row)">{{ scope.row.name }}</el-link>
             </template>
           </el-table-column>
           <el-table-column prop="mobile" label="手机号" width="150"></el-table-column>
@@ -171,16 +171,6 @@
   };
 </script>
 <style>
-  .main-container {
-    display: flex;
-    height: 100%;
-  }
-  .tree-container {
-    width: 200px;
-    height: calc(100vh - 164px);
-    margin-right: 20px;
-    border: solid 1px #ebeef5;
-  }
   .tree-container .tree-button {
     margin: 10px auto;
     text-align: center;
@@ -193,10 +183,5 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     font-size: 13px;
-  }
-  .main-table {
-    flex: 1;
-    overflow-x: auto;
-    overflow-y: hidden;
   }
 </style>

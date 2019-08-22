@@ -1,9 +1,5 @@
 package com.seglino.jingyi.webapi.controller.back;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -27,7 +23,6 @@ import com.github.pagehelper.Page;
 import com.seglino.jingyi.common.request.RequestPageParams;
 import com.seglino.jingyi.common.response.ApiPageResult;
 import com.seglino.jingyi.common.response.ApiResult;
-import com.seglino.jingyi.common.utils.ApplicationUtils;
 import com.seglino.jingyi.common.utils.AutoMapper;
 import com.seglino.jingyi.common.utils.DateUtils;
 import com.seglino.jingyi.dingtalk.dto.DingtalkWorkMessageDto;

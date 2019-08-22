@@ -43,6 +43,8 @@ pagehelper:
 # 日志配置
 logging:
   level:
+    # 输入SQL日志
+    # com.seglino.jingyi.assets.dao: debug
     root: info
   file: ./logs/webapi.log
   pattern:

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.seglino.jingyi.assets.dao.AssetsCategoryDao">
+<mapper namespace="com.seglino.jingyi.assets.dao.AssetsPositionDao">
 	<!-- 数据表名 -->
-	<sql id="tableName">tab_assets_category</sql>
+	<sql id="tableName">tab_assets_position</sql>
 
 	<!-- 数据字段 -->
 	<sql id="column">
@@ -28,7 +28,7 @@
 	</sql>
 
 	<!-- 根据条件获取列表 -->
-	<select id="list" resultType="com.seglino.jingyi.assets.pojo.AssetsCategory">
+	<select id="list" resultType="com.seglino.jingyi.assets.pojo.AssetsPosition">
 		SELECT
 		<include refid="column"></include>
 		FROM
@@ -40,24 +40,24 @@
 	</select>
 
 	<!-- 根据条件获取分页列表 -->
-	<select id="pageByIndex" resultType="com.seglino.jingyi.assets.dto.AssetsCategoryListDto">
+	<select id="pageByIndex" resultType="com.seglino.jingyi.assets.dto.AssetsPositionListDto">
 		SELECT id,
 					 name,
 					 parentId,
-					 (SELECT name FROM tab_assets_category WHERE id = a.parentId) AS parentName
-			FROM tab_assets_category a
+					 (SELECT name FROM tab_assets_position WHERE id = a.parentId) AS parentName
+			FROM tab_assets_position a
 		<where>
 			<include refid="condition"></include>
 		</where>
 		ORDER BY createTime ASC
 	</select>
 
-	<select id="tree" resultType="com.seglino.jingyi.assets.dto.AssetsCategoryTreeDto">
+	<select id="tree" resultType="com.seglino.jingyi.assets.dto.AssetsPositionTreeDto">
 		SELECT id,
 					 name as label,
 					 id as value,
-					 (SELECT COUNT(*) FROM tab_assets_category where parentId = a.id) AS childCount
-			FROM tab_assets_category a
+					 (SELECT COUNT(*) FROM tab_assets_position where parentId = a.id) AS childCount
+			FROM tab_assets_position a
 		<where>
 			<if test="parentId != null"> parentId = #{parentId}</if>
 			<if test="parentId == null or parentId == ''"> parentId is null</if>
@@ -66,7 +66,7 @@
 	</select>
 
 	<!-- 根据条件获取详情 -->
-	<select id="detail" resultType="com.seglino.jingyi.assets.pojo.AssetsCategory">
+	<select id="detail" resultType="com.seglino.jingyi.assets.pojo.AssetsPosition">
 		SELECT
 		<include refid="column"></include>
 		FROM
@@ -77,7 +77,7 @@
 	</select>
 
 	<!-- 根据条件获取数据总数 -->
-	<select id="count" resultType="com.seglino.jingyi.assets.pojo.AssetsCategory">
+	<select id="count" resultType="com.seglino.jingyi.assets.pojo.AssetsPosition">
 		SELECT COUNT(*) FROM
 		<include refid="tableName"></include>
 		<where>
@@ -86,7 +86,7 @@
 	</select>
 
 	<!-- 插入 -->
-	<insert id="insert" parameterType="com.seglino.jingyi.assets.pojo.AssetsCategory">
+	<insert id="insert" parameterType="com.seglino.jingyi.assets.pojo.AssetsPosition">
 		INSERT INTO
 		<include refid="tableName"></include>
 		<trim prefix="(" suffix=")" suffixOverrides=",">
@@ -117,7 +117,7 @@
 	</insert>
 
 	<!-- 修改 -->
-	<update id="update" parameterType="com.seglino.jingyi.assets.pojo.AssetsCategory">
+	<update id="update" parameterType="com.seglino.jingyi.assets.pojo.AssetsPosition">
 		UPDATE
 		<include refid="tableName"></include>
 		<set>

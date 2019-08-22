@@ -22,7 +22,8 @@
 	<sql id="condition">
 		<if test="id != null"> and id = #{id}</if>
 		<if test="name != null"> and name like '%${name}%'</if>
-		<if test="parentId != null"> and parentId = #{parentId}</if>
+		<if test="parentId != null and isSelf == true"> and (id = #{parentId} or parentId = #{parentId})</if>
+		<if test="parentId != null and isSelf == false"> and parentId = #{parentId}</if>
 		<if test="isDeleted != null"> and isDeleted = #{isDeleted}</if>
 	</sql>
 
@@ -35,33 +36,33 @@
 		<where>
 			<include refid="condition"></include>
 		</where>
-		ORDER BY createTime DESC
+		ORDER BY createTime ASC
 	</select>
 
 	<!-- 根据条件获取分页列表 -->
 	<select id="pageByIndex" resultType="com.seglino.jingyi.assets.dto.AssetsCategoryListDto">
 		SELECT id,
-		name,
-		parentId,
-		(SELECT name FROM tab_assets_category WHERE id = a.parentId) AS parentName
-		FROM tab_assets_category a
+					 name,
+					 parentId,
+					 (SELECT name FROM tab_assets_category WHERE id = a.parentId) AS parentName
+			FROM tab_assets_category a
 		<where>
 			<include refid="condition"></include>
 		</where>
-		ORDER BY createTime DESC
+		ORDER BY createTime ASC
 	</select>
 
 	<select id="tree" resultType="com.seglino.jingyi.assets.dto.AssetsCategoryTreeDto">
 		SELECT id,
-		name as label,
-		id as value,
-		(SELECT COUNT(*) FROM tab_assets_category where parentId = a.id) AS childCount
-		FROM tab_assets_category a
+					 name as label,
+					 id as value,
+					 (SELECT COUNT(*) FROM tab_assets_category where parentId = a.id) AS childCount
+			FROM tab_assets_category a
 		<where>
 			<if test="parentId != null"> parentId = #{parentId}</if>
 			<if test="parentId == null or parentId == ''"> parentId is null</if>
 		</where>
-		ORDER BY createTime DESC
+		ORDER BY createTime ASC
 	</select>
 
 	<!-- 根据条件获取详情 -->
