@@ -2,6 +2,7 @@ package com.seglino.jingyi.common.utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -26,26 +27,12 @@ public class ExcelUtils {
 	private final static String excel2007U = ".xlsx"; // 2007+ 版本的excel
 
 	/**
-	 * 获取实体对象返回属性名称
-	 * 
-	 * @param obj 实体对象
-	 * @return
-	 * @throws Exception
-	 */
-	public java.lang.reflect.Field[] findEntityAllTypeName(Object obj) throws Exception {
-
-		Class<? extends Object> cls = obj.getClass();
-
-		return cls.getDeclaredFields();
-	}
-
-	/**
 	 * 根据文件选择excel版本
 	 * 
 	 * @return
 	 * @throws Exception
 	 */
-	public Workbook chooseWorkbook(MultipartFile file) throws Exception {
+	private static Workbook chooseWorkbook(MultipartFile file) throws Exception {
 
 		Workbook workbook = null;
 
@@ -68,24 +55,70 @@ public class ExcelUtils {
 	}
 
 	/**
-	 * 公共的导入excel方法
+	 * 导入excel方法
 	 * 
 	 * @param file 文件
-	 * @param sheetname 工作簿名称
-	 * @param obj 实体类
+	 * @param sheetIndex 工作簿索引
+	 * @param clazz 实体类
 	 * @return
 	 * @throws IOException
 	 */
-	public List<Object> importBaseExcel(MultipartFile file, String sheetname, Object obj) throws IOException {
-
+	public static <T> List<T> importExcel(MultipartFile file, int sheetIndex, Class<T> clazz) throws IOException {
+		List<T> list = new ArrayList<T>();
 		Workbook workbook = null;
-
 		try {
 			// 读取文件内容
-			workbook = this.chooseWorkbook(file);
+			workbook = chooseWorkbook(file);
+			// 获取工作表
+			Sheet sheet = workbook.getSheetAt(sheetIndex);
+			list = importExcel(sheet, clazz);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (null != workbook)
+				workbook.close();
+		}
+		return list;
+	}
 
+	/**
+	 * 导入excel方法
+	 * 
+	 * @param file 文件
+	 * @param sheetname 工作簿名称
+	 * @param clazz 实体类
+	 * @return
+	 * @throws IOException
+	 */
+	public static <T> List<T> importExcel(MultipartFile file, String sheetname, Class<T> clazz) throws IOException {
+		List<T> list = new ArrayList<T>();
+		Workbook workbook = null;
+		try {
+			// 读取文件内容
+			workbook = chooseWorkbook(file);
 			// 获取工作表
 			Sheet sheet = workbook.getSheet(sheetname);
+			list = importExcel(sheet, clazz);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (null != workbook)
+				workbook.close();
+		}
+		return list;
+	}
+
+	/**
+	 * 导入excel方法
+	 * 
+	 * @param sheet		工作簿
+	 * @param clazz		实体类
+	 * @return
+	 * @throws IOException
+	 */
+	private static <T> List<T> importExcel(Sheet sheet, Class<T> clazz) throws IOException {
+		List<T> list = new ArrayList<T>();
+		try {
 
 			// 获取sheet中第一行行号
 			int firstRowNum = sheet.getFirstRowNum();
@@ -93,12 +126,7 @@ public class ExcelUtils {
 			int lastRowNum = sheet.getLastRowNum();
 
 			// 获取该实体所有定义的属性 返回Field数组
-			java.lang.reflect.Field[] entityName = this.findEntityAllTypeName(obj);
-
-			String classname = obj.getClass().getName();
-			Class<?> clazz = Class.forName(classname);
-
-			List<Object> list = new ArrayList<Object>();
+			Field[] entityName = clazz.getDeclaredFields();
 
 			// 循环插入数据
 			for (int i = firstRowNum + 1; i <= lastRowNum; i++) {
@@ -106,19 +134,20 @@ public class ExcelUtils {
 				Row row = sheet.getRow(i);
 
 				// 可以根据该类名生成Java对象
-				Object pojo = clazz.newInstance();
+				T pojo = clazz.newInstance();
 
 				// 除自增编号外，实体字段匹配sheet列
 				for (int j = 0; j < entityName.length - 3; j++) {
 
 					// 获取属性的名字,将属性的首字符大写，方便构造set方法
-					String name = "set" + entityName[j + 1].getName().substring(0, 1).toUpperCase().concat(entityName[j + 1].getName().substring(1).toLowerCase()) + "";
+					String name = "set" + entityName[j + 1].getName().substring(0, 1).toUpperCase()
+							.concat(entityName[j + 1].getName().substring(1).toLowerCase()) + "";
 					// 获取属性的类型
 					String type = entityName[j + 1].getGenericType().toString();
 
 					Method m = null;
 					// getMethod只能调用public声明的方法，而getDeclaredMethod基本可以调用任何类型声明的方法
-					m = obj.getClass().getDeclaredMethod(name, entityName[j + 1].getType());
+					m = clazz.getClass().getDeclaredMethod(name, entityName[j + 1].getType());
 
 					Cell pname = row.getCell(j);
 					// 根据属性类型装入值
@@ -126,14 +155,14 @@ public class ExcelUtils {
 					case "char":
 					case "java.lang.Character":
 					case "class java.lang.String":
-						m.invoke(pojo, getVal(pname));
+						m.invoke(pojo, getValue(pname));
 						break;
 					case "int":
 					case "class java.lang.Integer":
-						m.invoke(pojo, Integer.valueOf(getVal(pname)));
+						m.invoke(pojo, Integer.valueOf(getValue(pname)));
 						break;
 					case "class java.util.Date":
-						m.invoke(pojo, getVal(pname));
+						m.invoke(pojo, getValue(pname));
 						break;
 					case "float":
 					case "double":
@@ -142,7 +171,7 @@ public class ExcelUtils {
 					case "java.lang.Long":
 					case "java.lang.Short":
 					case "java.math.BigDecimal":
-						m.invoke(pojo, Double.valueOf(getVal(pname)));
+						m.invoke(pojo, Double.valueOf(getValue(pname)));
 						break;
 					default:
 						break;
@@ -150,13 +179,10 @@ public class ExcelUtils {
 				}
 				list.add(pojo);
 			}
-			return list;
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			workbook.close();
 		}
-		return null;
+		return list;
 	}
 
 	/**
@@ -166,14 +192,12 @@ public class ExcelUtils {
 	 * @return
 	 */
 	@SuppressWarnings("deprecation")
-	public static String getVal(Cell cell) {
+	public static String getValue(Cell cell) {
 		if (null != cell) {
 			switch (cell.getCellType()) {
 			case NUMERIC: // 数字
-
 				String val = cell.getNumericCellValue() + "";
 				int index = val.indexOf(".");
-
 				if (Integer.valueOf(val.substring(index + 1)) == 0) {
 					DecimalFormat df = new DecimalFormat("0");// 处理科学计数法
 					return df.format(cell.getNumericCellValue());
@@ -184,7 +208,6 @@ public class ExcelUtils {
 			case BOOLEAN: // Boolean
 				return cell.getBooleanCellValue() + "";
 			case FORMULA: // 公式
-
 				try {
 					if (HSSFDateUtil.isCellDateFormatted(cell)) {
 						Date date = cell.getDateCellValue();
