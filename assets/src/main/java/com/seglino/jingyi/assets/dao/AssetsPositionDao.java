@@ -30,4 +30,12 @@ public interface AssetsPositionDao extends BaseDao<AssetsPosition> {
 	 * @return
 	 */
 	public List<AssetsPositionTreeDto> tree(@Param("parentId") String parentId);
+
+	/**
+	 * 判断同一上级位置中是否存在重复名称的位置
+	 * @param name 
+	 * @param parentId
+	 * @return
+	 */
+	public int existsByName(@Param("name") String name, @Param("parentId") String parentId);
 }

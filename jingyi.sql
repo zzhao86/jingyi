@@ -11,7 +11,7 @@
  Target Server Version : 50718
  File Encoding         : 65001
 
- Date: 21/08/2019 17:33:43
+ Date: 23/08/2019 17:31:20
 */
 
 SET NAMES utf8mb4;
@@ -24,6 +24,7 @@ DROP TABLE IF EXISTS `tab_assets`;
 CREATE TABLE `tab_assets`  (
   `id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '主键',
   `categoryId` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '资产分类ID',
+  `positionId` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '所在位置',
   `code` bigint(20) NULL DEFAULT NULL COMMENT '资产编码',
   `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '资产名称',
   `imageUrl` varchar(300) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '资产图片',
@@ -33,7 +34,6 @@ CREATE TABLE `tab_assets`  (
   `model` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '型号',
   `status` int(11) NULL DEFAULT NULL COMMENT '资产状态。100、空闲；200、领用待签字；300、已领用；400、退库待签字；500、借用待签字；600、借用中；700、归还待签字；800、调拨中；900、待验收；1000、处置待确认；1100、处置待审核；1200、信息变更待审核',
   `useStatus` int(11) NULL DEFAULT NULL COMMENT '使用状态。100、正常；200、故障；300、维修中',
-  `positionId` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '所在位置',
   `useTerm` int(11) NULL DEFAULT NULL COMMENT '预计使用期限，单位：月',
   `amount` decimal(8, 2) NULL DEFAULT NULL COMMENT '金额',
   `startDate` datetime(0) NULL DEFAULT NULL COMMENT '购置/起租日期',
@@ -97,7 +97,7 @@ DROP TABLE IF EXISTS `tab_assets_position`;
 CREATE TABLE `tab_assets_position`  (
   `id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '主键',
   `name` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '位置名称',
-  `parentId` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '上级位置',
+  `parentId` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '上级位置',
   `createTime` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `createUid` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
   `modifyTime` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
@@ -107,6 +107,39 @@ CREATE TABLE `tab_assets_position`  (
   `isDeleted` tinyint(4) NULL DEFAULT 0 COMMENT '是否删除',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '资产位置管理表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of tab_assets_position
+-- ----------------------------
+INSERT INTO `tab_assets_position` VALUES ('03ea3242dc0946a5a58e5881b424953d', '东城', 'eaf13df13039479a8ce68f29a6454343', '2019-08-23 17:29:18', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tab_assets_position` VALUES ('0d956e34c8c2444aa3e2723de80b0660', '邢台', '3a6ed7ce4b9e4653914d4f141d23ed24', '2019-08-23 17:29:19', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tab_assets_position` VALUES ('1032e04d5d9f429691a74c6b89490846', 'a', '0', '2019-08-23 17:29:19', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tab_assets_position` VALUES ('1752f74209604c23a004dd9366106dcd', '朝阳', 'eaf13df13039479a8ce68f29a6454343', '2019-08-23 17:29:18', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tab_assets_position` VALUES ('1a5d0a26c8644ac3ba9882461bf9bfca', '11', 'c0baf67abda54c0e9e1e753ae00d219d', '2019-08-23 17:29:19', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tab_assets_position` VALUES ('204ab9078f4c443b8a59f22fccbe759f', '威海', '73d082ab53704e15ab918ada7db38c87', '2019-08-23 17:29:19', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tab_assets_position` VALUES ('2ae35f8226644e358707c1e1808d1385', '烟台', '73d082ab53704e15ab918ada7db38c87', '2019-08-23 17:29:19', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tab_assets_position` VALUES ('2eac4f9ec5a54eb990df24757a580a42', '12', 'c0baf67abda54c0e9e1e753ae00d219d', '2019-08-23 17:29:19', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tab_assets_position` VALUES ('3a6ed7ce4b9e4653914d4f141d23ed24', '河北', '0', '2019-08-23 17:29:19', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tab_assets_position` VALUES ('3fbb81fd23a4433aacbb0935d0581dc5', '石景山', 'eaf13df13039479a8ce68f29a6454343', '2019-08-23 17:29:19', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tab_assets_position` VALUES ('42d55858ca8b459284f91e5c282a6820', 'aa', '1032e04d5d9f429691a74c6b89490846', '2019-08-23 17:29:19', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tab_assets_position` VALUES ('63ce0a508dd04118bd2d0a381491c27d', '潍坊', '73d082ab53704e15ab918ada7db38c87', '2019-08-23 17:29:19', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tab_assets_position` VALUES ('68580ba4c42d48d39f5c6002c667abd3', '丰台', 'eaf13df13039479a8ce68f29a6454343', '2019-08-23 17:29:18', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tab_assets_position` VALUES ('6c72b8fbc7d043f98a5031bb62b185a7', '西城', 'eaf13df13039479a8ce68f29a6454343', '2019-08-23 17:29:18', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tab_assets_position` VALUES ('73d082ab53704e15ab918ada7db38c87', '山东', '0', '2019-08-23 17:29:19', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tab_assets_position` VALUES ('7c13f1c75e2d41a8a92f41027477aa24', 'a1', '1032e04d5d9f429691a74c6b89490846', '2019-08-23 17:29:19', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tab_assets_position` VALUES ('8a4d3efb17ad4145ab060bd93cf7cbd8', '石家庄', '3a6ed7ce4b9e4653914d4f141d23ed24', '2019-08-23 17:29:19', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tab_assets_position` VALUES ('8bd2084fe0d540089f0d6219392f5f92', '海淀', 'eaf13df13039479a8ce68f29a6454343', '2019-08-23 17:29:18', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tab_assets_position` VALUES ('8eb6f2e1dd5c4406b6affa96ab108439', '通州', 'eaf13df13039479a8ce68f29a6454343', '2019-08-23 17:29:18', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tab_assets_position` VALUES ('95d769a7c02f44aab5994fc6b49768b6', '济南', '73d082ab53704e15ab918ada7db38c87', '2019-08-23 17:29:19', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tab_assets_position` VALUES ('a7cbe4e1ba5c46c4ae90258fc089b887', '邯郸', '3a6ed7ce4b9e4653914d4f141d23ed24', '2019-08-23 17:29:19', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tab_assets_position` VALUES ('bfc8be1e53514c3fbcbde45cdcb085ee', '昌平', 'eaf13df13039479a8ce68f29a6454343', '2019-08-23 17:29:18', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tab_assets_position` VALUES ('c0baf67abda54c0e9e1e753ae00d219d', '1', '0', '2019-08-23 17:29:19', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tab_assets_position` VALUES ('c0c55aa95bde48ca82fd52b04e4f34fd', '青岛', '73d082ab53704e15ab918ada7db38c87', '2019-08-23 17:29:19', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tab_assets_position` VALUES ('c9e4a029e47040df8bfb020fedcc7ea7', '唐山', '3a6ed7ce4b9e4653914d4f141d23ed24', '2019-08-23 17:29:19', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tab_assets_position` VALUES ('e96cb0dc8eef4bacac71e7c36e3cbaf5', '保定', '3a6ed7ce4b9e4653914d4f141d23ed24', '2019-08-23 17:29:19', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tab_assets_position` VALUES ('eaf13df13039479a8ce68f29a6454343', '北京', '0', '2019-08-23 17:29:18', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tab_assets_position` VALUES ('eccd509f58fe4ea49862694868b79f8a', '枣庄', '73d082ab53704e15ab918ada7db38c87', '2019-08-23 17:29:19', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tab_assets_position` VALUES ('efc0428f5f8e445ba7523df9734582fd', '秦皇岛', '3a6ed7ce4b9e4653914d4f141d23ed24', '2019-08-23 17:29:19', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
 
 -- ----------------------------
 -- Table structure for tab_dept

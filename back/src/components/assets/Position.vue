@@ -4,7 +4,7 @@
       <div class="title">资产位置</div>
       <div class="buttons">
         <el-button type="primary" size="small" @click="onAddClick">新建</el-button>
-        <el-button type="warning" size="small" @click="onImportClick">导入</el-button>
+        <el-button type="warning" size="small" @click="showImportClick">批量导入</el-button>
       </div>
     </div>
 
@@ -35,29 +35,49 @@
         </el-table>
         <pagination :params="params" :total="total" @page-change="onPageChange" @size-change="onSizeChange"></pagination>
       </div>
-      <!-- 详情Dialog -->
-      <el-dialog title="资产位置详情" :visible.sync="dialogDetailVisible" :before-close="onDialogDetailClose">
-        <el-form :model="detail" ref="form" :rules="rules" :disabled="detailFormDisabled" label-width="100px">
-          <el-form-item prop="name" label="位置名称">
-            <el-input v-model="detail.name" placeholder="请输入资产位置名称"></el-input>
-          </el-form-item>
-          <el-form-item prop="parentId" label="上级位置">
-            <el-cascader
-              v-model="detail.parentId"
-              :options="cascaderData"
-              :show-all-levels="false"
-              :props="{ checkStrictly: true, emitPath: false, expandTrigger: 'hover' }"
-              placeholder="请选择上级位置"
-            >
-            </el-cascader>
-          </el-form-item>
-        </el-form>
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="onDialogDetailClose">取 消</el-button>
-          <el-button type="primary" @click="onSaveClick" v-show="!detailFormDisabled">确 定</el-button>
-        </span>
-      </el-dialog>
     </div>
+    <!-- 详情Dialog -->
+    <el-dialog title="资产位置详情" :visible.sync="dialogDetailVisible" width="600px" :before-close="onDialogDetailClose">
+      <el-form :model="detail" ref="form" :rules="rules" :disabled="detailFormDisabled" label-width="100px">
+        <el-form-item prop="name" label="位置名称">
+          <el-input v-model="detail.name" placeholder="请输入资产位置名称"></el-input>
+        </el-form-item>
+        <el-form-item prop="parentId" label="上级位置">
+          <el-cascader
+            v-model="detail.parentId"
+            :options="cascaderData"
+            :show-all-levels="false"
+            :props="{ checkStrictly: true, emitPath: false, expandTrigger: 'hover' }"
+            placeholder="请选择上级位置"
+          >
+          </el-cascader>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="onDialogDetailClose">取 消</el-button>
+        <el-button type="primary" @click="onSaveClick" v-show="!detailFormDisabled">确 定</el-button>
+      </span>
+    </el-dialog>
+
+    <!-- 批量导入Dialog -->
+    <el-dialog title="位置批量导入" :visible.sync="dialogImportVisible" width="600px">
+      <ul class="ul-import">
+        <li>
+          <span>请先下载模板文件：</span>
+          <a class="el-link el-link--primary" href="">导入模板-Excel文件</a>
+        </li>
+        <li>
+          <el-upload ref="upload" :auto-upload="false" :show-file-list="false" with-credentials :action="$global.baseUrl + 'test/import'" accept=".xls,.xlsx" :on-change="onImportFileChange">
+            <el-button size="mini" type="primary">选择Excel文件</el-button>
+            <span>{{ importFile.name }}</span>
+          </el-upload>
+        </li>
+      </ul>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="onDialogDetailClose">取 消</el-button>
+        <el-button type="primary" @click="onImportClick" :disabled="importButtonDisabled">导入</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -86,8 +106,11 @@
         maxHeight: 500,
         detail: {},
         detailFormDisabled: false,
+        importButtonDisabled: true,
         dialogDetailVisible: false,
+        dialogImportVisible: true,
         cascaderData: [],
+        importFile: {},
         rules: {
           name: [
             {
@@ -232,7 +255,23 @@
             });
         });
       },
-      onImportClick() {},
+      // 显示导入Dialog
+      showImportClick() {
+        this.dialogImportVisible = true;
+      },
+      // 导入文件改变事件
+      onImportFileChange(file, fileList) {
+        this.importFile = file;
+        if (file.name) {
+          this.importButtonDisabled = false;
+        }
+      },
+      // 上传导入的Excel文件
+      onImportClick() {
+        if (this.importFile) {
+          this.$refs['upload'].submit();
+        }
+      },
       // 关闭详情弹窗事件
       onDialogDetailClose() {
         this.dialogDetailVisible = false;
@@ -256,4 +295,12 @@
     }
   };
 </script>
-<style scoped></style>
+<style scoped>
+  .ul-import li {
+    list-style: decimal;
+    margin-bottom: 10px;
+  }
+  .ul-import .upload {
+    display: inline-block;
+  }
+</style>

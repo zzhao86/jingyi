@@ -1,6 +1,9 @@
 package com.seglino.jingyi.assets.service;
 
+import java.io.IOException;
 import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import com.github.pagehelper.Page;
 import com.seglino.jingyi.assets.dto.AssetsPositionListDto;
@@ -24,4 +27,10 @@ public interface AssetsPositionService extends BaseService<AssetsPosition> {
 	 * @return
 	 */
 	public List<AssetsPositionTreeDto> treeData(String parentId);
+	
+	/**
+	 * Excel导入资产位置
+	 * @param file
+	 */
+	public void importExcel(MultipartFile file) throws IOException;
 }
