@@ -22,8 +22,8 @@
 	<sql id="condition">
 		<if test="id != null"> and id = #{id}</if>
 		<if test="name != null"> and name like '%${name}%'</if>
-		<if test="parentId != null and isSelf == true"> and (id = #{parentId} or parentId = #{parentId})</if>
-		<if test="parentId != null and isSelf == false"> and parentId = #{parentId}</if>
+		<if test="parentId != null and isSelf"> and (id = #{parentId} or parentId = #{parentId})</if>
+		<if test="parentId != null and isSelf"> and parentId = #{parentId}</if>
 		<if test="isDeleted != null"> and isDeleted = #{isDeleted}</if>
 	</sql>
 

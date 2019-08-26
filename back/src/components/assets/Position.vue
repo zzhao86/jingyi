@@ -10,7 +10,15 @@
 
     <div class="main-container">
       <div class="tree-container">
-        <el-tree ref="tree" :data="treeData" node-key="id" default-expand-all :expand-on-click-node="false" highlight-current @node-click="onTreeNodeClick"></el-tree>
+        <el-tree
+          ref="tree"
+          :data="treeData"
+          node-key="id"
+          default-expand-all
+          :expand-on-click-node="false"
+          highlight-current
+          @node-click="onTreeNodeClick"
+        ></el-tree>
       </div>
 
       <div class="main-table">
@@ -33,12 +41,28 @@
             </template>
           </el-table-column>
         </el-table>
-        <pagination :params="params" :total="total" @page-change="onPageChange" @size-change="onSizeChange"></pagination>
+        <pagination
+          :params="params"
+          :total="total"
+          @page-change="onPageChange"
+          @size-change="onSizeChange"
+        ></pagination>
       </div>
     </div>
     <!-- 详情Dialog -->
-    <el-dialog title="资产位置详情" :visible.sync="dialogDetailVisible" width="600px" :before-close="onDialogDetailClose">
-      <el-form :model="detail" ref="form" :rules="rules" :disabled="detailFormDisabled" label-width="100px">
+    <el-dialog
+      title="资产位置详情"
+      :visible.sync="dialogDetailVisible"
+      width="600px"
+      :before-close="onDialogDetailClose"
+    >
+      <el-form
+        :model="detail"
+        ref="form"
+        :rules="rules"
+        :disabled="detailFormDisabled"
+        label-width="100px"
+      >
         <el-form-item prop="name" label="位置名称">
           <el-input v-model="detail.name" placeholder="请输入资产位置名称"></el-input>
         </el-form-item>
@@ -49,8 +73,7 @@
             :show-all-levels="false"
             :props="{ checkStrictly: true, emitPath: false, expandTrigger: 'hover' }"
             placeholder="请选择上级位置"
-          >
-          </el-cascader>
+          ></el-cascader>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -64,10 +87,18 @@
       <ul class="ul-import">
         <li>
           <span>请先下载模板文件：</span>
-          <a class="el-link el-link--primary" href="">导入模板-Excel文件</a>
+          <a class="el-link el-link--primary" href>导入模板-Excel文件</a>
         </li>
         <li>
-          <el-upload ref="upload" :auto-upload="false" :show-file-list="false" with-credentials :action="$global.baseUrl + 'test/import'" accept=".xls,.xlsx" :on-change="onImportFileChange">
+          <el-upload
+            ref="upload"
+            :auto-upload="false"
+            :show-file-list="false"
+            with-credentials
+            :action="$global.baseUrl + 'test/import'"
+            accept=".xls, .xlsx"
+            :on-change="onImportFileChange"
+          >
             <el-button size="mini" type="primary">选择Excel文件</el-button>
             <span>{{ importFile.name }}</span>
           </el-upload>
@@ -81,226 +112,227 @@
   </div>
 </template>
 <script>
-  import Pagination from '../utils/components/Pagination';
-  export default {
-    name: 'AssetsPosition',
-    components: {
-      Pagination
+import Pagination from '../utils/components/Pagination';
+export default {
+  name: 'AssetsPosition',
+  components: {
+    Pagination
+  },
+  created() {
+    this.loadTreeData();
+    this.loadTableData();
+  },
+  data() {
+    return {
+      params: {
+        index: 1,
+        size: this.$global.pageSize,
+        query: {
+          name: ''
+        }
+      },
+      total: 0,
+      treeData: [],
+      tableData: [],
+      maxHeight: 500,
+      detail: {},
+      detailFormDisabled: false,
+      importButtonDisabled: true,
+      dialogDetailVisible: false,
+      dialogImportVisible: false,
+      cascaderData: [],
+      importFile: {},
+      rules: {
+        name: [
+          {
+            required: true,
+            message: '请输入资产位置名称',
+            trigger: 'blur'
+          }
+        ],
+        parentId: [
+          {
+            required: true,
+            message: '请选择上级位置',
+            trigger: 'blur'
+          }
+        ]
+      }
+    };
+  },
+  methods: {
+    loadTableData() {
+      this.$get('back/assets/position/list', {
+        params: this.params
+      }).then(res => {
+        if (res.isSuccess) {
+          this.total = res.total;
+          this.tableData = res.data;
+        }
+      });
     },
-    created() {
-      this.loadTreeData();
+    // 加载Tree数据
+    loadTreeData() {
+      this.$get('back/assets/position/tree').then(res => {
+        if (res.isSuccess) {
+          res.data.unshift({
+            id: null,
+            label: '所有位置',
+            value: null
+          });
+          this.treeData = res.data;
+        }
+      });
+    },
+    onPageChange(index) {
+      this.params.index = index;
       this.loadTableData();
     },
-    data() {
-      return {
-        params: {
-          index: 1,
-          size: this.$global.pageSize,
-          query: {
-            name: ''
-          }
-        },
-        total: 0,
-        treeData: [],
-        tableData: [],
-        maxHeight: 500,
-        detail: {},
-        detailFormDisabled: false,
-        importButtonDisabled: true,
-        dialogDetailVisible: false,
-        dialogImportVisible: true,
-        cascaderData: [],
-        importFile: {},
-        rules: {
-          name: [
-            {
-              required: true,
-              message: '请输入资产位置名称',
-              trigger: 'blur'
-            }
-          ],
-          parentId: [
-            {
-              required: true,
-              message: '请选择上级位置',
-              trigger: 'blur'
-            }
-          ]
-        }
-      };
+    onSizeChange(size) {
+      this.params.size = size;
+      this.loadTableData();
     },
-    methods: {
-      loadTableData() {
-        this.$get('back/assets/position/list', {
-          params: this.params
-        }).then(res => {
-          if (res.isSuccess) {
-            this.total = res.total;
-            this.tableData = res.data;
-          }
-        });
-      },
-      // 加载Tree数据
-      loadTreeData() {
-        this.$get('back/assets/position/tree').then(res => {
-          if (res.isSuccess) {
-            res.data.unshift({
-              id: null,
-              label: '所有位置',
-              value: null
-            });
-            this.treeData = res.data;
-          }
-        });
-      },
-      onPageChange(index) {
-        this.params.index = index;
-        this.loadTableData();
-      },
-      onSizeChange(size) {
-        this.params.size = size;
-        this.loadTableData();
-      },
-      // 刷新列表数据
-      flushTableData() {
-        this.loadTreeData();
-        this.params.index = 1;
-        this.loadTableData();
-      },
-      // Tree节点点击事件
-      onTreeNodeClick(data, node, store) {
-        this.params.index = 1;
-        this.params.query.parentId = data.id;
-        this.loadTableData();
-      },
-      // 加载资产位置Cascader数据
-      loadCascaderData() {
-        const vue = this;
-        this.$get('back/assets/position/tree').then(res => {
-          if (res.isSuccess) {
-            this.cascaderData = res.data;
-            // 添加“无上级位置”节点
-            this.cascaderData.unshift({
-              id: '0',
-              label: '无上级位置',
-              value: '0'
-            });
+    // 刷新列表数据
+    flushTableData() {
+      this.loadTreeData();
+      this.params.index = 1;
+      this.loadTableData();
+    },
+    // Tree节点点击事件
+    onTreeNodeClick(data, node, store) {
+      console.log(data)
+      this.params.index = 1;
+      this.params.query.parentId = data.id;
+      this.loadTableData();
+    },
+    // 加载资产位置Cascader数据
+    loadCascaderData() {
+      const vue = this;
+      this.$get('back/assets/position/tree').then(res => {
+        if (res.isSuccess) {
+          this.cascaderData = res.data;
+          // 添加“无上级位置”节点
+          this.cascaderData.unshift({
+            id: '0',
+            label: '无上级位置',
+            value: '0'
+          });
 
-            // 查找自身节点
-            var arrayFindItem = function(array, id) {
-              if (!array || array.length == 0) {
-                return null;
+          // 查找自身节点
+          var arrayFindItem = function (array, id) {
+            if (!array || array.length == 0) {
+              return null;
+            }
+            var result = null;
+            for (let i = 0; i < array.length; i++) {
+              let item = array[i];
+              if (item.id === id) {
+                result = item;
               }
-              var result = null;
-              for (let i = 0; i < array.length; i++) {
-                let item = array[i];
-                if (item.id === id) {
-                  result = item;
-                }
-                if (result) {
-                  return result;
-                } else {
-                  if (item.children && item.children.length > 0) {
-                    result = arrayFindItem(item.children, id);
-                    if (result) {
-                      return result;
-                    }
+              if (result) {
+                return result;
+              } else {
+                if (item.children && item.children.length > 0) {
+                  result = arrayFindItem(item.children, id);
+                  if (result) {
+                    return result;
                   }
                 }
               }
-            };
-            let item = arrayFindItem(this.cascaderData, vue.detail.id);
-            if (item) {
-              item.disabled = true;
-              item.children = null;
             }
+          };
+          let item = arrayFindItem(this.cascaderData, vue.detail.id);
+          if (item) {
+            item.disabled = true;
+            item.children = null;
           }
-        });
-      },
-      // 显示详情弹窗
-      showDialogDetail() {
-        this.dialogDetailVisible = true;
-        this.loadCascaderData();
-      },
-      // 新建按钮事件
-      onAddClick() {
-        this.detailFormDisabled = false;
-        this.showDialogDetail();
-      },
-      // 查看按钮事件
-      onViewClick(row) {
-        this.detail = row;
-        this.detailFormDisabled = true;
-        this.showDialogDetail();
-      },
-      // 编辑按钮事件
-      onEditClick(row) {
-        this.detail = row;
-        this.detailFormDisabled = false;
-        this.showDialogDetail();
-      },
-      // 删除按钮事件
-      onDeleteClick(row) {
-        const vue = this;
-        this.$confirm(`确定要删除资产位置 “${row.name}” 及其所有下级位置吗？`, () => {
-          vue
-            .$get('back/assets/position/delete', {
-              params: {
-                id: row.id
-              }
-            })
-            .then(res => {
-              this.$success('删除成功');
-              vue.flushTableData();
-            });
-        });
-      },
-      // 显示导入Dialog
-      showImportClick() {
-        this.dialogImportVisible = true;
-      },
-      // 导入文件改变事件
-      onImportFileChange(file, fileList) {
-        this.importFile = file;
-        if (file.name) {
-          this.importButtonDisabled = false;
         }
-      },
-      // 上传导入的Excel文件
-      onImportClick() {
-        if (this.importFile) {
-          this.$refs['upload'].submit();
-        }
-      },
-      // 关闭详情弹窗事件
-      onDialogDetailClose() {
-        this.dialogDetailVisible = false;
-        this.$refs['form'].resetFields();
-        this.detail = {};
-      },
-      // 详情保存
-      onSaveClick() {
-        this.$refs['form'].validate(valid => {
-          if (valid) {
-            this.$post('back/assets/position/save', this.detail).then(res => {
-              if (res.isSuccess) {
-                this.onDialogDetailClose();
-                this.flushTableData();
-                this.$success('保存成功');
-              }
-            });
-          }
-        });
+      });
+    },
+    // 显示详情弹窗
+    showDialogDetail() {
+      this.dialogDetailVisible = true;
+      this.loadCascaderData();
+    },
+    // 新建按钮事件
+    onAddClick() {
+      this.detailFormDisabled = false;
+      this.showDialogDetail();
+    },
+    // 查看按钮事件
+    onViewClick(row) {
+      this.detail = row;
+      this.detailFormDisabled = true;
+      this.showDialogDetail();
+    },
+    // 编辑按钮事件
+    onEditClick(row) {
+      this.detail = row;
+      this.detailFormDisabled = false;
+      this.showDialogDetail();
+    },
+    // 删除按钮事件
+    onDeleteClick(row) {
+      const vue = this;
+      this.$confirm(`确定要删除资产位置 “${row.name}” 及其所有下级位置吗？`, () => {
+        vue
+          .$get('back/assets/position/delete', {
+            params: {
+              id: row.id
+            }
+          })
+          .then(res => {
+            this.$success('删除成功');
+            vue.flushTableData();
+          });
+      });
+    },
+    // 显示导入Dialog
+    showImportClick() {
+      this.dialogImportVisible = true;
+    },
+    // 导入文件改变事件
+    onImportFileChange(file, fileList) {
+      this.importFile = file;
+      if (file.name) {
+        this.importButtonDisabled = false;
       }
+    },
+    // 上传导入的Excel文件
+    onImportClick() {
+      if (this.importFile) {
+        this.$refs['upload'].submit();
+      }
+    },
+    // 关闭详情弹窗事件
+    onDialogDetailClose() {
+      this.dialogDetailVisible = false;
+      this.$refs['form'].resetFields();
+      this.detail = {};
+    },
+    // 详情保存
+    onSaveClick() {
+      this.$refs['form'].validate(valid => {
+        if (valid) {
+          this.$post('back/assets/position/save', this.detail).then(res => {
+            if (res.isSuccess) {
+              this.onDialogDetailClose();
+              this.flushTableData();
+              this.$success('保存成功');
+            }
+          });
+        }
+      });
     }
-  };
+  }
+};
 </script>
 <style scoped>
-  .ul-import li {
-    list-style: decimal;
-    margin-bottom: 10px;
-  }
-  .ul-import .upload {
-    display: inline-block;
-  }
+.ul-import li {
+  list-style: decimal;
+  margin-bottom: 10px;
+}
+.ul-import .upload {
+  display: inline-block;
+}
 </style>
