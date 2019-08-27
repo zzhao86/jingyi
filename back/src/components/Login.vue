@@ -30,9 +30,10 @@
     methods: {
       onLogin() {
         var appid = 'dingoahwjazjqdmlt2gs5k';
-        var redirect = encodeURIComponent(this.$global.baseUrl + 'account/login/dingtalk_qrcode');
+        var redirect = encodeURIComponent(this.$global.baseUrl + 'account/login/dingtalk_qrcode?redirect=' + this.$global.redirect);
         var url = 'https://oapi.dingtalk.com/connect/oauth2/sns_authorize?appid=' + appid + '&response_type=code&scope=snsapi_login&state=STATE&redirect_uri=';
         var goto = encodeURIComponent(url + redirect);
+        console.log(goto)
         this.$nextTick(function() {
           var obj = DDLogin({
             id: 'loginContainer',

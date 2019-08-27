@@ -13,7 +13,7 @@
         <el-table-column align="center" label="序号" width="50">
           <template slot-scope="scope">{{ scope.$index + (params.index - 1) * params.size + 1 }}</template>
         </el-table-column>
-        <el-table-column prop="title" label="标题">
+        <el-table-column prop="title" label="标题" show-overflow-tooltip>
           <template slot-scope="scope">
             <el-link type="primary" @click="onViewClick(scope.row)">{{ scope.row.title }}</el-link>
           </template>

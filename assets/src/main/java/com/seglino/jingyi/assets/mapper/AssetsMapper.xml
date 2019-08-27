@@ -42,9 +42,7 @@
 	<!-- 查询条件 -->
 	<sql id="condition">
 		<if test="id != null"> and id = #{id}</if>
-		<if test="name != null"> and name like '%${name}%'</if>
-		<if test="parentId != null and isSelf == true"> and (id = #{parentId} or parentId = #{parentId})</if>
-		<if test="parentId != null and isSelf == false"> and parentId = #{parentId}</if>
+		<if test="name != null and name != ''"> and name like '%${name}%'</if>
 		<if test="isDeleted != null"> and isDeleted = #{isDeleted}</if>
 	</sql>
 
@@ -63,14 +61,24 @@
 	<!-- 根据条件获取分页列表 -->
 	<select id="pageByIndex" resultType="com.seglino.jingyi.assets.dto.AssetsListDto">
 		SELECT id,
+					 (SELECT name FROM tab_assets_category where id = a.categoryId) AS categoryName,
+					 (SELECT name FROM tab_assets_position where id = a.positionId) AS positionName,
+					 code,
 					 name,
-					 parentId,
-					 (SELECT name FROM tab_assets_category WHERE id = a.parentId) AS parentName
-			FROM tab_assets_category a
+					 brand,
+					 model,
+					 status,
+					 useStatus,
+					 admin,
+					 (SELECT name FROM tab_user where id = a.admin) AS adminName,
+					 purchasingMethod,
+					 startDate,
+					 owner
+			FROM tab_assets a
 		<where>
 			<include refid="condition"></include>
 		</where>
-		ORDER BY createTime ASC
+		ORDER BY createTime DESC
 	</select>
 
 	<!-- 根据条件获取详情 -->

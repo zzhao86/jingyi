@@ -1,33 +1,28 @@
-package com.seglino.jingyi.assets.dto;
+package com.seglino.jingyi.webapi.vo.back.assets;
 
 import java.util.Date;
 
-import com.seglino.jingyi.common.core.dto.BaseDto;
+import com.seglino.jingyi.common.core.vo.BaseVo;
 
-public class AssetsListDto extends BaseDto {
-	private String categoryId;
+public class AssetsListVo extends BaseVo {
 	private String categoryName;
-	private String positionId;
 	private String positionName;
 	private String code;
 	private String name;
 	private String brand;
 	private String model;
 	private int status;
+	@SuppressWarnings("unused")
+	private String statusName;
 	private int useStatus;
-	private String admin;
+	@SuppressWarnings("unused")
+	private String useStatusName;
 	private String adminName;
 	private int purchasingMethod;
+	@SuppressWarnings("unused")
+	private String purchasingMethodName;
 	private Date startDate;
 	private String owner;
-
-	public String getCategoryId() {
-		return categoryId;
-	}
-
-	public void setCategoryId(String categoryId) {
-		this.categoryId = categoryId;
-	}
 
 	public String getCategoryName() {
 		return categoryName;
@@ -35,14 +30,6 @@ public class AssetsListDto extends BaseDto {
 
 	public void setCategoryName(String categoryName) {
 		this.categoryName = categoryName;
-	}
-
-	public String getPositionId() {
-		return positionId;
-	}
-
-	public void setPositionId(String positionId) {
-		this.positionId = positionId;
 	}
 
 	public String getPositionName() {
@@ -93,6 +80,10 @@ public class AssetsListDto extends BaseDto {
 		this.status = status;
 	}
 
+	public String getStatusName() {
+		return AssetsDataMapping.getStatusName(status);
+	}
+
 	public int getUseStatus() {
 		return useStatus;
 	}
@@ -101,12 +92,8 @@ public class AssetsListDto extends BaseDto {
 		this.useStatus = useStatus;
 	}
 
-	public String getAdmin() {
-		return admin;
-	}
-
-	public void setAdmin(String admin) {
-		this.admin = admin;
+	public String getUseStatusName() {
+		return AssetsDataMapping.getUseStatusName(useStatus);
 	}
 
 	public String getAdminName() {
@@ -123,6 +110,14 @@ public class AssetsListDto extends BaseDto {
 
 	public void setPurchasingMethod(int purchasingMethod) {
 		this.purchasingMethod = purchasingMethod;
+	}
+
+	public String getPurchasingMethodName() {
+		return AssetsDataMapping.getPurchasingMethodName(purchasingMethod);
+	}
+
+	public void setPurchasingMethodName(String purchasingMethodName) {
+		this.purchasingMethodName = purchasingMethodName;
 	}
 
 	public Date getStartDate() {

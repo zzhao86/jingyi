@@ -29,7 +29,6 @@ ElementUI.Dialog.props.appendToBody.default = true;
 ElementUI.Link.props.underline.default = false;
 ElementUI.Upload.props.withCredentials = true;
 
-
 axios.defaults.baseURL = Global.baseUrl;
 axios.defaults.headers.get['Content-Type'] = 'application/x-www-form-urlencoded; charset=utf-8;';
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded; charset=utf-8;';
@@ -68,6 +67,7 @@ axios.interceptors.response.use(
       } else {
         if (data.code == 401) {
           Global.user = null;
+          vue.$global.redirect = vue.$route.path;
           vue.$router.replace('/login');
         } else {
           vue.$error(data.message);

@@ -38,21 +38,21 @@ public class AccountController {
 	 * @return
 	 */
 	@GetMapping("login/dingtalk_qrcode")
-	public ModelAndView loginByDingtalkQrcode(String code, String state) {
-		RedirectView redirect = new RedirectView();
+	public ModelAndView loginByDingtalkQrcode(String redirect, String code, String state) {
+		RedirectView view = new RedirectView();
 		try {
 			Subject subject = SecurityUtils.getSubject();
 			CustomToken token = new CustomToken(LoginType.DINGTALK_QRCODE, code, state, code, code);
 			subject.login(token);
 			if (subject.isAuthenticated()) {
-				redirect.setUrl(BackBaseUrl);
+				view.setUrl(BackBaseUrl + redirect);
 			} else {
-				redirect.setUrl(BackLoginUrl);
+				view.setUrl(BackLoginUrl);
 			}
 		} catch (Exception e) {
-			redirect.setUrl(BackLoginUrl);
+			view.setUrl(BackLoginUrl);
 		}
-		return new ModelAndView(redirect);
+		return new ModelAndView(view);
 	}
 
 	/**

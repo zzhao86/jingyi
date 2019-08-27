@@ -1,21 +1,26 @@
 package com.seglino.jingyi.assets.service.impl;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.seglino.jingyi.assets.dao.AssetsCategoryDao;
 import com.seglino.jingyi.assets.dto.AssetsCategoryListDto;
 import com.seglino.jingyi.assets.dto.AssetsCategoryTreeDto;
+import com.seglino.jingyi.assets.dto.AssetsCategoryImportDto;
 import com.seglino.jingyi.assets.pojo.AssetsCategory;
 import com.seglino.jingyi.assets.service.AssetsCategoryService;
 import com.seglino.jingyi.assets.service.AssetsService;
 import com.seglino.jingyi.common.core.service.BaseServiceImpl;
+import com.seglino.jingyi.common.excel.ImportExcel;
 import com.seglino.jingyi.common.request.RequestPageParams;
 
 @Service
@@ -93,5 +98,56 @@ public class AssetsCategoryServiceImpl extends BaseServiceImpl<AssetsCategoryDao
 			}
 		}
 		return list;
+	}
+
+	/**
+	 * Excel导入资产分类
+	 * 
+	 * @param file 上传的Excel文件
+	 * @throws IOException
+	 */
+	public void importExcel(MultipartFile file) throws IOException {
+		ImportExcel<AssetsCategoryImportDto> ie = new ImportExcel<>();
+		List<AssetsCategoryImportDto> list = ie.importExcel(file, 0, AssetsCategoryImportDto.class);
+		List<AssetsCategoryImportDto> data = getImportChildrenData(list, "");
+		saveImportData(list, data, "0");
+	}
+
+	/**
+	 * 保存数据
+	 * 
+	 * @param list Excel的所有数据
+	 * @param data 需要保存的数据
+	 * @param parentId 上级分类ID
+	 */
+	private void saveImportData(List<AssetsCategoryImportDto> list, List<AssetsCategoryImportDto> data, String parentId) {
+		for (int i = 0; i < data.size(); i++) {
+			AssetsCategoryImportDto dto = data.get(i);
+			AssetsCategory entity = new AssetsCategory();
+			entity.setName(dto.getName());
+			entity.setParentId(parentId);
+			int count = dao.existsByName(entity.getName(), entity.getParentId());
+			if (count > 0) {
+				continue;
+			}
+			int result = insert(entity);
+			if (result == 1) {
+				List<AssetsCategoryImportDto> children = getImportChildrenData(list, dto.getName());
+				if (null != children && children.size() > 0) {
+					saveImportData(list, children, entity.getId().toString());
+				}
+			}
+		}
+	}
+
+	/**
+	 * 获取导入的子级数据
+	 * 
+	 * @param list Excel的所有数据
+	 * @param parent Excel中的上级分类名称
+	 * @return
+	 */
+	private List<AssetsCategoryImportDto> getImportChildrenData(List<AssetsCategoryImportDto> list, String parent) {
+		return list.stream().filter((AssetsCategoryImportDto c) -> parent.equals(c.getParent())).collect(Collectors.toList());
 	}
 }

@@ -188,6 +188,13 @@ body {
   font-size: 12px;
 }
 
+.cell .el-link {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 /******************** 禁用状态下 单选按钮样式 开始 ********************/
 .el-radio.is-bordered.is-checked.is-disabled {
   border-color: #409eff;

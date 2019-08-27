@@ -1,6 +1,9 @@
 package com.seglino.jingyi.assets.service;
 
+import java.io.IOException;
 import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import com.github.pagehelper.Page;
 import com.seglino.jingyi.assets.dto.AssetsCategoryListDto;
@@ -24,4 +27,10 @@ public interface AssetsCategoryService extends BaseService<AssetsCategory> {
 	 * @return
 	 */
 	public List<AssetsCategoryTreeDto> treeData(String parentId);
+	
+	/**
+	 * Excel导入资产分类
+	 * @param file
+	 */
+	public void importExcel(MultipartFile file) throws IOException;
 }

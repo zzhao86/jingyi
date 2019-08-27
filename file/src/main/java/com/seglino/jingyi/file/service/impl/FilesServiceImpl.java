@@ -134,6 +134,7 @@ public class FilesServiceImpl extends BaseServiceImpl<FilesDao, Files> implement
 		BufferedOutputStream bos = null;
 		try {
 			response.reset();
+			response.setContentType("application/octet-stream");
 			response.addHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8"));
 			response.setCharacterEncoding("UTF-8");
 

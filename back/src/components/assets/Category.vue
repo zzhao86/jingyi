@@ -4,7 +4,7 @@
       <div class="title">资产分类</div>
       <div class="buttons">
         <el-button type="primary" size="small" @click="onAddClick">新建</el-button>
-        <el-button type="warning" size="small" @click="onImportClick">导入</el-button>
+        <el-button type="warning" size="small" @click="showImportClick">导入</el-button>
       </div>
     </div>
 
@@ -57,6 +57,35 @@
           <el-button type="primary" @click="onSaveClick" v-show="!detailFormDisabled">确 定</el-button>
         </span>
       </el-dialog>
+
+      <!-- 批量导入Dialog -->
+      <el-dialog title="位置批量导入" :visible.sync="dialogImportVisible" width="600px">
+        <ul class="ul-import">
+          <li>
+            <span>请先下载模板文件：</span>
+            <a class="el-link el-link--primary" target="_blank" :href="$global.baseUrl + 'back/assets/category/template/download'">导入模板-Excel文件</a>
+          </li>
+          <li>
+            <el-upload
+              ref="upload"
+              :auto-upload="false"
+              :show-file-list="false"
+              with-credentials
+              :action="$global.baseUrl + 'back/assets/category/import'"
+              accept=".xls, .xlsx"
+              :on-change="onImportFileChange"
+              :on-success="onImportFileSuccess"
+            >
+              <el-button size="mini" type="primary">选择Excel文件</el-button>
+              <span>{{ importFile.name }}</span>
+            </el-upload>
+          </li>
+        </ul>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="onDialogDetailClose">取 消</el-button>
+          <el-button type="primary" @click="onImportClick" :disabled="importButtonDisabled">导入</el-button>
+        </span>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -87,7 +116,10 @@
         detail: {},
         detailFormDisabled: false,
         dialogDetailVisible: false,
+        importButtonDisabled: true,
+        dialogImportVisible: false,
         cascaderData: [],
+        importFile: {},
         rules: {
           name: [
             {
@@ -141,6 +173,7 @@
       // 刷新列表数据
       flushTableData() {
         this.params.index = 1;
+        this.loadTreeData();
         this.loadTableData();
       },
       // Tree节点点击事件
@@ -230,7 +263,31 @@
             });
         });
       },
-      onImportClick() {},
+      // 显示导入Dialog
+      showImportClick() {
+        this.dialogImportVisible = true;
+      },
+      // 导入文件改变事件
+      onImportFileChange(file, fileList) {
+        this.importFile = file;
+        if (file.name) {
+          this.importButtonDisabled = false;
+        }
+      },
+      // 导入文件成功事件
+      onImportFileSuccess(res, file, fileList) {
+        if (res.isSuccess) {
+          this.$success('导入成功');
+          this.dialogImportVisible = false;
+          this.flushTableData();
+        }
+      },
+      // 上传导入的Excel文件
+      onImportClick() {
+        if (this.importFile) {
+          this.$refs['upload'].submit();
+        }
+      },
       // 关闭详情弹窗事件
       onDialogDetailClose() {
         this.detail = {};

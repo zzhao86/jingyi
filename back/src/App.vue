@@ -15,7 +15,7 @@
     </div>
     <div class="app-content-container">
       <div class="app-side" v-show="$global.user">
-        <el-menu :default-openeds="['3']" :router="true">
+        <el-menu :default-openeds="['2','3']" :router="true">
           <el-menu-item index="1" route="/notice"> <i class="el-icon-bell"></i>通知公告 </el-menu-item>
           <el-submenu index="2">
             <template slot="title">

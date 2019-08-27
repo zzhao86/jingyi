@@ -21,9 +21,9 @@
 	<!-- 查询条件 -->
 	<sql id="condition">
 		<if test="id != null"> and id = #{id}</if>
-		<if test="name != null"> and name like '%${name}%'</if>
-		<if test="parentId != null and isSelf == true"> and (id = #{parentId} or parentId = #{parentId})</if>
-		<if test="parentId != null and isSelf == false"> and parentId = #{parentId}</if>
+		<if test="name != null and name != ''"> and name like '%${name}%'</if>
+		<if test="parentId != null and isSelf == 1"> and (id = #{parentId} or parentId = #{parentId})</if>
+		<if test="parentId != null and isSelf == 0"> and parentId = #{parentId}</if>
 		<if test="isDeleted != null"> and isDeleted = #{isDeleted}</if>
 	</sql>
 
@@ -73,6 +73,15 @@
 		<include refid="tableName"></include>
 		<where>
 			<include refid="condition"></include>
+		</where>
+	</select>
+
+	<!-- 判断同一上级位置中是否存在重复名称的位置 -->
+	<select id="existsByName" resultType="Integer">
+		SELECT COUNT(*) FROM
+		<include refid="tableName"></include>
+		<where>
+			name = #{name} AND parentId = #{parentId}
 		</where>
 	</select>
 

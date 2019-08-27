@@ -29,4 +29,12 @@ public interface AssetsCategoryDao extends BaseDao<AssetsCategory> {
 	 * @return
 	 */
 	public List<AssetsCategoryTreeDto> tree(@Param("parentId") String parentId);
+
+	/**
+	 * 判断同一上级分类中是否存在重复名称的分类
+	 * @param name 
+	 * @param parentId
+	 * @return
+	 */
+	public int existsByName(@Param("name") String name, @Param("parentId") String parentId);
 }
