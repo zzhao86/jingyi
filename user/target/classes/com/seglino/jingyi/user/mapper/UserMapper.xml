@@ -89,6 +89,16 @@
 		</where>
 	</select>
 	
+	<select id="adminList" resultType="com.seglino.jingyi.user.dto.UserListDto">
+		SELECT id,
+					 name,
+					 mobile,
+					 avatar,
+					 position
+			FROM tab_user
+		 WHERE name like '%${keywords}%' AND type IN (1,2)
+	</select>
+	
 	<!-- 根据条件获取数据总数 -->
 	<select id="count" resultType="com.seglino.jingyi.user.pojo.User">
 		SELECT COUNT(*) FROM

@@ -28,6 +28,22 @@ body {
   font-family: 'Helvetica Neue', 'Helvetica', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'SimSun', 'sans-serif';
 }
 
+fieldset {
+  border: none;
+  border-bottom: dashed 1px #ddd;
+  margin-bottom: 15px;
+}
+fieldset:last-of-type {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+fieldset legend {
+  color: #999;
+  font-weight: 600;
+  font-size: 14px;
+}
+
 .el-menu {
   border-right: none;
 }

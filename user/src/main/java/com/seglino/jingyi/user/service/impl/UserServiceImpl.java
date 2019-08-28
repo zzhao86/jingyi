@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.seglino.jingyi.common.core.service.BaseServiceImpl;
 import com.seglino.jingyi.user.dao.UserDao;
 import com.seglino.jingyi.user.dto.UserDetailDto;
+import com.seglino.jingyi.user.dto.UserListDto;
 import com.seglino.jingyi.user.pojo.Dept;
 import com.seglino.jingyi.user.pojo.User;
 import com.seglino.jingyi.user.service.DeptService;
@@ -58,5 +59,14 @@ public class UserServiceImpl extends BaseServiceImpl<UserDao, User> implements U
 			}
 		}
 		return result;
+	}
+
+	/**
+	 * 获取管理员列表
+	 * @param keywords
+	 * @return
+	 */
+	public List<UserListDto> adminList(String keywords){
+		return dao.adminList(keywords);
 	}
 }

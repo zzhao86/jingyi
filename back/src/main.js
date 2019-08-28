@@ -23,11 +23,11 @@ Vue.directive('auto-height', tableAutoHeight);
 
 Vue.config.productionTip = false;
 Vue.use(ElementUI);
-// console.log(ElementUI.Upload)
+// console.log(ElementUI)
 ElementUI.Dialog.props.closeOnClickModal.default = false;
 ElementUI.Dialog.props.appendToBody.default = true;
 ElementUI.Link.props.underline.default = false;
-ElementUI.Upload.props.withCredentials = true;
+ElementUI.Upload.props.withCredentials.default = true;
 
 axios.defaults.baseURL = Global.baseUrl;
 axios.defaults.headers.get['Content-Type'] = 'application/x-www-form-urlencoded; charset=utf-8;';

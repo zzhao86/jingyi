@@ -18,6 +18,7 @@ import com.seglino.jingyi.common.response.ApiResult;
 import com.seglino.jingyi.common.utils.AutoMapper;
 import com.seglino.jingyi.dingtalk.service.DingtalkUserService;
 import com.seglino.jingyi.user.dto.UserDetailDto;
+import com.seglino.jingyi.user.dto.UserListDto;
 import com.seglino.jingyi.user.pojo.Dept;
 import com.seglino.jingyi.user.pojo.User;
 import com.seglino.jingyi.user.service.DeptService;
@@ -116,6 +117,22 @@ public class UserBackController {
 				vo.setType("user");
 				list.add(vo);
 			}
+			aResult.setData(list);
+		} catch (Exception e) {
+			aResult.addError(e);
+		}
+		return aResult;
+	}
+	
+	@GetMapping("admin_list")
+	public ApiResult adminList(String keywords) {
+		ApiResult aResult = new ApiResult();
+		if(StringUtils.isEmpty(keywords)) {
+			aResult.setData(new ArrayList<>());
+			return aResult;
+		}
+		try {
+			List<UserListDto> list = userService.adminList(keywords);
 			aResult.setData(list);
 		} catch (Exception e) {
 			aResult.addError(e);

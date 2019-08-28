@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.seglino.jingyi.common.core.service.BaseService;
 import com.seglino.jingyi.user.dto.UserDetailDto;
+import com.seglino.jingyi.user.dto.UserListDto;
 import com.seglino.jingyi.user.pojo.User;
 
 public interface UserService extends BaseService<User> {
@@ -23,4 +24,11 @@ public interface UserService extends BaseService<User> {
 	 * @return
 	 */
 	public List<User> listByDept(String deptId, boolean fetchChild);
+
+	/**
+	 * 获取管理员列表
+	 * @param keywords
+	 * @return
+	 */
+	public List<UserListDto> adminList(String keywords);
 }

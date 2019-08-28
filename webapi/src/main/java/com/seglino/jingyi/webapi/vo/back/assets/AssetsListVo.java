@@ -41,7 +41,7 @@ public class AssetsListVo extends BaseVo {
 	}
 
 	public String getCode() {
-		return code;
+		return String.format("%06d", Long.valueOf(code));
 	}
 
 	public void setCode(String code) {

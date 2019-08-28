@@ -19,4 +19,11 @@ public interface AssetsDao extends BaseDao<Assets> {
 	 * @return
 	 */
 	public Page<AssetsListDto> pageByIndex(Map<String, Object> param);
+
+	/**
+	 * 获取资产最大编号
+	 * 
+	 * @return
+	 */
+	public Long maxCode();
 }

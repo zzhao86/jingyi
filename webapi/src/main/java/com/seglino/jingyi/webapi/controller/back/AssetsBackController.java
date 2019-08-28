@@ -2,6 +2,7 @@ package com.seglino.jingyi.webapi.controller.back;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +30,13 @@ import com.seglino.jingyi.common.request.RequestPageParams;
 import com.seglino.jingyi.common.response.ApiPageResult;
 import com.seglino.jingyi.common.response.ApiResult;
 import com.seglino.jingyi.common.utils.AutoMapper;
+import com.seglino.jingyi.file.dto.FileType;
+import com.seglino.jingyi.file.pojo.Files;
 import com.seglino.jingyi.file.service.FilesService;
 import com.seglino.jingyi.webapi.vo.back.assets.AssetsCategoryListVo;
 import com.seglino.jingyi.webapi.vo.back.assets.AssetsCategoryTreeVo;
 import com.seglino.jingyi.webapi.vo.back.assets.AssetsDataMapping;
+import com.seglino.jingyi.webapi.vo.back.assets.AssetsDetailVo;
 import com.seglino.jingyi.webapi.vo.back.assets.AssetsListVo;
 import com.seglino.jingyi.webapi.vo.back.assets.AssetsPositionListVo;
 import com.seglino.jingyi.webapi.vo.back.assets.AssetsPositionTreeVo;
@@ -57,20 +61,99 @@ public class AssetsBackController {
 	@GetMapping("list")
 	public ApiPageResult list(RequestPageParams params) {
 		ApiPageResult aResult = new ApiPageResult();
-		Page<AssetsListDto> page = assetsService.pageByIndex(params);
-		aResult.setTotal(page.getTotal());
-		aResult.setData(AutoMapper.mapperList(page.getResult(), AssetsListVo.class));
+		try {
+			Page<AssetsListDto> page = assetsService.pageByIndex(params);
+			aResult.setTotal(page.getTotal());
+			aResult.setData(AutoMapper.mapperList(page.getResult(), AssetsListVo.class));
+		} catch (Exception e) {
+			aResult.addError(e);
+		}
+		return aResult;
+	} 
+
+	/**
+	 * 获取资产详情
+	 * @param params
+	 * @return
+	 */
+	@GetMapping("detail")
+	public ApiResult detail(String id) {
+		ApiResult aResult = new ApiResult();
+		try {
+			Assets assets = assetsService.detailById(id);
+			aResult.setData(AutoMapper.mapper(assets, AssetsDetailVo.class));
+		} catch (Exception e) {
+			aResult.addError(e);
+		}
 		return aResult;
 	}
 
 	/**
-	 * 资产分类下拉框数据
+	 * 资产状态下拉框数据
 	 * @return
 	 */
-	@GetMapping("category/select")
-	public ApiResult categorySelect() {
+	@GetMapping("status/select")
+	public ApiResult statusSelect() {
 		ApiResult aResult = new ApiResult();
-		aResult.setData(AssetsDataMapping.statusList());
+		aResult.setData(AssetsDataMapping.getStatusList());
+		return aResult;
+	}
+
+	/**
+	 * 资产使用状态下拉框数据
+	 * @return
+	 */
+	@GetMapping("useStatus/select")
+	public ApiResult useStatusSelect() {
+		ApiResult aResult = new ApiResult();
+		aResult.setData(AssetsDataMapping.getUseStatusList());
+		return aResult;
+	}
+
+	/**
+	 * 资产使用状态下拉框数据
+	 * @return
+	 */
+	@GetMapping("purchasingMethod/select")
+	public ApiResult purchasingMethodSelect() {
+		ApiResult aResult = new ApiResult();
+		aResult.setData(AssetsDataMapping.getPurchasingMethodList());
+		return aResult;
+	}
+	
+	/**
+	 * 上传资产图片
+	 * @return
+	 */
+	@PostMapping("upload/image")
+	public ApiResult uploadAssetsImage(HttpServletRequest request) {
+		ApiResult aResult = new ApiResult();
+		try {
+			List<Files> list = filesService.upload(request, FileType.IMAGE);
+			aResult.setData(list);
+		} catch (Exception e) {
+			aResult.addError(e);
+		}		
+		return aResult;
+	}
+
+	/**
+	 * 资产保存
+	 * @param assets
+	 * @return
+	 */
+	@PostMapping("save")
+	public ApiResult save(@RequestBody Assets assets) {
+		ApiResult aResult = new ApiResult();
+		try {
+			if(null== assets.getId()) {
+				assetsService.insert(assets);
+			} else {
+				assetsService.update(assets);
+			}
+		} catch (Exception e) {
+			aResult.addError(e);
+		}
 		return aResult;
 	}
 

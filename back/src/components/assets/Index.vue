@@ -34,7 +34,7 @@
             <el-link type="primary" @click="onViewClick(scope.row)">{{ scope.row.code }}</el-link>
           </template>
         </el-table-column>
-        <el-table-column prop="name" label="资产名称" width="200" show-overflow-tooltip>
+        <el-table-column prop="name" label="资产名称" show-overflow-tooltip>
           <template slot-scope="scope">
             <el-link type="primary" @click="onViewClick(scope.row)">{{ scope.row.name }}</el-link>
           </template>

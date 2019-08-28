@@ -16,11 +16,19 @@ public class AssetsServiceImpl extends BaseServiceImpl<AssetsDao, Assets> implem
 
 	/**
 	 * 获取主页列表分页数据
+	 * 
 	 * @param params
 	 * @return
 	 */
-	public Page<AssetsListDto> pageByIndex(RequestPageParams params){
+	public Page<AssetsListDto> pageByIndex(RequestPageParams params) {
 		PageHelper.startPage(params.getIndex(), params.getSize());
 		return dao.pageByIndex(params.getCondition());
+	}
+
+	@Override
+	public int insert(Assets entity) {
+		Long maxCode = dao.maxCode();
+		entity.setCode(maxCode + 1);
+		return super.insert(entity);
 	}
 }
