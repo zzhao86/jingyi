@@ -127,10 +127,6 @@ public class UserBackController {
 	@GetMapping("admin_list")
 	public ApiResult adminList(String keywords) {
 		ApiResult aResult = new ApiResult();
-		if(StringUtils.isEmpty(keywords)) {
-			aResult.setData(new ArrayList<>());
-			return aResult;
-		}
 		try {
 			List<UserListDto> list = userService.adminList(keywords);
 			aResult.setData(list);

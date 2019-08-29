@@ -55,6 +55,7 @@ public class AssetsBackController {
 
 	/**
 	 * 获取资产列表分页数据
+	 * 
 	 * @param params
 	 * @return
 	 */
@@ -69,10 +70,11 @@ public class AssetsBackController {
 			aResult.addError(e);
 		}
 		return aResult;
-	} 
+	}
 
 	/**
 	 * 获取资产详情
+	 * 
 	 * @param params
 	 * @return
 	 */
@@ -81,7 +83,50 @@ public class AssetsBackController {
 		ApiResult aResult = new ApiResult();
 		try {
 			Assets assets = assetsService.detailById(id);
-			aResult.setData(AutoMapper.mapper(assets, AssetsDetailVo.class));
+			AssetsDetailVo vo = AutoMapper.mapper(assets, AssetsDetailVo.class);
+			aResult.setData(vo);
+		} catch (Exception e) {
+			aResult.addError(e);
+		}
+		return aResult;
+	}
+
+	/**
+	 * 删除资产
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@GetMapping("delete")
+	public ApiResult delete(String id) {
+		ApiResult aResult = new ApiResult();
+		try {
+			assetsService.deletePhysical(id);
+		} catch (Exception e) {
+			aResult.addError(e);
+		}
+		return aResult;
+	}
+
+	/**
+	 * 下载资产信息导入模板
+	 */
+	@GetMapping("template/download")
+	public void templateDownload(HttpServletResponse response) {
+		String url = "/static/ExcelTemplate/资产信息导入模板.xlsx";
+		filesService.download(url, "资产信息导入模板.xlsx", response);
+	}
+	
+	/**
+	 * 资产信息批量导入
+	 * @param file
+	 * @return
+	 */
+	@PostMapping("import")
+	public ApiResult importExcel(@RequestParam MultipartFile file) {
+		ApiResult aResult = new ApiResult();
+		try {
+			assetsService.importExcel(file);
 		} catch (Exception e) {
 			aResult.addError(e);
 		}
@@ -90,6 +135,7 @@ public class AssetsBackController {
 
 	/**
 	 * 资产状态下拉框数据
+	 * 
 	 * @return
 	 */
 	@GetMapping("status/select")
@@ -101,6 +147,7 @@ public class AssetsBackController {
 
 	/**
 	 * 资产使用状态下拉框数据
+	 * 
 	 * @return
 	 */
 	@GetMapping("useStatus/select")
@@ -112,6 +159,7 @@ public class AssetsBackController {
 
 	/**
 	 * 资产使用状态下拉框数据
+	 * 
 	 * @return
 	 */
 	@GetMapping("purchasingMethod/select")
@@ -120,9 +168,10 @@ public class AssetsBackController {
 		aResult.setData(AssetsDataMapping.getPurchasingMethodList());
 		return aResult;
 	}
-	
+
 	/**
 	 * 上传资产图片
+	 * 
 	 * @return
 	 */
 	@PostMapping("upload/image")
@@ -133,12 +182,13 @@ public class AssetsBackController {
 			aResult.setData(list);
 		} catch (Exception e) {
 			aResult.addError(e);
-		}		
+		}
 		return aResult;
 	}
 
 	/**
 	 * 资产保存
+	 * 
 	 * @param assets
 	 * @return
 	 */
@@ -146,7 +196,7 @@ public class AssetsBackController {
 	public ApiResult save(@RequestBody Assets assets) {
 		ApiResult aResult = new ApiResult();
 		try {
-			if(null== assets.getId()) {
+			if (null == assets.getId()) {
 				assetsService.insert(assets);
 			} else {
 				assetsService.update(assets);
@@ -167,7 +217,6 @@ public class AssetsBackController {
 	public ApiPageResult categoryList(RequestPageParams params) {
 		ApiPageResult aResult = new ApiPageResult();
 		try {
-			params.addCondition("isSelf", 1);
 			Page<AssetsCategoryListDto> page = assetsCategoryService.pageByIndex(params);
 			aResult.setTotal(page.getTotal());
 			aResult.setData(AutoMapper.mapperList(page.getResult(), AssetsCategoryListVo.class));
@@ -274,7 +323,6 @@ public class AssetsBackController {
 	public ApiPageResult positionList(RequestPageParams params) {
 		ApiPageResult aResult = new ApiPageResult();
 		try {
-			params.addCondition("isSelf", 1);
 			Page<AssetsPositionListDto> page = assetsPositionService.pageByIndex(params);
 			aResult.setTotal(page.getTotal());
 			aResult.setData(AutoMapper.mapperList(page.getResult(), AssetsPositionListVo.class));

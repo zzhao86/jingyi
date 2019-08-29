@@ -82,7 +82,7 @@
           </li>
         </ul>
         <span slot="footer" class="dialog-footer">
-          <el-button @click="onDialogDetailClose">取 消</el-button>
+          <el-button @click="dialogImportVisible = false">取 消</el-button>
           <el-button type="primary" @click="onImportClick" :disabled="importButtonDisabled">导入</el-button>
         </span>
       </el-dialog>
@@ -106,7 +106,7 @@
           index: 1,
           size: this.$global.pageSize,
           query: {
-            name: ''
+            keywords: ''
           }
         },
         total: 0,
@@ -179,7 +179,7 @@
       // Tree节点点击事件
       onTreeNodeClick(data, node, store) {
         this.params.index = 1;
-        this.params.query.parentId = data.id;
+        this.params.query.treePId = data.id;
         this.loadTableData();
       },
       // 加载资产分类Cascader数据

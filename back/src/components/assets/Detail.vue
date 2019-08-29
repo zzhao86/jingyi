@@ -23,7 +23,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item prop="admin" label="管理员">
-              <el-select v-model="detailData.admin" filterable remote reserve-keyword placeholder="请输入管理员姓名关键字" :remote-method="remoteAdminSelectListMethod" :loading="adminSelectLoading">
+              <el-select v-model="detailData.admin" filterable placeholder="请选择资产管理员">
                 <el-option v-for="(item,index) in adminSelectList" :key="index" :label="item.name" :value="item.id"> </el-option>
               </el-select>
             </el-form-item>
@@ -55,14 +55,14 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item prop="code" label="资产状态">
+            <el-form-item prop="status" label="资产状态">
               <el-select v-model="detailData.status" placeholder="请选择资产资产状态" disabled>
                 <el-option v-for="(item, index) in statusSelectList" :key="index" :label="item.label" :value="item.value"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item prop="code" label="使用状态">
+            <el-form-item prop="useStatus" label="使用状态">
               <el-select v-model="detailData.useStatus" placeholder="请选择资产使用状态">
                 <el-option v-for="(item, index) in useStatusSelectList" :key="index" :label="item.label" :value="item.value"></el-option>
               </el-select>
@@ -87,6 +87,17 @@
               <el-input v-model="detailData.useTerm" placeholder="请输入预计使用期限">
                 <template slot="suffix">
                   <span>月</span>
+                </template>
+              </el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item prop="amount" label="资产金额">
+              <el-input v-model="detailData.amount" placeholder="请输入资产金额" @input="onAmountInput">
+                <template slot="suffix">
+                  <span>元</span>
                 </template>
               </el-input>
             </el-form-item>
@@ -172,6 +183,7 @@
       this.loadStatusSelect();
       this.loadUseStatusSelect();
       this.loadPurchasingMethodSelect();
+      this.loadAdminListSelect();
     },
     data() {
       return {
@@ -180,7 +192,9 @@
           status: 100,
           useStatus: 100,
           purchasingMethod: 1,
-          imageUrl: ''
+          imageUrl: '',
+          admin: this.$global.user.id,
+          amount: 0
         },
         disabled: false,
         categorySelectList: [],
@@ -196,6 +210,62 @@
             {
               required: true,
               message: '请输入资产名称',
+              trigger: 'blur'
+            }
+          ],
+          admin: [
+            {
+              required: true,
+              message: '请选择资产管理员',
+              trigger: 'blur'
+            }
+          ],
+          categoryId: [
+            {
+              required: true,
+              message: '请选择资产分类',
+              trigger: 'blur'
+            }
+          ],
+          brand: [
+            {
+              required: true,
+              message: '请输入资产品牌',
+              trigger: 'blur'
+            }
+          ],
+          positionId: [
+            {
+              required: true,
+              message: '请选择资产所在位置',
+              trigger: 'blur'
+            }
+          ],
+          status: [
+            {
+              required: true,
+              message: '请选择资产状态',
+              trigger: 'blur'
+            }
+          ],
+          useStatus: [
+            {
+              required: true,
+              message: '请选择资产使用状态',
+              trigger: 'blur'
+            }
+          ],
+          purchasingMethod: [
+            {
+              required: true,
+              message: '请选择资产购置方式',
+              trigger: 'blur'
+            }
+          ],
+          amount: [
+            {
+              required: true,
+              message: '请输入资产金额',
               trigger: 'blur'
             }
           ]
@@ -256,7 +326,7 @@
         });
       },
       // 远程加载管理员下拉列表
-      remoteAdminSelectListMethod(keywords) {
+      loadAdminListSelect(keywords) {
         this.adminSelectLoading = true;
         this.$get('back/user/admin_list', {
           params: {
@@ -268,6 +338,10 @@
           }
           this.adminSelectLoading = false;
         });
+      },
+      // 资产金额框输入事件
+      onAmountInput() {
+        this.detailData.amount = this.detailData.amount.replace(/[^\d.]/, '');
       },
       // 上传资产图片成功事件
       onUploadAssetsImageSuccess(res, file, fileList) {

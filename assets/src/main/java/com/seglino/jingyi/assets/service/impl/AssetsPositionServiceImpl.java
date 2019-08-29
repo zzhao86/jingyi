@@ -57,6 +57,18 @@ public class AssetsPositionServiceImpl extends BaseServiceImpl<AssetsPositionDao
 		return list;
 	}
 
+	/**
+	 * 判断同一上级位置中是否存在重复名称的位置
+	 * 
+	 * @param name
+	 * @param parentId
+	 * @return
+	 */
+	public boolean existsByName(String name, String parentId) {
+		int count = dao.existsByName(name, parentId);
+		return count > 0;
+	}
+
 	@Override
 	public int deletePhysical(Object id) {
 		int result = 1;

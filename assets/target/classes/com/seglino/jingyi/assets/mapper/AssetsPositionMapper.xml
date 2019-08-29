@@ -21,10 +21,11 @@
 	<!-- 查询条件 -->
 	<sql id="condition">
 		<if test="id != null"> and id = #{id}</if>
-		<if test="name != null and name != ''"> and name like '%${name}%'</if>
-		<if test="parentId != null and isSelf == 1"> and (id = #{parentId} or parentId = #{parentId})</if>
-		<if test="parentId != null and isSelf == 0"> and parentId = #{parentId}</if>
+		<if test="keywords != null and keywords != ''"> and name like '%${name}%'</if>
+		<if test="name != null"> and name = #{name}</if>
+		<if test="parentId != null"> and parentId = #{parentId}</if>
 		<if test="isDeleted != null"> and isDeleted = #{isDeleted}</if>
+		<if test="treePId != null"> and (id = #{treePId} or parentId = #{treePId})</if>
 	</sql>
 
 	<!-- 根据条件获取列表 -->

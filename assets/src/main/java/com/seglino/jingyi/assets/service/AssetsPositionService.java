@@ -33,4 +33,12 @@ public interface AssetsPositionService extends BaseService<AssetsPosition> {
 	 * @param file
 	 */
 	public void importExcel(MultipartFile file) throws IOException;
+
+	/**
+	 * 判断同一上级位置中是否存在重复名称的位置
+	 * @param name 
+	 * @param parentId
+	 * @return
+	 */
+	public boolean existsByName(String name, String parentId);
 }
