@@ -8,6 +8,11 @@
       </div>
     </div>
     <div class="main-table">
+      <div class="search-bar">
+        <assets-category v-model="params.query.category" size="small" default-option placeholder="资产分类"></assets-category>
+        <assets-position v-model="params.query.position" size="small" default-option placeholder="资产位置"></assets-position>
+        <el-button type="primary" size="small" @click="onSearchClick">搜索</el-button>
+      </div>
       <el-table :data="tableData" ref="table" stripe v-auto-height :max-height="maxHeight">
         <el-table-column align="center" label="序号" width="50">
           <template slot-scope="scope">{{ scope.$index + (params.index - 1) * params.size + 1 }}</template>
@@ -46,7 +51,11 @@
         <el-table-column prop="useStatusName" label="使用状态" width="100"></el-table-column>
         <el-table-column prop="adminName" label="管理员" width="100"></el-table-column>
         <el-table-column prop="purchasingMethodName" label="购置方式" width="100"></el-table-column>
-        <el-table-column prop="startDate" label="购置/起租日期" width="150"></el-table-column>
+        <el-table-column prop="startDate" label="购置/起租日期" width="150">
+          <template slot-scope="scope">
+            <span>{{ scope.row.startDate ? scope.row.startDate.substring(0, 10) : '' }}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" width="100" fixed="right">
           <template slot-scope="scope">
             <div class="options-buttons">
@@ -91,10 +100,14 @@
 </template>
 <script>
   import Pagination from '../utils/components/Pagination';
+  import AssetsCategory from './select/CategorySelect';
+  import AssetsPosition from './select/PositionSelect';
   export default {
     name: 'AssetsIndex',
     components: {
-      Pagination
+      Pagination,
+      AssetsCategory,
+      AssetsPosition
     },
     created() {
       this.loadTableData();
@@ -105,6 +118,8 @@
           index: 1,
           size: this.$global.pageSize,
           query: {
+            category: '',
+            position: '',
             keywords: ''
           }
         },
@@ -133,6 +148,11 @@
       },
       onSizeChange(size) {
         this.params.size = size;
+        this.loadTableData();
+      },
+      // 搜索按钮点击事件
+      onSearchClick() {
+        this.params.index = 1;
         this.loadTableData();
       },
       // 刷新主数据
@@ -196,4 +216,12 @@
     }
   };
 </script>
-<style scoped></style>
+<style scoped>
+  .ul-import li {
+    list-style: decimal;
+    margin-bottom: 10px;
+  }
+  .ul-import .upload {
+    display: inline-block;
+  }
+</style>

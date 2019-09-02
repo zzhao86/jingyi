@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,6 +17,8 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.seglino.jingyi.common.utils.DateUtils;
 
 public class ImportExcel<T> {
 	/**
@@ -142,7 +145,7 @@ public class ImportExcel<T> {
 			int lastRowNum = sheet.getLastRowNum();
 
 			// 循环插入数据
-			for (int i = firstRowNum; i < lastRowNum; i++) {
+			for (int i = firstRowNum; i <= lastRowNum; i++) {
 				if (i < ignoreRowCount)
 					continue;
 
@@ -174,7 +177,7 @@ public class ImportExcel<T> {
 				continue;
 
 			// 获取属性的名字,将属性的首字符大写，方便构造set方法
-			String name = "set" + entityName[i].getName().substring(0, 1).toUpperCase().concat(entityName[i].getName().substring(1).toLowerCase()) + "";
+			String name = "set" + entityName[i].getName().substring(0, 1).toUpperCase().concat(entityName[i].getName().substring(1)) + "";
 			// 获取属性的类型
 			String type = entityName[i].getGenericType().toString();
 
@@ -194,7 +197,7 @@ public class ImportExcel<T> {
 				method.invoke(t, Integer.valueOf(getCellValue(pname)));
 				break;
 			case "class java.util.Date":
-				method.invoke(t, getCellValue(pname));
+				method.invoke(t, DateUtils.getDate(getCellValue(pname), "yyyy-MM-dd"));
 				break;
 			case "float":
 			case "double":
@@ -222,14 +225,20 @@ public class ImportExcel<T> {
 	protected String getCellValue(Cell cell) {
 		if (null != cell) {
 			switch (cell.getCellType()) {
-			case NUMERIC: // 数字
-				String val = cell.getNumericCellValue() + "";
-				int index = val.indexOf(".");
-				if (Integer.valueOf(val.substring(index + 1)) == 0) {
-					DecimalFormat df = new DecimalFormat("0");// 处理科学计数法
-					return df.format(cell.getNumericCellValue());
+			case NUMERIC: // 数字和日期
+				if (HSSFDateUtil.isCellDateFormatted(cell)) {
+					Date date = cell.getDateCellValue();
+					SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+					return format.format(date);
+				} else {
+					String val = cell.getNumericCellValue() + "";
+					int index = val.indexOf(".");
+					if (Integer.valueOf(val.substring(index + 1)) == 0) {
+						DecimalFormat df = new DecimalFormat("0");// 处理科学计数法
+						return df.format(cell.getNumericCellValue());
+					}
+					return cell.getNumericCellValue() + "";// double
 				}
-				return cell.getNumericCellValue() + "";// double
 			case STRING: // 字符串
 				return cell.getStringCellValue() + "";
 			case BOOLEAN: // Boolean

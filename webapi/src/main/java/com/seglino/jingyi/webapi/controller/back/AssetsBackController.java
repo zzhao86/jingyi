@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.github.pagehelper.Page;
 import com.seglino.jingyi.assets.dto.AssetsCategoryListDto;
 import com.seglino.jingyi.assets.dto.AssetsCategoryTreeDto;
+import com.seglino.jingyi.assets.dto.AssetsEntryData;
 import com.seglino.jingyi.assets.dto.AssetsListDto;
 import com.seglino.jingyi.assets.dto.AssetsPositionListDto;
 import com.seglino.jingyi.assets.dto.AssetsPositionTreeDto;
@@ -35,7 +36,6 @@ import com.seglino.jingyi.file.pojo.Files;
 import com.seglino.jingyi.file.service.FilesService;
 import com.seglino.jingyi.webapi.vo.back.assets.AssetsCategoryListVo;
 import com.seglino.jingyi.webapi.vo.back.assets.AssetsCategoryTreeVo;
-import com.seglino.jingyi.webapi.vo.back.assets.AssetsDataMapping;
 import com.seglino.jingyi.webapi.vo.back.assets.AssetsDetailVo;
 import com.seglino.jingyi.webapi.vo.back.assets.AssetsListVo;
 import com.seglino.jingyi.webapi.vo.back.assets.AssetsPositionListVo;
@@ -141,7 +141,7 @@ public class AssetsBackController {
 	@GetMapping("status/select")
 	public ApiResult statusSelect() {
 		ApiResult aResult = new ApiResult();
-		aResult.setData(AssetsDataMapping.getStatusList());
+		aResult.setData(AssetsEntryData.getStatusList());
 		return aResult;
 	}
 
@@ -153,7 +153,7 @@ public class AssetsBackController {
 	@GetMapping("useStatus/select")
 	public ApiResult useStatusSelect() {
 		ApiResult aResult = new ApiResult();
-		aResult.setData(AssetsDataMapping.getUseStatusList());
+		aResult.setData(AssetsEntryData.getUseStatusList());
 		return aResult;
 	}
 
@@ -165,7 +165,7 @@ public class AssetsBackController {
 	@GetMapping("purchasingMethod/select")
 	public ApiResult purchasingMethodSelect() {
 		ApiResult aResult = new ApiResult();
-		aResult.setData(AssetsDataMapping.getPurchasingMethodList());
+		aResult.setData(AssetsEntryData.getPurchasingMethodList());
 		return aResult;
 	}
 

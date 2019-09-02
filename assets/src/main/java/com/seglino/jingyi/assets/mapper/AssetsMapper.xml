@@ -42,7 +42,11 @@
 	<!-- 查询条件 -->
 	<sql id="condition">
 		<if test="id != null"> and id = #{id}</if>
-		<if test="name != null and name != ''"> and name like '%${name}%'</if>
+		<if test="keywords != null and keywords != ''"> and name like '%${name}%'</if>
+		<if test="category != null and category != ''"> and categoryId = #{category}</if>
+		<if test="position != null and position != ''"> and positionId = #{position}</if>
+		<if test="status != null and status != ''"> and status = #{status}</if>
+		<if test="useStatus != null and useStatus != ''"> and useStatus = #{useStatus}</if>
 		<if test="isDeleted != null"> and isDeleted = #{isDeleted}</if>
 	</sql>
 

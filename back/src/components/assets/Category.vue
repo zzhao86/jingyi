@@ -35,6 +35,7 @@
         </el-table>
         <pagination :params="params" :total="total" @page-change="onPageChange" @size-change="onSizeChange"></pagination>
       </div>
+
       <!-- 详情Dialog -->
       <el-dialog title="资产详情" :visible.sync="dialogDetailVisible" :before-close="onDialogDetailClose">
         <el-form :model="detail" ref="form" :rules="rules" :disabled="detailFormDisabled" label-width="100px">
@@ -42,14 +43,7 @@
             <el-input v-model="detail.name" placeholder="请输入资产分类名称"></el-input>
           </el-form-item>
           <el-form-item prop="parentId" label="上级分类">
-            <el-cascader
-              v-model="detail.parentId"
-              :options="cascaderData"
-              :show-all-levels="false"
-              :props="{ checkStrictly: true, emitPath: false, expandTrigger: 'hover' }"
-              placeholder="请选择上级分类"
-            >
-            </el-cascader>
+            <assets-category v-model="detail.parentId" :default-option="defaultOption" :disabled-option="detail.id" :show-all-levels="false" placeholder="请选择上级分类"></assets-category>
           </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
@@ -59,7 +53,7 @@
       </el-dialog>
 
       <!-- 批量导入Dialog -->
-      <el-dialog title="位置批量导入" :visible.sync="dialogImportVisible" width="600px">
+      <el-dialog title="分类批量导入" :visible.sync="dialogImportVisible" width="600px">
         <ul class="ul-import">
           <li>
             <span>请先下载模板文件：</span>
@@ -91,10 +85,12 @@
 </template>
 <script>
   import Pagination from '../utils/components/Pagination';
+  import AssetsCategory from './select/CategorySelect';
   export default {
-    name: 'AssetsCategory',
+    name: 'AssetsCategoryIndex',
     components: {
-      Pagination
+      Pagination,
+      AssetsCategory
     },
     created() {
       this.loadTreeData();
@@ -118,7 +114,11 @@
         dialogDetailVisible: false,
         importButtonDisabled: true,
         dialogImportVisible: false,
-        cascaderData: [],
+        defaultOption: {
+          label: '无上级分类',
+          value: '0',
+          id: '0'
+        },
         importFile: {},
         rules: {
           name: [
@@ -182,54 +182,9 @@
         this.params.query.treePId = data.id;
         this.loadTableData();
       },
-      // 加载资产分类Cascader数据
-      loadCascaderData() {
-        const vue = this;
-        this.$get('back/assets/category/tree').then(res => {
-          if (res.isSuccess) {
-            this.cascaderData = res.data;
-            // 添加“无上级分类”节点
-            this.cascaderData.unshift({
-              id: '0',
-              label: '无上级分类',
-              value: '0'
-            });
-
-            // 查找自身节点
-            var arrayFindItem = function(array, id) {
-              if (!array || array.length == 0) {
-                return null;
-              }
-              var result = null;
-              for (let i = 0; i < array.length; i++) {
-                let item = array[i];
-                if (item.id === id) {
-                  result = item;
-                }
-                if (result) {
-                  return result;
-                } else {
-                  if (item.children && item.children.length > 0) {
-                    result = arrayFindItem(item.children, id);
-                    if (result) {
-                      return result;
-                    }
-                  }
-                }
-              }
-            };
-            let item = arrayFindItem(this.cascaderData, vue.detail.id);
-            if (item) {
-              item.disabled = true;
-              item.children = null;
-            }
-          }
-        });
-      },
       // 显示详情弹窗
       showDialogDetail() {
         this.dialogDetailVisible = true;
-        this.loadCascaderData();
       },
       // 新建按钮事件
       onAddClick() {
@@ -311,4 +266,12 @@
     }
   };
 </script>
-<style scoped></style>
+<style scoped>
+  .ul-import li {
+    list-style: decimal;
+    margin-bottom: 10px;
+  }
+  .ul-import .upload {
+    display: inline-block;
+  }
+</style>

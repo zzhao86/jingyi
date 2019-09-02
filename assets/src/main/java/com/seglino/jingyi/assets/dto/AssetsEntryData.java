@@ -1,4 +1,4 @@
-package com.seglino.jingyi.webapi.vo.back.assets;
+package com.seglino.jingyi.assets.dto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.stream.Stream;
 
 import com.seglino.jingyi.common.core.vo.EntryData;
 
-public class AssetsDataMapping {
+public class AssetsEntryData {
 
 	/**
 	 * 获取资产状态列表
@@ -43,6 +43,17 @@ public class AssetsDataMapping {
 	}
 
 	/**
+	 * 获取资产状态值
+	 * @param name
+	 * @return
+	 */
+	public static int getStatusValue(String name) {
+		Stream<EntryData> stream = getStatusList().stream().filter((EntryData e)-> e.getLabel().equals(name)); 
+		EntryData entry = stream.findAny().get();
+		return (int)entry.getValue();
+	}
+	
+	/**
 	 * 获取资产使用状态列表
 	 * 
 	 * @return
@@ -68,6 +79,17 @@ public class AssetsDataMapping {
 	}
 
 	/**
+	 * 获取资产使用状态值
+	 * @param name
+	 * @return
+	 */
+	public static int getUseStatusValue(String name) {
+		Stream<EntryData> stream = getUseStatusList().stream().filter((EntryData e)-> e.getLabel().equals(name)); 
+		EntryData entry = stream.findAny().get();
+		return (int)entry.getValue();
+	}
+
+	/**
 	 * 获取购置方式列表
 	 * 
 	 * @return
@@ -89,5 +111,16 @@ public class AssetsDataMapping {
 		Stream<EntryData> stream = getPurchasingMethodList().stream().filter((EntryData e) -> e.getValue().equals(purchasingMethod));
 		EntryData entry = stream.findAny().get();
 		return entry.getLabel();
+	}
+
+	/**
+	 * 获取资产使用状态值
+	 * @param name
+	 * @return
+	 */
+	public static int getPurchasingMethodValue(String name) {
+		Stream<EntryData> stream = getPurchasingMethodList().stream().filter((EntryData e)-> e.getLabel().equals(name)); 
+		EntryData entry = stream.findAny().get();
+		return (int)entry.getValue();
 	}
 }

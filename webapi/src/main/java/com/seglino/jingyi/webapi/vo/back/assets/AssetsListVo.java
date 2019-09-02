@@ -2,6 +2,7 @@ package com.seglino.jingyi.webapi.vo.back.assets;
 
 import java.util.Date;
 
+import com.seglino.jingyi.assets.dto.AssetsEntryData;
 import com.seglino.jingyi.common.core.vo.BaseVo;
 
 public class AssetsListVo extends BaseVo {
@@ -81,7 +82,7 @@ public class AssetsListVo extends BaseVo {
 	}
 
 	public String getStatusName() {
-		return AssetsDataMapping.getStatusName(status);
+		return AssetsEntryData.getStatusName(status);
 	}
 
 	public int getUseStatus() {
@@ -93,7 +94,7 @@ public class AssetsListVo extends BaseVo {
 	}
 
 	public String getUseStatusName() {
-		return AssetsDataMapping.getUseStatusName(useStatus);
+		return AssetsEntryData.getUseStatusName(useStatus);
 	}
 
 	public String getAdminName() {
@@ -113,7 +114,7 @@ public class AssetsListVo extends BaseVo {
 	}
 
 	public String getPurchasingMethodName() {
-		return AssetsDataMapping.getPurchasingMethodName(purchasingMethod);
+		return AssetsEntryData.getPurchasingMethodName(purchasingMethod);
 	}
 
 	public void setPurchasingMethodName(String purchasingMethodName) {

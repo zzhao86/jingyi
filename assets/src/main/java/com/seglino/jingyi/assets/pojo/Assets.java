@@ -21,7 +21,7 @@ public class Assets extends BaseEntity {
 	private Integer useTerm;
 	private Double amount;
 	private Date startDate;
-	private String purchasingMethod;
+	private Integer purchasingMethod;
 	private String orderCode;
 	private String remark;
 	private String serialNum;
@@ -143,11 +143,11 @@ public class Assets extends BaseEntity {
 		this.startDate = startDate;
 	}
 
-	public String getPurchasingMethod() {
+	public Integer getPurchasingMethod() {
 		return purchasingMethod;
 	}
 
-	public void setPurchasingMethod(String purchasingMethod) {
+	public void setPurchasingMethod(Integer purchasingMethod) {
 		this.purchasingMethod = purchasingMethod;
 	}
 

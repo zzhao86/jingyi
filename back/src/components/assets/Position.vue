@@ -43,13 +43,7 @@
           <el-input v-model="detail.name" placeholder="请输入资产位置名称"></el-input>
         </el-form-item>
         <el-form-item prop="parentId" label="上级位置">
-          <el-cascader
-            v-model="detail.parentId"
-            :options="cascaderData"
-            :show-all-levels="false"
-            :props="{ checkStrictly: true, emitPath: false, expandTrigger: 'hover' }"
-            placeholder="请选择上级位置"
-          ></el-cascader>
+          <assets-position v-model="detail.parentId" :default-option="defaultOption" :disabled-option="detail.id" :show-all-levels="false" placeholder="请选择上级位置"></assets-position>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -90,10 +84,12 @@
 </template>
 <script>
   import Pagination from '../utils/components/Pagination';
+  import AssetsPosition from './select/PositionSelect';
   export default {
-    name: 'AssetsPosition',
+    name: 'AssetsPositionIndex',
     components: {
-      Pagination
+      Pagination,
+      AssetsPosition
     },
     created() {
       this.loadTreeData();
@@ -117,7 +113,11 @@
         dialogDetailVisible: false,
         importButtonDisabled: true,
         dialogImportVisible: false,
-        cascaderData: [],
+        defaultOption: {
+          label: '无上级位置',
+          value: '0',
+          id: '0'
+        },
         importFile: {},
         rules: {
           name: [
@@ -181,54 +181,9 @@
         this.params.query.treePId = data.id;
         this.loadTableData();
       },
-      // 加载资产位置Cascader数据
-      loadCascaderData() {
-        const vue = this;
-        this.$get('back/assets/position/tree').then(res => {
-          if (res.isSuccess) {
-            this.cascaderData = res.data;
-            // 添加“无上级位置”节点
-            this.cascaderData.unshift({
-              id: '0',
-              label: '无上级位置',
-              value: '0'
-            });
-
-            // 查找自身节点
-            var arrayFindItem = function(array, id) {
-              if (!array || array.length == 0) {
-                return null;
-              }
-              var result = null;
-              for (let i = 0; i < array.length; i++) {
-                let item = array[i];
-                if (item.id === id) {
-                  result = item;
-                }
-                if (result) {
-                  return result;
-                } else {
-                  if (item.children && item.children.length > 0) {
-                    result = arrayFindItem(item.children, id);
-                    if (result) {
-                      return result;
-                    }
-                  }
-                }
-              }
-            };
-            let item = arrayFindItem(this.cascaderData, vue.detail.id);
-            if (item) {
-              item.disabled = true;
-              item.children = null;
-            }
-          }
-        });
-      },
       // 显示详情弹窗
       showDialogDetail() {
         this.dialogDetailVisible = true;
-        this.loadCascaderData();
       },
       // 新建按钮事件
       onAddClick() {

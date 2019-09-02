@@ -11,7 +11,7 @@ public class AssetsImportDto {
 	private String useStatus;
 	private String purchasingMethod;
 	private Date startDate;
-	private String useTerm;
+	private Integer useTerm;
 	private Double amount;
 	private String remark;
 	private String supplier;
@@ -84,11 +84,11 @@ public class AssetsImportDto {
 		this.startDate = startDate;
 	}
 
-	public String getUseTerm() {
+	public Integer getUseTerm() {
 		return useTerm;
 	}
 
-	public void setUseTerm(String useTerm) {
+	public void setUseTerm(Integer useTerm) {
 		this.useTerm = useTerm;
 	}
 
