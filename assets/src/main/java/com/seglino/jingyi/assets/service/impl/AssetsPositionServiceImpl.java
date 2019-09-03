@@ -100,7 +100,6 @@ public class AssetsPositionServiceImpl extends BaseServiceImpl<AssetsPositionDao
 	private List<AssetsPosition> allChildren(Object parentId) {
 		Map<String, Object> param = new HashMap<String, Object>();
 		param.put("parentId", parentId);
-		param.put("isSelf", false);
 		List<AssetsPosition> list = list(param);
 		for (int i = 0; i < list.size(); i++) {
 			AssetsPosition position = list.get(i);

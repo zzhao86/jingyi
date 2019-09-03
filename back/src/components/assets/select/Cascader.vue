@@ -3,6 +3,7 @@
     v-model="value"
     :options="options"
     :size="size"
+    :clearable="clearable"
     :show-all-levels="showAllLevels"
     :props="{expandTrigger: 'hover', checkStrictly: true, emitPath: false}"
     :placeholder="placeholder"
@@ -46,6 +47,12 @@
       showAllLevels: {
         type: Boolean,
         default: true,
+        required: false
+      },
+      // 是否可以清空选项
+      clearable: {
+        type: Boolean,
+        default: false,
         required: false
       },
       // 输入框占位文本

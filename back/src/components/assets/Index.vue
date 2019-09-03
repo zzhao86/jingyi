@@ -2,24 +2,25 @@
   <div class="app-main">
     <div class="main-header">
       <div class="title">资产列表</div>
+      <div class="search-bar">
+        <el-input v-model="params.query.keywords" size="small" placeholder="请输入资产名称或编号关键字">
+          <el-button slot="append" icon="el-icon-search" @click="onSearchClick"></el-button>
+        </el-input>
+        <el-button type="default" size="small" @click="advanceSearchVisible = true">高级查询</el-button>
+      </div>
       <div class="buttons">
         <el-button type="primary" size="small" @click="onAddClick">新建</el-button>
         <el-button type="warning" size="small" @click="showImportClick">导入</el-button>
       </div>
     </div>
     <div class="main-table">
-      <div class="search-bar">
-        <assets-category v-model="params.query.category" size="small" default-option placeholder="资产分类"></assets-category>
-        <assets-position v-model="params.query.position" size="small" default-option placeholder="资产位置"></assets-position>
-        <el-button type="primary" size="small" @click="onSearchClick">搜索</el-button>
-      </div>
       <el-table :data="tableData" ref="table" stripe v-auto-height :max-height="maxHeight">
         <el-table-column align="center" label="序号" width="50">
           <template slot-scope="scope">{{ scope.$index + (params.index - 1) * params.size + 1 }}</template>
         </el-table-column>
         <el-table-column prop="statusName" label="资产状态" width="120">
           <template slot-scope="scope">
-            <el-tag effect="dark" size="mini" type="info" v-if="scope.row.status == 100">{{ scope.row.statusName }}</el-tag>
+            <el-tag effect="light" size="mini" v-if="scope.row.status == 100">{{ scope.row.statusName }}</el-tag>
             <el-tag effect="dark" size="mini" type="warning" v-else-if="scope.row.status == 200">{{ scope.row.statusName }}</el-tag>
             <el-tag effect="dark" size="mini" type="success" v-else-if="scope.row.status == 300">{{ scope.row.statusName }}</el-tag>
             <el-tag effect="dark" size="mini" type="warning" v-else-if="scope.row.status == 400">{{ scope.row.statusName }}</el-tag>
@@ -96,18 +97,56 @@
         <el-button type="primary" @click="onImportClick" :disabled="importButtonDisabled">导入</el-button>
       </span>
     </el-dialog>
+
+    <!-- 高级查询 -->
+    <el-drawer custom-class="advance-search" title="高级查询" direction="rtl" :visible.sync="advanceSearchVisible">
+      <el-form :model="params.query" ref="search" label-position="top" label-width="100px" size="mini">
+        <el-row :gutter="10">
+          <el-col :span="12">
+            <el-form-item label="资产分类">
+              <assets-category v-model="params.query.category" :default-option="categoryDefaultOption" placeholder="资产分类"></assets-category>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="资产位置">
+              <assets-position v-model="params.query.position" :default-option="positionDefaultOption" placeholder="资产位置"></assets-position>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :span="12">
+            <el-form-item label="资产状态">
+              <assets-status v-model="params.query.status" :default-option="statusDefaultOption" placeholder="资产状态"></assets-status>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="资产使用状态">
+              <assets-usestatus v-model="params.query.useStatus" :default-option="useStatusDefaultOption" placeholder="资产使用状态"></assets-usestatus>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-form-item>
+          <el-button type="warning" size="small" @click="onSearchResetClick">重置</el-button>
+          <el-button type="primary" size="small" @click="onSearchClick">查询</el-button>
+        </el-form-item>
+      </el-form>
+    </el-drawer>
   </div>
 </template>
 <script>
   import Pagination from '../utils/components/Pagination';
   import AssetsCategory from './select/CategorySelect';
   import AssetsPosition from './select/PositionSelect';
+  import AssetsStatus from './select/StatusSelect';
+  import AssetsUsestatus from './select/UseStatusSelect';
   export default {
     name: 'AssetsIndex',
     components: {
       Pagination,
       AssetsCategory,
-      AssetsPosition
+      AssetsPosition,
+      AssetsStatus,
+      AssetsUsestatus
     },
     created() {
       this.loadTableData();
@@ -117,18 +156,31 @@
         params: {
           index: 1,
           size: this.$global.pageSize,
-          query: {
-            category: '',
-            position: '',
-            keywords: ''
-          }
+          query: {}
         },
         total: 0,
         maxHeight: 500,
         tableData: [],
         importFile: [],
         importButtonDisabled: false,
-        dialogImportVisible: false
+        dialogImportVisible: false,
+        advanceSearchVisible: false,
+        categoryDefaultOption: {
+          label: '所有资产分类',
+          value: ''
+        },
+        positionDefaultOption: {
+          label: '所有资产位置',
+          value: ''
+        },
+        statusDefaultOption: {
+          label: '所有资产状态',
+          value: ''
+        },
+        useStatusDefaultOption: {
+          label: '所有资产使用状态',
+          value: ''
+        }
       };
     },
     methods: {
@@ -154,6 +206,10 @@
       onSearchClick() {
         this.params.index = 1;
         this.loadTableData();
+      },
+      // 高级搜索重置按钮点击事件
+      onSearchResetClick(){
+        this.$refs['search'].resetFields();
       },
       // 刷新主数据
       flushDataTable() {

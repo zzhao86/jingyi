@@ -100,7 +100,6 @@ public class AssetsCategoryServiceImpl extends BaseServiceImpl<AssetsCategoryDao
 	private List<AssetsCategory> allChildren(Object parentId) {
 		Map<String, Object> param = new HashMap<String, Object>();
 		param.put("parentId", parentId);
-		param.put("isSelf", false);
 		List<AssetsCategory> list = list(param);
 		for (int i = 0; i < list.size(); i++) {
 			AssetsCategory category = list.get(i);

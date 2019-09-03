@@ -1,5 +1,5 @@
 <template>
-  <assets-cascader v-model="value" :options="options" :size="size" :show-all-levels="showAllLevels" :placeholder="placeholder" @change="onChange"> </assets-cascader>
+  <assets-cascader v-model="value" :options="options" :size="size" :clearable="clearable" :show-all-levels="showAllLevels" :placeholder="placeholder" @change="onChange"> </assets-cascader>
 </template>
 <script>
   import AssetsCascader from './Cascader';
@@ -47,6 +47,12 @@
         default: true,
         required: false
       },
+      // 是否可以清空选项
+      clearable: {
+        type: Boolean,
+        default: false,
+        required: false
+      },
       // 输入框占位文本
       placeholder: {
         type: String,
@@ -69,7 +75,7 @@
               if (this.defaultOption === true) {
                 res.data.unshift({
                   label: '请选择分类',
-                  value: 'all'
+                  value: ''
                 });
               } else {
                 res.data.unshift(this.defaultOption);
@@ -89,7 +95,7 @@
         });
       },
       onChange() {
-        this.$emit('returnValue', this.value == 'all' ? '' : this.value);
+        this.$emit('returnValue', this.value);
       }
     }
   };
