@@ -14,6 +14,7 @@
       </div>
 
       <div class="main-table">
+          <search-bar v-model="params.query.keywords" @search="onSearchClick"></search-bar>
         <el-table :data="tableData" ref="table" stripe v-auto-height :max-height="maxHeight">
           <el-table-column align="center" label="序号" width="50">
             <template slot-scope="scope">{{ scope.$index + (params.index - 1) * params.size + 1 }}</template>
@@ -86,11 +87,13 @@
 <script>
   import Pagination from '../utils/components/Pagination';
   import AssetsCategory from './select/CategorySelect';
+  import SearchBar from '@/components/utils/components/SearchBar';
   export default {
     name: 'AssetsCategoryIndex',
     components: {
       Pagination,
-      AssetsCategory
+      AssetsCategory,
+      SearchBar
     },
     created() {
       this.loadTreeData();
@@ -174,6 +177,11 @@
       flushTableData() {
         this.params.index = 1;
         this.loadTreeData();
+        this.loadTableData();
+      },
+      // 搜索按钮点击事件
+      onSearchClick() {
+        this.params.index = 1;
         this.loadTableData();
       },
       // Tree节点点击事件

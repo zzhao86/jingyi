@@ -21,7 +21,7 @@
 	<!-- 查询条件 -->
 	<sql id="condition">
 		<if test="id != null"> and id = #{id}</if>
-		<if test="keywords != null and keywords != ''"> and name like '%${name}%'</if>
+		<if test="keywords != null and keywords != ''"> and name like '%${keywords}%'</if>
 		<if test="name != null"> and name = #{name}</if>
 		<if test="parentId != null"> and parentId = #{parentId}</if>
 		<if test="isDeleted != null"> and isDeleted = #{isDeleted}</if>

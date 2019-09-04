@@ -1,5 +1,6 @@
 <template>
-  <assets-cascader v-model="value" :options="options" :size="size" :clearable="clearable" :show-all-levels="showAllLevels" :placeholder="placeholder" @change="onChange"> </assets-cascader>
+  <assets-cascader v-model="value" :options="options" :size="size" :clearable="clearable" :show-all-levels="showAllLevels" :placeholder="placeholder" @change="onChange" v-select-text="text">
+  </assets-cascader>
 </template>
 <script>
   import AssetsCascader from './Cascader';
@@ -13,6 +14,7 @@
     },
     data() {
       return {
+        text: '',
         value: '',
         options: []
       };
@@ -61,6 +63,9 @@
       }
     },
     watch: {
+      category: function(val, old) {
+        this.value = val;
+      },
       disabledOption: function(val, old) {
         this.loadSelectData();
       }
@@ -95,6 +100,7 @@
         });
       },
       onChange() {
+        console.log('text', this.text)
         this.$emit('returnValue', this.value);
       }
     }

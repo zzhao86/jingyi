@@ -68,7 +68,7 @@
       }
     },
     methods: {
-      onChange() {
+      onChange(v) {
         this.$emit('returnValue', this.value);
         this.$emit('change');
       }

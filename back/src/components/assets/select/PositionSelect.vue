@@ -61,6 +61,9 @@
       }
     },
     watch: {
+      position: function(val, old) {
+        this.value = val;
+      },
       disabledOption: function(val, old) {
         this.loadSelectData();
       }

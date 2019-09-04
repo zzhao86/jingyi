@@ -18,8 +18,10 @@ import '../static/js/Utils';
 import Global from './Global.vue';
 
 import tableAutoHeight from './components/utils/directive/TableAutoHeight';
+import SelectText from './components/utils/directive/SelectText';
 
 Vue.directive('auto-height', tableAutoHeight);
+Vue.directive('select-text', SelectText);
 
 Vue.config.productionTip = false;
 Vue.use(ElementUI);

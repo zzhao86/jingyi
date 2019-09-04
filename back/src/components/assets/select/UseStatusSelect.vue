@@ -52,6 +52,11 @@
         required: false
       }
     },
+    watch: {
+      modelValue: function(val, old) {
+        this.value = val;
+      }
+    },
     methods: {
       loadSelectData() {
         this.$get('back/assets/useStatus/select').then(res => {

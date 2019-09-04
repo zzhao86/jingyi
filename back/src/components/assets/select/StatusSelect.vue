@@ -1,6 +1,6 @@
 <template>
   <el-select v-model="value" :size="size" :placeholder="placeholder" :clearable="clearable" @change="onChange">
-    <el-option v-for="(item, index) in options" :key="index" :label="item.label" :value="item.value"></el-option>
+    <el-option v-for="(item, index) in options" :key="index" :label="item.label" :value="item.value" v-select-text="text"></el-option>
   </el-select>
 </template>
 <script>
@@ -12,6 +12,7 @@
     },
     data() {
       return {
+        text: '',
         value: '',
         options: []
       };
@@ -50,6 +51,11 @@
         type: String,
         default: '',
         required: false
+      }
+    },
+    watch: {
+      modelValue: function(val, old) {
+        this.value = val;
       }
     },
     methods: {

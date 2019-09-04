@@ -159,14 +159,6 @@ fieldset legend {
   margin-left: 10px;
 }
 
-.main-header .search-bar {
-  margin-right: 40px;
-}
-
-.main-header .search-bar .el-input-group {
-  width: 300px;
-}
-
 .main-header .buttons {
   padding-bottom: 10px;
   text-align: right;
@@ -242,7 +234,39 @@ fieldset legend {
   margin-left: 3px;
 }
 
-.advance-search .el-drawer__body {
-  background-color: #ebeef5;
-  padding: 10px;
+/************************** 搜索栏 开始 **************************/
+.app-content .search-bar {
+  display: flex;
+  margin-bottom: 10px;
 }
+
+.app-content .search-bar .tag-wrapper {
+  flex: 1;
+}
+
+.app-content .search-bar .el-input-group {
+  width: 300px;
+}
+
+.advance-search .el-drawer__header {
+  margin-bottom: 15px;
+  padding-top: 15px;
+}
+
+.advance-search .el-drawer__body {
+  background-color: #f6f6f6;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.advance-search .el-drawer__body .content {
+  flex: 1;
+}
+.advance-search .el-drawer__body .footer {
+  display: flex;
+}
+.advance-search .el-drawer__body .footer .el-button {
+  flex: 1;
+}
+/************************** 搜索栏 结束 **************************/

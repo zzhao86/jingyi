@@ -2,18 +2,13 @@
   <div class="app-main">
     <div class="main-header">
       <div class="title">资产列表</div>
-      <div class="search-bar">
-        <el-input v-model="params.query.keywords" size="small" placeholder="请输入资产名称或编号关键字">
-          <el-button slot="append" icon="el-icon-search" @click="onSearchClick"></el-button>
-        </el-input>
-        <el-button type="default" size="small" @click="advanceSearchVisible = true">高级查询</el-button>
-      </div>
       <div class="buttons">
         <el-button type="primary" size="small" @click="onAddClick">新建</el-button>
         <el-button type="warning" size="small" @click="showImportClick">导入</el-button>
       </div>
     </div>
     <div class="main-table">
+      <search-bar v-model="params.query.keywords" show-advance placeholder="请输入资产名称或编号关键字" @advance="onShowAdvanceSearch" @search="onSearchClick"></search-bar>
       <el-table :data="tableData" ref="table" stripe v-auto-height :max-height="maxHeight">
         <el-table-column align="center" label="序号" width="50">
           <template slot-scope="scope">{{ scope.$index + (params.index - 1) * params.size + 1 }}</template>
@@ -99,54 +94,19 @@
     </el-dialog>
 
     <!-- 高级查询 -->
-    <el-drawer custom-class="advance-search" title="高级查询" direction="rtl" :visible.sync="advanceSearchVisible">
-      <el-form :model="params.query" ref="search" label-position="top" label-width="100px" size="mini">
-        <el-row :gutter="10">
-          <el-col :span="12">
-            <el-form-item label="资产分类">
-              <assets-category v-model="params.query.category" :default-option="categoryDefaultOption" placeholder="资产分类"></assets-category>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="资产位置">
-              <assets-position v-model="params.query.position" :default-option="positionDefaultOption" placeholder="资产位置"></assets-position>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="10">
-          <el-col :span="12">
-            <el-form-item label="资产状态">
-              <assets-status v-model="params.query.status" :default-option="statusDefaultOption" placeholder="资产状态"></assets-status>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="资产使用状态">
-              <assets-usestatus v-model="params.query.useStatus" :default-option="useStatusDefaultOption" placeholder="资产使用状态"></assets-usestatus>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-form-item>
-          <el-button type="warning" size="small" @click="onSearchResetClick">重置</el-button>
-          <el-button type="primary" size="small" @click="onSearchClick">查询</el-button>
-        </el-form-item>
-      </el-form>
-    </el-drawer>
+    <search-advance ref="advanceSearch" @search="onAdvanceSearchClick"></search-advance>
   </div>
 </template>
 <script>
   import Pagination from '../utils/components/Pagination';
-  import AssetsCategory from './select/CategorySelect';
-  import AssetsPosition from './select/PositionSelect';
-  import AssetsStatus from './select/StatusSelect';
-  import AssetsUsestatus from './select/UseStatusSelect';
+  import SearchBar from '@/components/utils/components/SearchBar';
+  import SearchAdvance from './search/IndexSearch';
   export default {
     name: 'AssetsIndex',
     components: {
       Pagination,
-      AssetsCategory,
-      AssetsPosition,
-      AssetsStatus,
-      AssetsUsestatus
+      SearchBar,
+      SearchAdvance
     },
     created() {
       this.loadTableData();
@@ -163,24 +123,7 @@
         tableData: [],
         importFile: [],
         importButtonDisabled: false,
-        dialogImportVisible: false,
-        advanceSearchVisible: false,
-        categoryDefaultOption: {
-          label: '所有资产分类',
-          value: ''
-        },
-        positionDefaultOption: {
-          label: '所有资产位置',
-          value: ''
-        },
-        statusDefaultOption: {
-          label: '所有资产状态',
-          value: ''
-        },
-        useStatusDefaultOption: {
-          label: '所有资产使用状态',
-          value: ''
-        }
+        dialogImportVisible: false
       };
     },
     methods: {
@@ -207,9 +150,14 @@
         this.params.index = 1;
         this.loadTableData();
       },
-      // 高级搜索重置按钮点击事件
-      onSearchResetClick(){
-        this.$refs['search'].resetFields();
+      // 显示高级查询窗口
+      onShowAdvanceSearch() {
+        this.$refs['advanceSearch'].open();
+      },
+      // 高级搜索按钮点击事件
+      onAdvanceSearchClick(query) {
+        this.params.query = query;
+        this.onSearchClick();
       },
       // 刷新主数据
       flushDataTable() {
