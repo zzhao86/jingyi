@@ -4,11 +4,20 @@
       <div class="title">资产列表</div>
       <div class="buttons">
         <el-button type="primary" size="small" @click="onAddClick">新建</el-button>
-        <el-button type="warning" size="small" @click="showImportClick">导入</el-button>
+        <el-button-group>
+          <el-button type="warning" size="small" @click="showImportClick">导入</el-button>
+          <el-dropdown @command="onExportClick">
+            <el-button type="success" size="small"> 导出<i class="el-icon-arrow-down el-icon--right"></i> </el-button>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="result">导出查询结果</el-dropdown-item>
+              <el-dropdown-item command="all">导出全部资产</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </el-button-group>
       </div>
     </div>
     <div class="main-table">
-      <search-bar v-model="params.query.keywords" show-advance placeholder="请输入资产名称或编号关键字" @advance="onShowAdvanceSearch" @search="onSearchClick"></search-bar>
+      <index-search v-model="params.query.keywords" @search="onSearchClick"></index-search>
       <el-table :data="tableData" ref="table" stripe v-auto-height :max-height="maxHeight">
         <el-table-column align="center" label="序号" width="50">
           <template slot-scope="scope">{{ scope.$index + (params.index - 1) * params.size + 1 }}</template>
@@ -92,21 +101,16 @@
         <el-button type="primary" @click="onImportClick" :disabled="importButtonDisabled">导入</el-button>
       </span>
     </el-dialog>
-
-    <!-- 高级查询 -->
-    <search-advance ref="advanceSearch" @search="onAdvanceSearchClick"></search-advance>
   </div>
 </template>
 <script>
   import Pagination from '../utils/components/Pagination';
-  import SearchBar from '@/components/utils/components/SearchBar';
-  import SearchAdvance from './search/IndexSearch';
+  import IndexSearch from './search/IndexSearch';
   export default {
     name: 'AssetsIndex',
     components: {
       Pagination,
-      SearchBar,
-      SearchAdvance
+      IndexSearch
     },
     created() {
       this.loadTableData();
@@ -146,8 +150,9 @@
         this.loadTableData();
       },
       // 搜索按钮点击事件
-      onSearchClick() {
+      onSearchClick(query) {
         this.params.index = 1;
+        this.params.query = query;
         this.loadTableData();
       },
       // 显示高级查询窗口
@@ -215,6 +220,17 @@
       onImportClick() {
         if (this.importFile) {
           this.$refs['upload'].submit();
+        }
+      },
+      // 导出Excel文件
+      onExportClick(command) {
+        switch (command) {
+          case 'result':
+            console.log('导出查询结果');
+            break;
+          case 'all':
+            console.log('导出所有资产');
+            break;
         }
       }
     }

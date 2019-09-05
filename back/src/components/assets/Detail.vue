@@ -32,8 +32,7 @@
         <el-row>
           <el-col :span="8">
             <el-form-item prop="categoryId" label="资产分类">
-              <el-cascader v-model="detailData.categoryId" :options="categorySelectList" :props="{expandTrigger: 'hover', checkStrictly: true, emitPath: false}" placeholder="请选择资产分类">
-              </el-cascader>
+              <assets-category v-model="detailData.categoryId" placeholder="请选择资产分类"></assets-category>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -43,43 +42,36 @@
           </el-col>
           <el-col :span="8">
             <el-form-item prop="model" label="型号">
-              <el-input v-model="detailData.model" placeholder="请选择型号"></el-input>
+              <el-input v-model="detailData.model" placeholder="请输入型号"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
             <el-form-item prop="positionId" label="资产位置">
-              <el-cascader v-model="detailData.positionId" :options="positionSelectList" :props="{expandTrigger: 'hover', checkStrictly: true, emitPath: false}" placeholder="请选择资产位置">
-              </el-cascader>
+              <assets-position v-model="detailData.positionId" placeholder="请选择资产位置"></assets-position>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item prop="status" label="资产状态">
-              <el-select v-model="detailData.status" placeholder="请选择资产资产状态" disabled>
-                <el-option v-for="(item, index) in statusSelectList" :key="index" :label="item.label" :value="item.value"></el-option>
-              </el-select>
+              <assets-status v-model="detailData.status" placeholder="请选择资产资产状态" disabled></assets-status>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item prop="useStatus" label="使用状态">
-              <el-select v-model="detailData.useStatus" placeholder="请选择资产使用状态">
-                <el-option v-for="(item, index) in useStatusSelectList" :key="index" :label="item.label" :value="item.value"></el-option>
-              </el-select>
+              <assets-usestatus v-model="detailData.useStatus" placeholder="请选择资产使用状态"></assets-usestatus>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
             <el-form-item prop="purchasingMethod" label="购置方式">
-              <el-select v-model="detailData.purchasingMethod" placeholder="请选择资产购置方式">
-                <el-option v-for="(item, index) in purchasingMethodSelectList" :key="index" :label="item.label" :value="item.value"></el-option>
-              </el-select>
+              <Assets-purchasing-method v-model="detailData.purchasingMethod" placeholder="请选择资产购置方式"></Assets-purchasing-method>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item prop="startDate" label="购置日期">
-              <el-date-picker v-model="detailData.startDate" type="date" placeholder="请选择购置日期"> </el-date-picker>
+              <el-date-picker v-model="detailData.startDate" type="date" value-format="yyyy-MM-dd HH:mm" placeholder="请选择购置日期"> </el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -147,7 +139,7 @@
         <el-row>
           <el-col>
             <el-form-item prop="maintDate" label="维保到期">
-              <el-date-picker v-model="detailData.maintDate" type="date" placeholder="请选择购置日期"> </el-date-picker>
+              <el-date-picker v-model="detailData.maintDate" type="date" value-format="yyyy-MM-dd HH:mm" placeholder="请选择购置日期"> </el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
@@ -168,8 +160,20 @@
   </div>
 </template>
 <script>
+  import AssetsCategory from './select/CategorySelect';
+  import AssetsPosition from './select/PositionSelect';
+  import AssetsStatus from './select/StatusSelect';
+  import AssetsUsestatus from './select/UseStatusSelect';
+  import AssetsPurchasingMethod from './select/PurchasingMethodSelect';
   export default {
     name: 'AssetsDetail',
+    components: {
+      AssetsCategory,
+      AssetsPosition,
+      AssetsStatus,
+      AssetsUsestatus,
+      AssetsPurchasingMethod
+    },
     created() {
       const mode = this.$route.params.mode;
       const query = this.$route.query;
@@ -178,10 +182,6 @@
         this.loadDetailData();
       }
       this.disabled = mode == 'view';
-      this.loadCategorySelect();
-      this.loadPositionSelect();
-      this.loadStatusSelect();
-      this.loadUseStatusSelect();
       this.loadPurchasingMethodSelect();
       this.loadAdminListSelect();
     },
@@ -197,10 +197,6 @@
           amount: 0
         },
         disabled: false,
-        categorySelectList: [],
-        positionSelectList: [],
-        statusSelectList: [],
-        useStatusSelectList: [],
         purchasingMethodSelectList: [],
         adminSelectList: [],
         dialogPreviewVisibled: false,
@@ -285,38 +281,6 @@
           }
         });
       },
-      // 加载资产分类下拉列表数据
-      loadCategorySelect() {
-        this.$get('back/assets/category/tree').then(res => {
-          if (res.isSuccess) {
-            this.categorySelectList = res.data;
-          }
-        });
-      },
-      // 加载资产位置下拉列表数据
-      loadPositionSelect() {
-        this.$get('back/assets/position/tree').then(res => {
-          if (res.isSuccess) {
-            this.positionSelectList = res.data;
-          }
-        });
-      },
-      // 加载资产状态下拉列表数据
-      loadStatusSelect() {
-        this.$get('back/assets/status/select').then(res => {
-          if (res.isSuccess) {
-            this.statusSelectList = res.data;
-          }
-        });
-      },
-      // 加载资产使用状态下拉列表数据
-      loadUseStatusSelect() {
-        this.$get('back/assets/useStatus/select').then(res => {
-          if (res.isSuccess) {
-            this.useStatusSelectList = res.data;
-          }
-        });
-      },
       // 加载资产购置方式下拉列表数据
       loadPurchasingMethodSelect() {
         this.$get('back/assets/purchasingMethod/select').then(res => {
@@ -379,9 +343,6 @@
   .el-form {
     max-width: 1200px;
   }
-  .priview-dialog {
-    text-align: center;
-  }
 
   .priview-dialog img {
     max-width: 500px;
@@ -389,6 +350,10 @@
   }
 </style>
 <style>
+  .priview-dialog .el-dialog__body {
+    text-align: center;
+  }
+
   .assets-uploader .el-upload {
     border: 1px dashed #d9d9d9;
     border-radius: 6px;

@@ -27,7 +27,8 @@ public class AssetsEntryData {
 		list.add(new EntryData("待验收", 900, true));
 		list.add(new EntryData("处置待确认", 1000, true));
 		list.add(new EntryData("处置待审核", 1100, true));
-		list.add(new EntryData("信息变更待审核", 1200, true));
+		list.add(new EntryData("已处置", 1300, true));
+		list.add(new EntryData("信息变更待审核", 1300, true));
 		return list.stream().filter((EntryData e) -> !e.getDisabled()).collect(Collectors.toList());
 	}
 

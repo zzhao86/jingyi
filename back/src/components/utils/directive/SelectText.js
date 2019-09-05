@@ -1,7 +1,9 @@
 export default {
   componentUpdated(el, binding, vnode) {
-    console.log(vnode.context)
-    // vnode.context.text = findInput(vnode.context);
+    // console.log(vnode.context)
+    var ctx = vnode.context;
+
+    ctx.onTextChange(findInput(vnode.context));
   }
 };
 

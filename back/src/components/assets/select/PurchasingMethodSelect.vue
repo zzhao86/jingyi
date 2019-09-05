@@ -5,7 +5,7 @@
 </template>
 <script>
   export default {
-    name: 'StatusSelect',
+    name: 'PurchasingMethodSelect',
     created() {
       this.value = this.modelValue;
       this.loadSelectData();
@@ -60,13 +60,13 @@
     },
     methods: {
       loadSelectData() {
-        this.$get('back/assets/status/select').then(res => {
+        this.$get('back/assets/purchasingMethod/select').then(res => {
           if (res.isSuccess) {
             this.options = res.data;
             if (this.defaultOption) {
               if (this.defaultOption === true) {
                 this.options.unshift({
-                  label: '请选择资产状态',
+                  label: '请选择资产购置方式',
                   value: ''
                 });
               } else {

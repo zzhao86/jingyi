@@ -1,5 +1,5 @@
 <template>
-  <assets-cascader v-model="value" :options="options" :size="size" :clearable="clearable" :show-all-levels="showAllLevels" :placeholder="placeholder" @change="onChange" v-select-text="text">
+  <assets-cascader v-model="value" :options="options" :size="size" :clearable="clearable" :show-all-levels="showAllLevels" :placeholder="placeholder" @change="onChange" v-select-text>
   </assets-cascader>
 </template>
 <script>
@@ -14,7 +14,6 @@
     },
     data() {
       return {
-        text: '',
         value: '',
         options: []
       };
@@ -100,8 +99,10 @@
         });
       },
       onChange() {
-        console.log('text', this.text)
         this.$emit('returnValue', this.value);
+      },
+      onTextChange(text) {
+        this.$emit('text-change', text);
       }
     }
   };

@@ -239,11 +239,12 @@ fieldset legend {
   display: flex;
   margin-bottom: 10px;
 }
-
 .app-content .search-bar .tag-wrapper {
   flex: 1;
 }
-
+.app-content .search-bar .tag-wrapper .search-tag{
+  margin-right: 10px;
+}
 .app-content .search-bar .el-input-group {
   width: 300px;
 }
@@ -252,14 +253,12 @@ fieldset legend {
   margin-bottom: 15px;
   padding-top: 15px;
 }
-
 .advance-search .el-drawer__body {
   background-color: #f6f6f6;
   padding: 10px;
   display: flex;
   flex-direction: column;
 }
-
 .advance-search .el-drawer__body .content {
   flex: 1;
 }

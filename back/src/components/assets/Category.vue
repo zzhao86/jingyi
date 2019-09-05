@@ -14,7 +14,7 @@
       </div>
 
       <div class="main-table">
-          <search-bar v-model="params.query.keywords" @search="onSearchClick"></search-bar>
+        <search-bar v-model="params.query" @search="onSearchClick"></search-bar>
         <el-table :data="tableData" ref="table" stripe v-auto-height :max-height="maxHeight">
           <el-table-column align="center" label="序号" width="50">
             <template slot-scope="scope">{{ scope.$index + (params.index - 1) * params.size + 1 }}</template>

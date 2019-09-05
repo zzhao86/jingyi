@@ -1,6 +1,6 @@
 <template>
   <el-select v-model="value" :size="size" :placeholder="placeholder" :clearable="clearable" @change="onChange">
-    <el-option v-for="(item, index) in options" :key="index" :label="item.label" :value="item.value"></el-option>
+    <el-option v-for="(item, index) in options" :key="index" :label="item.label" :value="item.value" v-select-text></el-option>
   </el-select>
 </template>
 <script>
@@ -77,6 +77,9 @@
       },
       onChange() {
         this.$emit('returnValue', this.value);
+      },
+      onTextChange(text) {
+        this.$emit('text-change', text);
       }
     }
   };

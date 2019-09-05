@@ -3,7 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <style href="../css/main.css" rel="stylesheet"></style>
+    <link href="../css/main.css" rel="stylesheet"></link>
+    <link href="../lib/font-awesome/css/font-awesome.min.css" rel="stylesheet"></link>
     <style>
       .title {
         color: #333;
@@ -19,17 +20,71 @@
         text-align: left;
         overflow: hidden;
       }
-      .author .name{
+      .author .name {
         padding-right: 15px;
         float: left;
       }
-      .author .time{
+      .author .time {
         float: left;
       }
       .content {
         clear: left;
         margin-top: 20px;
         overflow: hidden;
+      }
+
+      .attach-container {
+        margin-top: 30px;
+        border-top: solid 1px #ccc;
+        padding-top: 10px;
+        display: none;
+      }
+      .attach-wrapper {
+        margin-bottom: 20px;
+        padding-left: 20px;
+      }
+      .attach-wrapper li {
+        font-size: 14px;
+        list-style: none;
+        padding: 0;
+        margin-bottom: 10px;
+      }
+      .attach-wrapper .attach-info {
+        display: flex;
+        text-decoration: none;
+      }
+      .attach-wrapper .attach {
+        flex: 1;
+        margin-left: 10px;
+        font-family: 'Microsoft Yahei';
+      }
+      .attach-wrapper .attach .name {
+        color: #333;
+        margin-top: -3px;
+      }
+      .attach-wrapper .attach .size {
+        color: #999;
+        font-size: 11px;
+      }
+      .attach-wrapper .attach-info .icon {
+        font-size: 30px;
+        width: 32px;
+        height: 32px;
+      }
+      .attach-wrapper .attach-info .icon.green {
+        color: #39825a;
+      }
+      .attach-wrapper .attach-info .icon.orange {
+        color: #dc6141;
+      }
+      .attach-wrapper .attach-info .icon.blue {
+        color: #4269a5;
+      }
+      .attach-wrapper .attach-info .icon.brown {
+        color: #e56e4d;
+      }
+      .attach-wrapper .attach-info .icon.default {
+        color: #65676b;
       }
     </style>
   </head>
@@ -40,7 +95,11 @@
       <span class="time"></span>
     </div>
     <div class="content"></div>
-    <script src="../js/DateUtils.js"></script>
+    <div class="attach-container">
+      <div class="attach-header">附件：</div>
+      <ul class="attach-wrapper"></ul>
+    </div>
+    <script src="../js/Utils.js"></script>
     <script>
       window.addEventListener('message', function(msg) {
         var notice = msg.data;
@@ -48,6 +107,24 @@
         document.getElementsByClassName('name')[0].innerHTML = notice.author || '';
         document.getElementsByClassName('time')[0].innerHTML = new Date().format('yyyy-MM-dd hh:mm');
         document.getElementsByClassName('content')[0].innerHTML = notice.content || '';
+        document.getElementsByClassName('attach-container')[0].style.display = notice.attachList && notice.attachList.length > 0 ? 'block' : 'none';
+        if (notice.attachList && notice.attachList.length > 0) {
+          let html = '';
+          for (let i = 0; i < notice.attachList.length; i++) {
+            let attach = notice.attachList[i];
+            console.log(attach)
+            html += `<li>
+                        <a class="attach-info" href="javascript:void(0);">
+                          <i class="icon fa fa-file-o default"></i>
+                          <div class="attach">
+                            <div class="name">${attach.attachName}</div>
+                            <div class="size">0KB</div>
+                          </div>
+                        </a>
+                      </li>`;
+          }
+          document.getElementsByClassName('attach-wrapper')[0].innerHTML = html;
+        }
       });
     </script>
   </body>
