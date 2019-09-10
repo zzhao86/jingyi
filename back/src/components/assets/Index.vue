@@ -226,10 +226,17 @@
       onExportClick(command) {
         switch (command) {
           case 'result':
-            console.log('导出查询结果');
+            let param = '';
+            for (let key in this.params.query) {
+              let value = this.params.query[key];
+              if (value) {
+                param += `${key}=${encodeURIComponent(value)}&`;
+              }
+            }
+            open(`${this.$global.baseUrl}back/assets/export?${param.substr(0, param.length - 1)}`);
             break;
           case 'all':
-            console.log('导出所有资产');
+            open(`${this.$global.baseUrl}back/assets/export_all`);
             break;
         }
       }

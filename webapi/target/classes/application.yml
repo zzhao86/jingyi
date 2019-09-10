@@ -16,6 +16,9 @@ spring:
       resolve-lazily: true
       max-file-size: 20MB
       max-request-size: 100MB
+  aop:
+    auto: true
+    proxy-target-class: true
   mvc:
     view:
       prefix: /static/view

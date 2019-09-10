@@ -42,6 +42,8 @@ public class AccountController {
 		RedirectView view = new RedirectView();
 		try {
 			Subject subject = SecurityUtils.getSubject();
+			// session过期时间设置为2小时
+			subject.getSession().setTimeout(2 * 60 * 60 * 1000);
 			CustomToken token = new CustomToken(LoginType.DINGTALK_QRCODE, code, state, code, code);
 			subject.login(token);
 			if (subject.isAuthenticated()) {
@@ -66,6 +68,8 @@ public class AccountController {
 		RedirectView redirect = new RedirectView();
 		try {
 			Subject subject = SecurityUtils.getSubject();
+			// session过期时间设置为2小时
+			subject.getSession().setTimeout(2 * 60 * 60 * 1000);
 			CustomToken token = new CustomToken(LoginType.DINGTALK_SSO, code, code, code);
 			subject.login(token);
 			if (subject.isAuthenticated()) {
@@ -90,6 +94,8 @@ public class AccountController {
 		ApiResult aResult = new ApiResult();
 		try {
 			Subject subject = SecurityUtils.getSubject();
+			// session过期时间设置为7天
+			subject.getSession().setTimeout(7 * 24 * 60 * 60 * 1000);
 			CustomToken token = new CustomToken(LoginType.DINGTALK_CORP, code, code, code);
 			subject.login(token);
 			if (subject.isAuthenticated()) {

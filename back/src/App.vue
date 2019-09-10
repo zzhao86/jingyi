@@ -8,8 +8,7 @@
           <div class="user-name" :title="name">{{ name }}</div>
         </div>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item command="userCenter">用户中心</el-dropdown-item>
-          <el-dropdown-item command="logout" divided>退出登录</el-dropdown-item>
+          <el-dropdown-item command="logout" icon="fa fa-power-off">退出登录</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -21,9 +20,9 @@
             <template slot="title">
               <i class="el-icon-mobile"></i>资产管理
             </template>
-            <el-menu-item index=2-1 route="/assets">资产列表</el-menu-item>
-            <el-menu-item index=2-2 route="/assets/category">资产分类</el-menu-item>
-            <el-menu-item index=2-3 route="/assets/position">资产位置</el-menu-item>
+            <el-menu-item index="2-1" route="/assets">资产列表</el-menu-item>
+            <el-menu-item index="2-2" route="/assets/category">资产分类</el-menu-item>
+            <el-menu-item index="2-3" route="/assets/position">资产位置</el-menu-item>
           </el-submenu>
           <el-submenu index="3">
             <template slot="title">
@@ -53,7 +52,8 @@
     data() {
       return {
         name: '',
-        avatar: ''
+        avatar: '',
+        dialogPasswordVisible: false
       };
     },
     methods: {
@@ -71,15 +71,18 @@
           this.avatar = this.$global.user.avatar;
         }
       },
+      // 用户下拉事件
       userDropdownCommand: function(command) {
         switch (command) {
-          case 'userCenter':
+          case 'password':
+            this.dialogPasswordVisible = true;
             break;
           case 'logout':
             this.onLogoutClick();
             break;
         }
       },
+      // 退出登录
       onLogoutClick: function() {
         this.$confirm('确定要注销当前登录的用户吗？', () => {
           this.$http

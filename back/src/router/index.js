@@ -91,19 +91,20 @@ const router = new Router({
     }
   ]
 });
-// router.beforeEach((to, from, next) => {
-//   const requireAuth = to.meta.requireAuth;
-//   if (requireAuth == false) {
-//     next();
-//   } else {
-//     if (sessionStorage.getItem("JINGYI_BACK_USER")) {
-//       next();
-//     } else {
-//       next({
-//         path: "/login",
-//         query: { redirect: escape(to.fullPath) } // 将跳转的路由path作为参数，登录成功后跳转到该路由
-//       });
-//     }
-//   }
-// });
+
+router.beforeEach((to, from, next) => {
+  const requireAuth = to.meta.requireAuth;
+  if (requireAuth == false) {
+    next();
+  } else {
+    if (sessionStorage.getItem("JINGYI_BACK_USER")) {
+      next();
+    } else {
+      next({
+        path: "/login",
+        query: { redirect: escape(to.fullPath) } // 将跳转的路由path作为参数，登录成功后跳转到该路由
+      });
+    }
+  }
+});
 export default router;

@@ -5,6 +5,7 @@ import java.util.Date;
 import com.seglino.jingyi.assets.dto.AssetsEntryData;
 import com.seglino.jingyi.common.core.vo.BaseVo;
 
+@SuppressWarnings("unused")
 public class AssetsListVo extends BaseVo {
 	private String categoryName;
 	private String positionName;
@@ -13,14 +14,11 @@ public class AssetsListVo extends BaseVo {
 	private String brand;
 	private String model;
 	private int status;
-	@SuppressWarnings("unused")
 	private String statusName;
 	private int useStatus;
-	@SuppressWarnings("unused")
 	private String useStatusName;
 	private String adminName;
 	private int purchasingMethod;
-	@SuppressWarnings("unused")
 	private String purchasingMethodName;
 	private Date startDate;
 	private String owner;

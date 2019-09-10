@@ -2,8 +2,8 @@ package com.seglino.jingyi.common.excel;
 
 import java.lang.reflect.Method;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.poi.ss.usermodel.BorderStyle;
@@ -12,6 +12,7 @@ import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.RegionUtil;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFFont;
@@ -53,20 +54,27 @@ public class ExportExcel<T> {
 	 * @param headMap 表格列名和数据字段名称对应Map。key：数据类字段名称，value：表格列名
 	 * @return
 	 */
-	public XSSFWorkbook exportExcel(List<T> dataset, Map<String, String> headMap) {
+	public XSSFWorkbook exportExcel(List<T> dataset, LinkedHashMap<String, String> headMap) {
 		XSSFWorkbook workbook = new XSSFWorkbook();
+		workbook.unLock();
 		// 创建工作簿
 		XSSFSheet sheet = workbook.createSheet(sheetName);
 		// 设置默认列宽为20
 		sheet.setDefaultColumnWidth(20);
+		sheet.setDisplayGridlines(false);
 
 		// 创建数据表格标题
 		XSSFRow titleRow = sheet.createRow(0);
 		titleRow.setHeightInPoints(50);
 		XSSFCell titleCell = titleRow.createCell(0);
 		titleCell.setCellValue(title);
-		titleCell.setCellStyle(getTitleCellStyle(workbook));
-		sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, headMap.size() - 1));
+		titleCell.setCellStyle(titleCellStyle(workbook));
+		CellRangeAddress region = new CellRangeAddress(0, 0, 0, headMap.size() - 1);
+		sheet.addMergedRegion(region);
+		RegionUtil.setBorderTop(BorderStyle.THIN, region, sheet);
+		RegionUtil.setBorderRight(BorderStyle.THIN, region, sheet);
+		RegionUtil.setBorderBottom(BorderStyle.THIN, region, sheet);
+		RegionUtil.setBorderLeft(BorderStyle.THIN, region, sheet);
 
 		// 创建表格列名
 		XSSFRow headRow = sheet.createRow(1);
@@ -75,7 +83,7 @@ public class ExportExcel<T> {
 		for (Entry<String, String> entry : headMap.entrySet()) {
 			XSSFCell headCell = headRow.createCell(index++);
 			headCell.setCellValue(entry.getValue());
-			headCell.setCellStyle(getHeadCellStyle(workbook));
+			headCell.setCellStyle(headCellStyle(workbook));
 		}
 
 		// 创建导出数据
@@ -93,8 +101,8 @@ public class ExportExcel<T> {
 						try {
 							String typeName = method.getReturnType().getName();
 							Object value = method.invoke(t);
-							XSSFCellStyle style = getDataCellStyle(workbook);
-							if (null != value) {
+							XSSFCellStyle style = dataCellStyle(workbook);
+							if (null != value && !"".equals(value)) {
 								switch (typeName) {
 								case "java.lang.Integer":
 									dataCell.setCellValue((Integer) value);
@@ -140,10 +148,16 @@ public class ExportExcel<T> {
 	 * @param workbook
 	 * @return
 	 */
-	private XSSFCellStyle getTitleCellStyle(XSSFWorkbook workbook) {
-		XSSFCellStyle style = getBaseCellStyle(workbook);
+	private XSSFCellStyle titleCellStyle(XSSFWorkbook workbook) {
+		XSSFCellStyle style = baseCellStyle(workbook);
+		// 背景色
+		style.setFillForegroundColor(IndexedColors.LIGHT_YELLOW.getIndex());
+		style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+		// 水平居中
 		style.setAlignment(HorizontalAlignment.CENTER);
+		// 垂直居中
 		style.setVerticalAlignment(VerticalAlignment.CENTER);
+		// 字体设置
 		XSSFFont font = workbook.createFont();
 		font.setBold(true);
 		font.setFontHeightInPoints((short) 16);
@@ -157,12 +171,16 @@ public class ExportExcel<T> {
 	 * @param workbook
 	 * @return
 	 */
-	private XSSFCellStyle getHeadCellStyle(XSSFWorkbook workbook) {
-		XSSFCellStyle style = getBaseCellStyle(workbook);
+	private XSSFCellStyle headCellStyle(XSSFWorkbook workbook) {
+		XSSFCellStyle style = baseCellStyle(workbook);
+		// 背景色
 		style.setFillForegroundColor(IndexedColors.PALE_BLUE.getIndex());
 		style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+		// 水平居中
 		style.setAlignment(HorizontalAlignment.CENTER);
+		// 垂直居中
 		style.setVerticalAlignment(VerticalAlignment.CENTER);
+		// 字体设置
 		XSSFFont font = workbook.createFont();
 		font.setBold(true);
 		font.setFontHeightInPoints((short) 11);
@@ -176,9 +194,8 @@ public class ExportExcel<T> {
 	 * @param workbook
 	 * @return
 	 */
-	private XSSFCellStyle getDataCellStyle(XSSFWorkbook workbook) {
-		XSSFCellStyle style = getBaseCellStyle(workbook);
-
+	private XSSFCellStyle dataCellStyle(XSSFWorkbook workbook) {
+		XSSFCellStyle style = baseCellStyle(workbook);
 		return style;
 	}
 
@@ -188,7 +205,7 @@ public class ExportExcel<T> {
 	 * @param workbook
 	 * @return
 	 */
-	private XSSFCellStyle getBaseCellStyle(XSSFWorkbook workbook) {
+	private XSSFCellStyle baseCellStyle(XSSFWorkbook workbook) {
 		XSSFCellStyle style = workbook.createCellStyle();
 		if (isBorder) {
 			style.setBorderTop(BorderStyle.THIN);

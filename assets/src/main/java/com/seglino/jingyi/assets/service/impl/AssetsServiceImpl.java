@@ -1,9 +1,15 @@
 package com.seglino.jingyi.assets.service.impl;
 
+import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -13,6 +19,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.seglino.jingyi.assets.dao.AssetsDao;
 import com.seglino.jingyi.assets.dto.AssetsEntryData;
+import com.seglino.jingyi.assets.dto.AssetsExportDto;
 import com.seglino.jingyi.assets.dto.AssetsImportDto;
 import com.seglino.jingyi.assets.dto.AssetsListDto;
 import com.seglino.jingyi.assets.pojo.Assets;
@@ -22,8 +29,10 @@ import com.seglino.jingyi.assets.service.AssetsCategoryService;
 import com.seglino.jingyi.assets.service.AssetsPositionService;
 import com.seglino.jingyi.assets.service.AssetsService;
 import com.seglino.jingyi.common.core.service.BaseServiceImpl;
+import com.seglino.jingyi.common.excel.ExportExcel;
 import com.seglino.jingyi.common.excel.ImportExcel;
 import com.seglino.jingyi.common.request.RequestPageParams;
+import com.seglino.jingyi.common.utils.DateUtils;
 
 @Service
 public class AssetsServiceImpl extends BaseServiceImpl<AssetsDao, Assets> implements AssetsService {
@@ -85,7 +94,7 @@ public class AssetsServiceImpl extends BaseServiceImpl<AssetsDao, Assets> implem
 			assets.setName(dto.getName());
 			assets.setCategoryId(categoryId);
 			assets.setPositionId(positionId);
-//			assets.setAdmin();
+			// assets.setAdmin();
 			assets.setBrand(dto.getBrand());
 			assets.setModel(dto.getModel());
 			assets.setUseStatus(AssetsEntryData.getUseStatusValue(dto.getUseStatus()));
@@ -100,7 +109,7 @@ public class AssetsServiceImpl extends BaseServiceImpl<AssetsDao, Assets> implem
 			assets.setSupplierMobile(dto.getSupplierMobile());
 			assets.setMaintDate(dto.getMaintDate());
 			assets.setMaintNotes(dto.getMaintNotes());
-			
+
 			insert(assets);
 		}
 	}
@@ -151,5 +160,43 @@ public class AssetsServiceImpl extends BaseServiceImpl<AssetsDao, Assets> implem
 			assetsPositionService.insert(position);
 			return position.getId().toString();
 		}
+	}
+
+	/**
+	 * 导出数据到Excel
+	 * 
+	 * @param param
+	 * @param response
+	 * @throws IOException
+	 */
+	public void exportExcel(Map<String, Object> param, HttpServletResponse response) throws IOException {
+		LinkedHashMap<String, String> headMap = new LinkedHashMap<String, String>();
+		headMap.put("codeLabel", "资产编码");
+		headMap.put("name", "资产名称");
+		headMap.put("categoryName", "分类");
+		headMap.put("positionName", "位置");
+		headMap.put("brand", "品牌");
+		headMap.put("model", "型号");
+		headMap.put("statusName", "资产状态");
+		headMap.put("useStatusName", "使用状态");
+		headMap.put("adminName", "管理员");
+		headMap.put("purchasingMethodName", "采购方式");
+		headMap.put("startDate", "购置日期");
+		headMap.put("amount", "购置金额");
+		headMap.put("useTermName", "预计使用期限");
+		headMap.put("remark", "备注");
+		headMap.put("supplier", "供应商");
+		headMap.put("supplierContact", "供应商联系人");
+		headMap.put("supplierMobile", "联系方式");
+		headMap.put("maintDate", "维保到期日期");
+		headMap.put("maintNotes", "维保说明");
+
+		ExportExcel<AssetsExportDto> ee = new ExportExcel<AssetsExportDto>("资产信息数据");
+		XSSFWorkbook workbook = ee.exportExcel(dao.exportData(param), headMap);
+
+		String fileName = "资产信息导出_" + DateUtils.getNowString("yyyy-MM-dd") + "." + workbook.getWorkbookType().name().toLowerCase();
+		response.setContentType("application/octet-stream");
+		response.setHeader("Content-Disposition", "attachment;Filename=" + URLEncoder.encode(fileName, "UTF-8"));
+		workbook.write(response.getOutputStream());
 	}
 }

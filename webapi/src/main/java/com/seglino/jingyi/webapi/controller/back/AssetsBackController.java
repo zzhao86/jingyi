@@ -1,6 +1,7 @@
 package com.seglino.jingyi.webapi.controller.back;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -62,6 +63,7 @@ public class AssetsBackController {
 	@GetMapping("list")
 	public ApiPageResult list(RequestPageParams params) {
 		ApiPageResult aResult = new ApiPageResult();
+		
 		try {
 			Page<AssetsListDto> page = assetsService.pageByIndex(params);
 			aResult.setTotal(page.getTotal());
@@ -206,6 +208,24 @@ public class AssetsBackController {
 		}
 		return aResult;
 	}
+	
+	@GetMapping("export")
+	public void exportExcel(@RequestParam Map<String, Object> param, HttpServletResponse response) {
+		try {
+			assetsService.exportExcel(param, response);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@GetMapping("export_all")
+	public void exportExcelAll(HttpServletResponse response) {
+		try {
+			assetsService.exportExcel(null, response);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 * 获取资产分类列表分页数据
@@ -295,7 +315,7 @@ public class AssetsBackController {
 		String url = "/static/ExcelTemplate/资产分类导入模板.xlsx";
 		filesService.download(url, "资产分类导入模板.xlsx", response);
 	}
-
+	
 	/**
 	 * 资产分类批量导入
 	 * 

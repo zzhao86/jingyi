@@ -95,6 +95,39 @@
 			<include refid="condition"></include>
 		</where>
 	</select>
+	
+	<!-- 获取导出数据 -->
+	<select id="exportData" resultType="com.seglino.jingyi.assets.dto.AssetsExportDto">
+		SELECT id,
+					 fun_find_all_assets_category_parent(categoryId) AS categoryName,
+					 fun_find_all_assets_position_parent(positionId) AS positionName,
+					 code,
+					 name,
+					 brand,
+					 model,
+					 status,
+					 useStatus,
+					 admin,
+					 (SELECT name FROM tab_user where id = a.admin) AS adminName,
+					 purchasingMethod,
+					 startDate,
+					 owner,
+					 useTerm,
+					 amount,
+					 orderCode,
+					 remark,
+					 serialNum,
+					 supplier,
+					 supplierContact,
+					 supplierMobile,
+					 maintDate,
+					 maintNotes
+			FROM tab_assets a
+		<where>
+			<include refid="condition"></include>
+		</where>
+		ORDER BY createTime DESC
+	</select>
 
 	<!-- 根据条件获取数据总数 -->
 	<select id="count" resultType="Integer">
