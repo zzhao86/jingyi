@@ -16,8 +16,8 @@ import org.springframework.transaction.interceptor.TransactionInterceptor;
 /**
  * @description 通过AOP切面设置全局事务，拦截service包下面所有方法 AOP术语：通知（Advice）、连接点（Joinpoint）、切入点（Pointcut)、切面（Aspect）、目标(Target)、代理(Proxy)、织入（Weaving）
  */
-@Aspect
-@Configuration
+//@Aspect
+//@Configuration
 public class TransactionAdviceConfig {
 
     private static final int TX_METHOD_TIMEOUT = 5;

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.seglino.jingyi.common.core.service.BaseServiceImpl;
+import com.seglino.jingyi.common.log.annotation.OperationLog;
 import com.seglino.jingyi.user.dao.UserDao;
 import com.seglino.jingyi.user.dto.UserDetailDto;
 import com.seglino.jingyi.user.dto.UserListDto;
@@ -63,10 +64,15 @@ public class UserServiceImpl extends BaseServiceImpl<UserDao, User> implements U
 
 	/**
 	 * 获取管理员列表
+	 * 
 	 * @param keywords
 	 * @return
 	 */
-	public List<UserListDto> adminList(String keywords){
-		return dao.adminList(keywords);
+	@OperationLog("查询管理员列表")
+	public List<UserListDto> adminList(String keywords) {
+		
+		throw new IllegalArgumentException("错误测试");
+		
+//		return dao.adminList(keywords);
 	}
 }
