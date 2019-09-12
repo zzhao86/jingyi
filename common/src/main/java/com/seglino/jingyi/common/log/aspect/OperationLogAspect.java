@@ -6,9 +6,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -16,13 +15,12 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.fastjson.JSON;
 import com.seglino.jingyi.common.log.annotation.OperationLog;
-import com.seglino.jingyi.common.utils.IpUtils;
+import com.seglino.jingyi.common.log.annotation.ThrowableLog;
+import com.seglino.jingyi.common.utils.ApplicationUtils;
 
 @Aspect
 @Component
@@ -31,38 +29,48 @@ public class OperationLogAspect {
 
 	@Pointcut("@annotation(com.seglino.jingyi.common.log.annotation.OperationLog)")
 	public void operationLog() {
-		System.out.println("执行了Service");
 	}
 
+	@Pointcut("@annotation(com.seglino.jingyi.common.log.annotation.ThrowableLog)")
+	public void throwableLog() {
+	}
+
+	/**
+	 * controller层访问前拦截
+	 * 
+	 * @param point
+	 */
 	@Before("operationLog()")
-	public void before(JoinPoint point) {
-		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-		String userid = getUserid();
-		String ip = IpUtils.getClientIpAddress(request);
+	public void doBefore(JoinPoint point) {
+		HttpServletRequest request = ApplicationUtils.getHttpRequest();
+		String userid = ApplicationUtils.getUserId();
+		String ip = ApplicationUtils.getClientIP(request);
 		try {
 			String methodName = point.getTarget().getClass().getName() + "." + point.getSignature().getName();
-			String desc = getAnnotationValue(point);
+			OperationLog log = getMethod(point).getAnnotation(OperationLog.class);
 
 			System.out.println("=====日志通知开始=====");
 			System.out.println("用户ID：" + userid);
 			System.out.println("客户端IP：" + ip);
 			System.out.println("请求方法：" + methodName);
-			System.out.println("方法描述：" + desc);
+			System.out.println("方法描述：" + log.value());
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
 	}
 
 	/**
+	 * service层异常拦截
+	 * 
 	 * @param point
 	 * @param throwable
 	 */
-	@AfterThrowing(pointcut = "operationLog()", throwing = "ex")
-	public void afterThrowing(JoinPoint point, Throwable ex) {
+	@AfterThrowing(pointcut = "throwableLog()", throwing = "ex")
+	public void doAafterThrowing(JoinPoint point, Throwable ex) {
 		try {
-			HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-			String userid = getUserid();
-			String ip = IpUtils.getClientIpAddress(request);
+			HttpServletRequest request = ApplicationUtils.getHttpRequest();
+			String userid = ApplicationUtils.getUserId();
+			String ip = ApplicationUtils.getClientIP(request);
 			// 获取用户请求方法的参数并序列化为JSON格式字符串
 			String params = "";
 			if (point.getArgs() != null && point.getArgs().length > 0) {
@@ -75,15 +83,15 @@ public class OperationLogAspect {
 				}
 			}
 			String methodName = point.getTarget().getClass().getName() + "." + point.getSignature().getName();
-			String desc = getAnnotationValue(point);
+			ThrowableLog log = getMethod(point).getAnnotation(ThrowableLog.class);
 
 			System.out.println("=====异常通知开始=====");
-			System.out.println("异常代码:" + ex.getClass().getName());
+			System.out.println("异常代码:" + ex.toString());
 			System.out.println("异常信息:" + ex.getMessage());
 			System.out.println("用户ID：" + userid);
 			System.out.println("客户端IP：" + ip);
 			System.out.println("请求方法：" + methodName);
-			System.out.println("方法描述：" + desc);
+			System.out.println("方法描述：" + log.value());
 			System.out.println("请求参数:" + params);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -91,35 +99,22 @@ public class OperationLogAspect {
 	}
 
 	/**
-	 * 获取日志描述
+	 * 获取切面方法
 	 * 
 	 * @param point
 	 * @return
 	 * @throws ClassNotFoundException
 	 */
-	private String getAnnotationValue(JoinPoint point) throws ClassNotFoundException {
-		String value = "";
-		String targetName = point.getTarget().getClass().getName();
-		String methodName = point.getSignature().getName();
+	private Method getMethod(JoinPoint point) throws ClassNotFoundException {
+		Signature signature = point.getSignature();
+		Class<?> clazz = point.getTarget().getClass();
+		String targetName = clazz.getName();
+		String methodName = signature.getName();
 		Method[] methods = Class.forName(targetName).getMethods();
 		for (Method method : methods) {
 			if (method.getName().equals(methodName)) {
-				value = method.getAnnotation(OperationLog.class).value();
-				break;
+				return method;
 			}
-		}
-		return value;
-	}
-
-	/**
-	 * 获取当前登录用户ID
-	 * 
-	 * @return
-	 */
-	private String getUserid() {
-		Subject subject = SecurityUtils.getSubject();
-		if (subject.isAuthenticated()) {
-			return subject.getPrincipal().toString();
 		}
 		return null;
 	}

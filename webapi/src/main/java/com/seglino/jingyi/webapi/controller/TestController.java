@@ -21,7 +21,11 @@ public class TestController {
 	@GetMapping("")
 	public ApiResult index(HttpServletRequest request) {
 		ApiResult aResult = new ApiResult();
-		aResult.setData(userService.adminList(""));
+		try {
+			aResult.setData(userService.adminList("张志豪"));
+		} catch (Exception e) {
+			aResult.addError(e);
+		}
 		return aResult;
 	}
 }

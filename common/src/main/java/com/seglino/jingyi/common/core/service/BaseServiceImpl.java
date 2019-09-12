@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +13,7 @@ import com.github.pagehelper.PageHelper;
 import com.seglino.jingyi.common.core.dao.BaseDao;
 import com.seglino.jingyi.common.core.po.BaseEntity;
 import com.seglino.jingyi.common.request.RequestPageParams;
+import com.seglino.jingyi.common.utils.ApplicationUtils;
 import com.seglino.jingyi.common.utils.DateUtils;
 
 @Service
@@ -34,7 +33,7 @@ public abstract class BaseServiceImpl<D extends BaseDao<T>, T extends BaseEntity
 		if (null != entity) {
 			entity.setId(UUID.randomUUID().toString().replaceAll("-", ""));
 			entity.setCreateTime(DateUtils.getNow());
-			entity.setCreateUid(getUserid());
+			entity.setCreateUid(ApplicationUtils.getUserId());
 		}
 		return dao.insert(entity);
 	}
@@ -60,7 +59,7 @@ public abstract class BaseServiceImpl<D extends BaseDao<T>, T extends BaseEntity
 	public int update(T entity) {
 		if (null != entity) {
 			entity.setModifyTime(DateUtils.getNow());
-			entity.setModifyUid(getUserid());
+			entity.setModifyUid(ApplicationUtils.getUserId());
 		}
 		return dao.update(entity);
 	}
@@ -76,7 +75,7 @@ public abstract class BaseServiceImpl<D extends BaseDao<T>, T extends BaseEntity
 		T entity = detailById(id);		
 		if (null != entity) {
 			entity.setDeleteTime(DateUtils.getNow());
-			entity.setDeleteUid(getUserid());
+			entity.setDeleteUid(ApplicationUtils.getUserId());
 			entity.setIsDeleted(true);
 		}
 		return dao.update(entity);
@@ -178,13 +177,5 @@ public abstract class BaseServiceImpl<D extends BaseDao<T>, T extends BaseEntity
 	public Page<T> page(RequestPageParams params) {
 		PageHelper.startPage(params.getIndex(), params.getSize());
 		return dao.page(params.getCondition());
-	}
-
-	public String getUserid() {
-		Subject subject = SecurityUtils.getSubject();
-		if (subject.isAuthenticated()) {
-			return subject.getPrincipal().toString();
-		}
-		return null;
 	}
 }

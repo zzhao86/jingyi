@@ -23,7 +23,7 @@ public class TransactionAdviceConfig {
     private static final int TX_METHOD_TIMEOUT = 5;
 
     /*定义切点变量：拦截com.alex.springboot.service包下所有类的所有方法,返回值类型任意的方法*/
-    private static final String AOP_POINTCUT_EXPRESSION = "execution (* com.seglino.jingyi.*.service.**(..))";
+    private static final String AOP_POINTCUT_EXPRESSION = "execution (* com.seglino.jingyi.*.service.impl.**(..))";
 
     @Autowired
     private PlatformTransactionManager transactionManager;

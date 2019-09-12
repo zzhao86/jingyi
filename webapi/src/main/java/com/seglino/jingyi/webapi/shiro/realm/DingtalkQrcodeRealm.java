@@ -12,6 +12,7 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.util.StringUtils;
 
 import com.dingtalk.api.response.OapiSnsGetuserinfoBycodeResponse;
@@ -28,6 +29,7 @@ import com.seglino.jingyi.webapi.shiro.LoginType;
  *
  */
 public class DingtalkQrcodeRealm extends AuthorizingRealm {
+	@Lazy
 	@Autowired
 	private UserService userService;
 	@Autowired

@@ -11,7 +11,7 @@
  Target Server Version : 50718
  File Encoding         : 65001
 
- Date: 10/09/2019 14:59:52
+ Date: 12/09/2019 17:03:04
 */
 
 SET NAMES utf8mb4;
@@ -494,6 +494,28 @@ INSERT INTO `tab_notice_user` VALUES ('e5258dabee0f49a1b2ff6474a307d399', 'b345b
 INSERT INTO `tab_notice_user` VALUES ('ee138304e3004681a915b414b3714388', '4e6251f3bae5453292fe5a26f1dee2ba', '8a4ff0922af24964baa455d62cb2ef36', 0, NULL, '2019-08-09 17:01:22.000', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
 INSERT INTO `tab_notice_user` VALUES ('f0d7b718fc8340f6a64d8e5698e570fe', 'd90456296280469f8129813460a98859', 'd8bdfb8204fc4499bf379026f6865999', 0, NULL, '2019-08-06 15:40:40.000', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
 INSERT INTO `tab_notice_user` VALUES ('fcc7cc9a0df74aa6b16c2a438ebdc20b', '4e6251f3bae5453292fe5a26f1dee2ba', 'd664ed2baf414ec785dffd0ebbc77e2a', 0, NULL, '2019-08-09 17:01:23.000', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
+
+-- ----------------------------
+-- Table structure for tab_sys_log
+-- ----------------------------
+DROP TABLE IF EXISTS `tab_sys_log`;
+CREATE TABLE `tab_sys_log`  (
+  `Id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `type` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '日志类型',
+  `module` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '请求模块名称',
+  `method` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '请求方法名称',
+  `parameter` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '方法参数JSON字符串',
+  `ip` varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '客户端IP',
+  `detail` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '日志详情',
+  `createTime` datetime(3) NULL DEFAULT NULL COMMENT '创建时间',
+  `createUid` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
+  `modifyTime` datetime(3) NULL DEFAULT NULL COMMENT '修改时间',
+  `modifyUid` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '修改人',
+  `deleteTime` datetime(3) NULL DEFAULT NULL COMMENT '删除时间',
+  `deleteUid` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '删除人',
+  `isDeleted` tinyint(4) NULL DEFAULT 0 COMMENT '是否删除',
+  PRIMARY KEY (`Id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统日志表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for tab_sys_settings

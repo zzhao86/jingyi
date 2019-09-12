@@ -14,6 +14,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.seglino.jingyi.common.core.service.BaseServiceImpl;
 import com.seglino.jingyi.common.request.RequestPageParams;
+import com.seglino.jingyi.common.utils.ApplicationUtils;
 import com.seglino.jingyi.common.utils.AutoMapper;
 import com.seglino.jingyi.common.utils.DateUtils;
 import com.seglino.jingyi.notice.dao.NoticeDao;
@@ -171,7 +172,7 @@ public class NoticeServiceImpl extends BaseServiceImpl<NoticeDao, Notice> implem
 		param.put("noticeId", id);
 		param.put("userId", userid);
 		NoticeUser noticeUser = noticeUserService.detail(param);
-		if (null == noticeUser && !getUserid().equals(notice.getCreateUid())) {
+		if (null == noticeUser && !ApplicationUtils.getUserId().equals(notice.getCreateUid())) {
 			return -2;
 		} else if (noticeUser.getIsRead()) {
 			return 0;
