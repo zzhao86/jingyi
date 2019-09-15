@@ -28,8 +28,9 @@
             <template slot="title">
               <i class="el-icon-setting"></i>系统管理
             </template>
-            <el-menu-item index="3-1" route="/user">用户管理</el-menu-item>
-            <el-menu-item index="3-2" route="/settings">系统设置</el-menu-item>
+            <el-menu-item index="3-1" route="/user">通讯录管理</el-menu-item>
+            <el-menu-item index="3-2" route="/log">日志管理</el-menu-item>
+            <el-menu-item index="3-3" route="/settings">系统设置</el-menu-item>
           </el-submenu>
         </el-menu>
       </div>

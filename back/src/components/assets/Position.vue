@@ -37,6 +37,7 @@
         <pagination :params="params" :total="total" @page-change="onPageChange" @size-change="onSizeChange"></pagination>
       </div>
     </div>
+    
     <!-- 详情Dialog -->
     <el-dialog title="资产位置详情" :visible.sync="dialogDetailVisible" width="600px" :before-close="onDialogDetailClose">
       <el-form :model="detail" ref="form" :rules="rules" :disabled="detailFormDisabled" label-width="100px">

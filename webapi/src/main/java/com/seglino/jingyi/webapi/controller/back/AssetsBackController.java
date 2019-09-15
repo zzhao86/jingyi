@@ -63,7 +63,7 @@ public class AssetsBackController {
 	@GetMapping("list")
 	public ApiPageResult list(RequestPageParams params) {
 		ApiPageResult aResult = new ApiPageResult();
-		
+
 		try {
 			Page<AssetsListDto> page = assetsService.pageByIndex(params);
 			aResult.setTotal(page.getTotal());
@@ -118,9 +118,10 @@ public class AssetsBackController {
 		String url = "/static/ExcelTemplate/资产信息导入模板.xlsx";
 		filesService.download(url, "资产信息导入模板.xlsx", response);
 	}
-	
+
 	/**
 	 * 资产信息批量导入
+	 * 
 	 * @param file
 	 * @return
 	 */
@@ -208,7 +209,7 @@ public class AssetsBackController {
 		}
 		return aResult;
 	}
-	
+
 	@GetMapping("export")
 	public void exportExcel(@RequestParam Map<String, Object> param, HttpServletResponse response) {
 		try {
@@ -217,7 +218,7 @@ public class AssetsBackController {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@GetMapping("export_all")
 	public void exportExcelAll(HttpServletResponse response) {
 		try {
@@ -315,7 +316,7 @@ public class AssetsBackController {
 		String url = "/static/ExcelTemplate/资产分类导入模板.xlsx";
 		filesService.download(url, "资产分类导入模板.xlsx", response);
 	}
-	
+
 	/**
 	 * 资产分类批量导入
 	 * 

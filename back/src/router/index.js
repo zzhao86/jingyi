@@ -13,6 +13,7 @@ import AssetsPosition from '@/components/assets/Position';
 import SettingsIndex from '@/components/settings/Index';
 import UserIndex from '@/components/user/Index';
 import UserDetail from '@/components/user/Detail';
+import LogIndex from '@/components/log/Index';
 
 Vue.use(Router);
 
@@ -88,6 +89,11 @@ const router = new Router({
       path: '/user/detail/:mode',
       name: 'UserDetail',
       component: UserDetail
+    },
+    {
+      path: '/log',
+      name: 'LogIndex',
+      component: LogIndex
     }
   ]
 });
@@ -97,11 +103,11 @@ router.beforeEach((to, from, next) => {
   if (requireAuth == false) {
     next();
   } else {
-    if (sessionStorage.getItem("JINGYI_BACK_USER")) {
+    if (sessionStorage.getItem('JINGYI_BACK_USER')) {
       next();
     } else {
       next({
-        path: "/login",
+        path: '/login',
         query: { redirect: escape(to.fullPath) } // 将跳转的路由path作为参数，登录成功后跳转到该路由
       });
     }

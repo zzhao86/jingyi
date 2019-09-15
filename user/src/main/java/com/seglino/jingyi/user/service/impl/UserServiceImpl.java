@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.seglino.jingyi.common.core.service.BaseServiceImpl;
-import com.seglino.jingyi.common.log.annotation.ThrowableLog;
+import com.seglino.jingyi.common.log.annotation.ServiceLog;
 import com.seglino.jingyi.user.dao.UserDao;
 import com.seglino.jingyi.user.dto.UserDetailDto;
 import com.seglino.jingyi.user.dto.UserListDto;
@@ -20,11 +20,12 @@ import com.seglino.jingyi.user.service.UserService;
 
 /**
  * 用户服务
+ * 
  * @author ZZH
  *
  */
 @Service
-@ThrowableLog(name = "用户服务")
+@ServiceLog(module = "用户服务")
 public class UserServiceImpl extends BaseServiceImpl<UserDao, User> implements UserService {
 	@Autowired
 	private DeptService deptService;
@@ -43,7 +44,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserDao, User> implements U
 	/**
 	 * 获取部门下的所有用户列表
 	 * 
-	 * @param deptId 部门ID
+	 * @param deptId     部门ID
 	 * @param fetchChild 是否递归获取所有子部门下的用户
 	 * @return
 	 */
@@ -74,7 +75,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserDao, User> implements U
 	 * @param keywords
 	 * @return
 	 */
-	@ThrowableLog("查询管理员列表")
+	@ServiceLog(method = "查询管理员列表")
 	public List<UserListDto> adminList(String keywords) {
 
 		throw new IllegalArgumentException("错误测试");

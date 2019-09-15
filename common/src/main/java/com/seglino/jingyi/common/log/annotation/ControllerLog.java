@@ -6,9 +6,21 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target({ ElementType.PARAMETER, ElementType.METHOD })
+@Target({ ElementType.TYPE, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface OperationLog {
-	String value() default "";
+public @interface ControllerLog {
+	/**
+	 * 模块名称，用于类上
+	 * 
+	 * @return
+	 */
+	String module() default "";
+
+	/**
+	 * 方法名称，用户方法上
+	 * 
+	 * @return
+	 */
+	String method() default "";
 }

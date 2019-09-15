@@ -14,25 +14,33 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.fastjson.JSON;
-import com.seglino.jingyi.common.log.annotation.OperationLog;
-import com.seglino.jingyi.common.log.annotation.ThrowableLog;
+import com.seglino.jingyi.common.log.LogType;
+import com.seglino.jingyi.common.log.annotation.ControllerLog;
+import com.seglino.jingyi.common.log.annotation.ServiceLog;
+import com.seglino.jingyi.common.log.pojo.SysLog;
+import com.seglino.jingyi.common.log.service.SysLogService;
 import com.seglino.jingyi.common.utils.ApplicationUtils;
+import com.seglino.jingyi.common.utils.DateUtils;
 
 @Aspect
 @Component
 public class OperationLogAspect {
 	private static final Logger logger = LoggerFactory.getLogger(OperationLogAspect.class);
 
-	@Pointcut("@annotation(com.seglino.jingyi.common.log.annotation.OperationLog)")
-	public void operationLog() {
+	@Autowired
+	private SysLogService syslogService;
+
+	@Pointcut("@annotation(com.seglino.jingyi.common.log.annotation.ControllerLog)")
+	public void controllerLog() {
 	}
 
-	@Pointcut("@annotation(com.seglino.jingyi.common.log.annotation.ThrowableLog)")
-	public void throwableLog() {
+	@Pointcut("@annotation(com.seglino.jingyi.common.log.annotation.ServiceLog)")
+	public void serviceLog() {
 	}
 
 	/**
@@ -40,20 +48,43 @@ public class OperationLogAspect {
 	 * 
 	 * @param point
 	 */
-	@Before("operationLog()")
+	@Before("controllerLog()")
 	public void doBefore(JoinPoint point) {
-		HttpServletRequest request = ApplicationUtils.getHttpRequest();
-		String userid = ApplicationUtils.getUserId();
-		String ip = ApplicationUtils.getClientIP(request);
 		try {
+			HttpServletRequest request = ApplicationUtils.getHttpRequest();
+			String ip = ApplicationUtils.getClientIP(request);
 			String methodName = point.getTarget().getClass().getName() + "." + point.getSignature().getName();
-			OperationLog log = getMethod(point).getAnnotation(OperationLog.class);
+			ControllerLog operationLog = getMethod(point).getAnnotation(ControllerLog.class);
+			// 获取用户请求方法的参数并序列化为JSON格式字符串
+			String params = "";
+			if (point.getArgs() != null && point.getArgs().length > 0) {
+				for (int i = 0; i < point.getArgs().length; i++) {
+					Object arg = point.getArgs()[i];
+					if (arg instanceof ServletRequest || arg instanceof ServletResponse
+							|| arg instanceof MultipartFile) {
+						continue;
+					}
+					params += JSON.toJSONString(arg) + ";";
+				}
+			}
+			StringBuilder sb = new StringBuilder();
+			sb.append("操作用户：" + ApplicationUtils.getUserId() + "\n");
+			sb.append("操作方法：" + methodName + "\n");
+			sb.append("方法参数：" + params + "\n");
+			sb.append("操作时间：" + DateUtils.getNowString("yyyy-MM-dd HH:mm:ss") + "\n");
 
-			System.out.println("=====日志通知开始=====");
-			System.out.println("用户ID：" + userid);
-			System.out.println("客户端IP：" + ip);
-			System.out.println("请求方法：" + methodName);
-			System.out.println("方法描述：" + log.value());
+			SysLog sysLog = new SysLog();
+			sysLog.setType(LogType.OPERATION.getType());
+			sysLog.setModule(operationLog.module());
+			sysLog.setMethod(operationLog.method());
+			sysLog.setParameter(null);
+			sysLog.setIp(ip);
+			sysLog.setDetail(sb.toString());
+
+			int count = syslogService.insert(sysLog);
+			if (count <= 0) {
+				logger.error("日志保存失败");
+			}
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
@@ -65,34 +96,44 @@ public class OperationLogAspect {
 	 * @param point
 	 * @param throwable
 	 */
-	@AfterThrowing(pointcut = "throwableLog()", throwing = "ex")
+	@AfterThrowing(pointcut = "serviceLog()", throwing = "ex")
 	public void doAafterThrowing(JoinPoint point, Throwable ex) {
 		try {
 			HttpServletRequest request = ApplicationUtils.getHttpRequest();
-			String userid = ApplicationUtils.getUserId();
 			String ip = ApplicationUtils.getClientIP(request);
+			String methodName = point.getTarget().getClass().getName() + "." + point.getSignature().getName();
+			ServiceLog serviceLog = getMethod(point).getAnnotation(ServiceLog.class);
 			// 获取用户请求方法的参数并序列化为JSON格式字符串
 			String params = "";
 			if (point.getArgs() != null && point.getArgs().length > 0) {
 				for (int i = 0; i < point.getArgs().length; i++) {
 					Object arg = point.getArgs()[i];
-					if (arg instanceof ServletRequest || arg instanceof ServletResponse || arg instanceof MultipartFile) {
+					if (arg instanceof ServletRequest || arg instanceof ServletResponse
+							|| arg instanceof MultipartFile) {
 						continue;
 					}
 					params += JSON.toJSONString(arg) + ";";
 				}
 			}
-			String methodName = point.getTarget().getClass().getName() + "." + point.getSignature().getName();
-			ThrowableLog log = getMethod(point).getAnnotation(ThrowableLog.class);
+			StringBuilder sb = new StringBuilder();
+			sb.append("操作用户：" + ApplicationUtils.getUserId() + "\n");
+			sb.append("操作方法：" + methodName + "\n");
+			sb.append("方法参数：" + params + "\n");
+			sb.append("操作时间：" + DateUtils.getNowString("yyyy-MM-dd HH:mm:ss") + "\n");
+			sb.append("异常信息："+ex.toString() + "\n");
 
-			System.out.println("=====异常通知开始=====");
-			System.out.println("异常代码:" + ex.toString());
-			System.out.println("异常信息:" + ex.getMessage());
-			System.out.println("用户ID：" + userid);
-			System.out.println("客户端IP：" + ip);
-			System.out.println("请求方法：" + methodName);
-			System.out.println("方法描述：" + log.value());
-			System.out.println("请求参数:" + params);
+			SysLog sysLog = new SysLog();
+			sysLog.setType(LogType.THROWABLE.getType());
+			sysLog.setModule(serviceLog.module());
+			sysLog.setMethod(serviceLog.method());
+			sysLog.setParameter(params);
+			sysLog.setIp(ip);
+			sysLog.setDetail(sb.toString());
+
+			int count = syslogService.insert(sysLog);
+			if (count <= 0) {
+				logger.error("日志保存失败");
+			}
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}

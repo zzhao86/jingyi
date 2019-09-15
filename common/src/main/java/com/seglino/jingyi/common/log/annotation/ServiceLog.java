@@ -9,8 +9,18 @@ import java.lang.annotation.Target;
 @Target({ ElementType.TYPE, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface ThrowableLog {
-	String value() default "";
+public @interface ServiceLog {
+	/**
+	 * 模块名称，用于类上
+	 * 
+	 * @return
+	 */
+	String module() default "";
 
-	String name() default "";
+	/**
+	 * 方法名称，用户方法上
+	 * 
+	 * @return
+	 */
+	String method() default "";
 }
