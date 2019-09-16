@@ -1,5 +1,7 @@
 package com.seglino.jingyi.common.log.service;
 
+import java.util.List;
+
 import com.github.pagehelper.Page;
 import com.seglino.jingyi.common.core.service.BaseService;
 import com.seglino.jingyi.common.log.dto.SysLogDetailDto;
@@ -23,4 +25,10 @@ public interface SysLogService extends BaseService<SysLog> {
 	 * @return
 	 */
 	public SysLogDetailDto detail(String id);
+	
+	/**
+	 * 日志模块列表
+	 * @return
+	 */
+	public List<String> moduleList();
 }

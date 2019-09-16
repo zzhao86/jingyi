@@ -5,18 +5,18 @@ import com.seglino.jingyi.common.core.po.BaseEntity;
 public class SysLog extends BaseEntity {
 	private static final long serialVersionUID = 782425579822603297L;
 
-	private String type;
+	private Integer type;
 	private String module;
 	private String method;
 	private String parameter;
 	private String ip;
 	private String detail;
 
-	public String getType() {
+	public Integer getType() {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(Integer type) {
 		this.type = type;
 	}
 

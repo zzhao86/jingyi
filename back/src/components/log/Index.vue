@@ -12,7 +12,7 @@
           <el-table-column align="center" label="序号" width="50">
             <template slot-scope="scope">{{ scope.$index + (params.index - 1) * params.size + 1 }}</template>
           </el-table-column>
-          <el-table-column prop="type" label="日志类型"></el-table-column>
+          <el-table-column prop="typeName" label="日志类型"></el-table-column>
           <el-table-column prop="module" label="操作模块"></el-table-column>
           <el-table-column prop="method" label="操作方法"></el-table-column>
           <el-table-column prop="ip" label="客户端IP"></el-table-column>
@@ -32,54 +32,54 @@
 
     <!-- 详情Dialog -->
     <el-dialog title="日志详情" :visible.sync="dialogDetailVisible" width="800px">
-      <el-form :model="detail" ref="form" disabled label-width="100px">
+      <el-form :model="detail" ref="form" label-width="100px">
         <el-row>
           <el-col :span="12">
-            <el-form-item prop="type" label="日志类型">
-              <el-input v-model="detail.type"></el-input>
+            <el-form-item prop="typeName" label="日志类型">
+              <el-input v-model="detail.typeName" readonly></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item prop="module" label="操作模块">
-              <el-input v-model="detail.module"></el-input>
+              <el-input v-model="detail.module" readonly></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
             <el-form-item prop="method" label="操作方法">
-              <el-input v-model="detail.method"></el-input>
+              <el-input v-model="detail.method" readonly></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item prop="ip" label="客户端IP">
-              <el-input v-model="detail.ip"></el-input>
+              <el-input v-model="detail.ip" readonly></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item prop="parameter" label="方法参数">
-              <el-input v-model="detail.parameter" type="textarea" :rows="3" resize="none"></el-input>
+              <el-input v-model="detail.parameter" type="textarea" :rows="3" resize="none" readonly></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
             <el-form-item prop="date" label="操作时间">
-              <el-input v-model="detail.date"></el-input>
+              <el-input v-model="detail.date" readonly></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item prop="userName" label="操作人">
-              <el-input v-model="detail.userName"></el-input>
+              <el-input v-model="detail.userName" readonly></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item prop="detail" label="日志详细">
-              <el-input v-model="detail.detail" type="textarea" :rows="5" resize="none"></el-input>
+              <el-input v-model="detail.detail" type="textarea" :rows="5" resize="none" readonly></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -145,8 +145,10 @@
       },
       // 搜索按钮点击事件
       onSearchClick() {
-        this.params.index = 1;
-        this.loadTableData();
+        console.log(this.params.query);
+
+        // this.params.index = 1;
+        // this.loadTableData();
       },
       // 查看日志详情
       onViewClick(row) {

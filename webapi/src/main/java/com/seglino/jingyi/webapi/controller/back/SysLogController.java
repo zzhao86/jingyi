@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pagehelper.Page;
 import com.seglino.jingyi.common.log.dto.SysLogDetailDto;
+import com.seglino.jingyi.common.log.dto.SysLogEntryData;
 import com.seglino.jingyi.common.log.dto.SysLogListDto;
 import com.seglino.jingyi.common.log.service.SysLogService;
 import com.seglino.jingyi.common.request.RequestPageParams;
@@ -42,6 +43,28 @@ public class SysLogController {
 		try {
 			SysLogDetailDto dto = sysLogService.detail(id);
 			aResult.setData(AutoMapper.mapper(dto, SysLogDetailVo.class));
+		} catch (Exception e) {
+			aResult.addError(e);
+		}
+		return aResult;
+	}
+
+	@GetMapping("module/list")
+	public ApiResult moduleList() {
+		ApiResult aResult = new ApiResult();
+		try {
+			aResult.setData(sysLogService.moduleList());
+		} catch (Exception e) {
+			aResult.addError(e);
+		}
+		return aResult;
+	}
+
+	@GetMapping("type/list")
+	public ApiResult typeList() {
+		ApiResult aResult = new ApiResult();
+		try {
+			aResult.setData(SysLogEntryData.getTypeList());
 		} catch (Exception e) {
 			aResult.addError(e);
 		}

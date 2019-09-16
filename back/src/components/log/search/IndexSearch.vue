@@ -4,8 +4,25 @@
       <el-form :model="query" ref="advanceSearch" label-position="top" label-width="100px" size="mini">
         <el-row :gutter="10">
           <el-col :span="12">
+            <el-form-item label="日志类型">
+              <el-select v-model="query.type" @change="onTypeTextChange">
+                <el-option v-for="(item, index) in types" :key="index" :value="item.value" :label="item.label"></el-option>
+              </el-select>
+            </el-form-item>
           </el-col>
           <el-col :span="12">
+            <el-form-item label="操作模块">
+              <el-select v-model="query.module" @change="onModuleTextChange">
+                <el-option v-for="(item, index) in modules" :key="index" :value="item" :label="item"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :span="24">
+            <el-form-item label="日期">
+              <el-date-picker v-model="query.date" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" @change="onDateChange"> </el-date-picker>
+            </el-form-item>
           </el-col>
         </el-row>
       </el-form>
@@ -16,33 +33,52 @@
   import SearchBar from '@/components/utils/components/SearchBar';
 
   export default {
-    name: 'AssetsIndexSearch',
+    name: 'LogIndexSearch',
     components: {
-      SearchBar,
+      SearchBar
     },
-    created() {},
+    created() {
+      this.loadModuleList();
+      this.loadTypeList();
+    },
     data() {
       return {
         query: {
           keywords: '',
-          category: '',
-          position: '',
-          status: '',
-          useStatus: ''
+          module: '',
+          type: '',
+          date: null
         },
         tagLabel: {
           keywords: '关键字',
-          category: '分类',
-          position: '位置',
-          status: '状态',
-          useStatus: '使用状态'
+          module: '操作模块',
+          type: '日志类型',
+          date: '日期'
         },
         tagText: {},
-        tags: []
+        tags: [],
+        modules: [],
+        types: []
       };
     },
     props: {},
     methods: {
+      // 加载日志模块下拉列表数据
+      loadModuleList() {
+        this.$get('back/syslog/module/list').then(res => {
+          if (res.isSuccess) {
+            this.modules = res.data;
+          }
+        });
+      },
+      // 加载日志类型下拉列表数据
+      loadTypeList() {
+        this.$get('back/syslog/type/list').then(res => {
+          if (res.isSuccess) {
+            this.types = res.data;
+          }
+        });
+      },
       // 重置
       onResetClick() {
         this.$refs['advanceSearch'].resetFields();
@@ -56,21 +92,20 @@
         this.$children[0].composeSearchTags(this.tagLabel, this.tagText);
         this.$emit('search', this.query);
       },
-      // 资产分类下拉框本文改变事件
-      onAssetsCategoryTextChange(text) {
-        this.tagText['category'] = text;
+      // 日志类型下拉框本文改变事件
+      onTypeTextChange(text) {
+        var temp = this.types.filter(o => {
+          return o.value == text;
+        });
+        this.tagText['type'] = temp[0].label;
       },
-      // 资产位置下拉框本文改变事件
-      onAssetsPositionTextChange(text) {
-        this.tagText['position'] = text;
+      // 日志模块下拉框本文改变事件
+      onModuleTextChange(text) {
+        this.tagText['module'] = text;
       },
-      // 资产状态下拉框本文改变事件
-      onAssetsStatusTextChange(text) {
-        this.tagText['status'] = text;
-      },
-      // 资产使用状态下拉框本文改变事件
-      onAssetsUseStatusTextChange(text) {
-        this.tagText['useStatus'] = text;
+      // 日期选择框本文改变事件
+      onDateChange(value) {
+        this.tagText['date'] = `${value[0].format('yyyy-MM-dd')}至${value[1].format('yyyy-MM-dd')}`;
       }
     }
   };

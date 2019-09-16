@@ -1,5 +1,6 @@
 package com.seglino.jingyi.common.log.dao;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -28,4 +29,10 @@ public interface SysLogDao extends BaseDao<SysLog> {
 	 * @return
 	 */
 	public SysLogDetailDto detailForDto(String id);
+	
+	/**
+	 * 日志模块列表
+	 * @return
+	 */
+	public List<String> moduleList();
 }

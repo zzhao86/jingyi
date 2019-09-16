@@ -95,6 +95,10 @@
 			<include refid="condition"></include>
 		</where>
 	</select>
+	
+	<select id="moduleList" resultType="String">
+		SELECT module FROM tab_sys_log GROUP BY module
+	</select>
 
 	<!-- 插入 -->
 	<insert id="insert" parameterType="com.seglino.jingyi.common.log.pojo.SysLog">

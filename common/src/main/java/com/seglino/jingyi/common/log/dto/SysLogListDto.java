@@ -5,18 +5,18 @@ import java.util.Date;
 import com.seglino.jingyi.common.core.dto.BaseDto;
 
 public class SysLogListDto extends BaseDto {
-	private String type;
+	private Integer type;
 	private String module;
 	private String method;
 	private String ip;
 	private Date date;
 	private String userName;
 
-	public String getType() {
+	public Integer getType() {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(Integer type) {
 		this.type = type;
 	}
 

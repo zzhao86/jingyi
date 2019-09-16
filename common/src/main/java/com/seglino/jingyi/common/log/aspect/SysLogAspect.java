@@ -29,8 +29,8 @@ import com.seglino.jingyi.common.utils.DateUtils;
 
 @Aspect
 @Component
-public class OperationLogAspect {
-	private static final Logger logger = LoggerFactory.getLogger(OperationLogAspect.class);
+public class SysLogAspect {
+	private static final Logger logger = LoggerFactory.getLogger(SysLogAspect.class);
 
 	@Autowired
 	private SysLogService syslogService;
@@ -51,33 +51,23 @@ public class OperationLogAspect {
 	@Before("controllerLog()")
 	public void doBefore(JoinPoint point) {
 		try {
+			Class<?> clazz = point.getTarget().getClass();
 			HttpServletRequest request = ApplicationUtils.getHttpRequest();
 			String ip = ApplicationUtils.getClientIP(request);
-			String methodName = point.getTarget().getClass().getName() + "." + point.getSignature().getName();
+			String methodFullName = clazz.getName() + "." + point.getSignature().getName();
 			ControllerLog operationLog = getMethod(point).getAnnotation(ControllerLog.class);
-			// 获取用户请求方法的参数并序列化为JSON格式字符串
-			String params = "";
-			if (point.getArgs() != null && point.getArgs().length > 0) {
-				for (int i = 0; i < point.getArgs().length; i++) {
-					Object arg = point.getArgs()[i];
-					if (arg instanceof ServletRequest || arg instanceof ServletResponse
-							|| arg instanceof MultipartFile) {
-						continue;
-					}
-					params += JSON.toJSONString(arg) + ";";
-				}
-			}
+			String parameter = getParameter(point);
 			StringBuilder sb = new StringBuilder();
 			sb.append("操作用户：" + ApplicationUtils.getUserId() + "\n");
-			sb.append("操作方法：" + methodName + "\n");
-			sb.append("方法参数：" + params + "\n");
+			sb.append("操作方法：" + methodFullName + "\n");
+			sb.append("方法参数：" + parameter + "\n");
 			sb.append("操作时间：" + DateUtils.getNowString("yyyy-MM-dd HH:mm:ss") + "\n");
 
 			SysLog sysLog = new SysLog();
 			sysLog.setType(LogType.OPERATION.getType());
-			sysLog.setModule(operationLog.module());
-			sysLog.setMethod(operationLog.method());
-			sysLog.setParameter(null);
+			sysLog.setModule(clazz.getAnnotation(ControllerLog.class).value());
+			sysLog.setMethod(operationLog.value());
+			sysLog.setParameter(parameter);
 			sysLog.setIp(ip);
 			sysLog.setDetail(sb.toString());
 
@@ -99,34 +89,25 @@ public class OperationLogAspect {
 	@AfterThrowing(pointcut = "serviceLog()", throwing = "ex")
 	public void doAafterThrowing(JoinPoint point, Throwable ex) {
 		try {
+			Class<?> clazz = point.getTarget().getClass();
 			HttpServletRequest request = ApplicationUtils.getHttpRequest();
 			String ip = ApplicationUtils.getClientIP(request);
-			String methodName = point.getTarget().getClass().getName() + "." + point.getSignature().getName();
+			String methodFullName = clazz.getName() + "." + point.getSignature().getName();
 			ServiceLog serviceLog = getMethod(point).getAnnotation(ServiceLog.class);
-			// 获取用户请求方法的参数并序列化为JSON格式字符串
-			String params = "";
-			if (point.getArgs() != null && point.getArgs().length > 0) {
-				for (int i = 0; i < point.getArgs().length; i++) {
-					Object arg = point.getArgs()[i];
-					if (arg instanceof ServletRequest || arg instanceof ServletResponse
-							|| arg instanceof MultipartFile) {
-						continue;
-					}
-					params += JSON.toJSONString(arg) + ";";
-				}
-			}
+			String parameter = getParameter(point);
+
 			StringBuilder sb = new StringBuilder();
 			sb.append("操作用户：" + ApplicationUtils.getUserId() + "\n");
-			sb.append("操作方法：" + methodName + "\n");
-			sb.append("方法参数：" + params + "\n");
+			sb.append("操作方法：" + methodFullName + "\n");
+			sb.append("方法参数：" + parameter + "\n");
 			sb.append("操作时间：" + DateUtils.getNowString("yyyy-MM-dd HH:mm:ss") + "\n");
-			sb.append("异常信息："+ex.toString() + "\n");
+			sb.append("异常信息：" + ex.toString() + "\n");
 
 			SysLog sysLog = new SysLog();
 			sysLog.setType(LogType.THROWABLE.getType());
-			sysLog.setModule(serviceLog.module());
-			sysLog.setMethod(serviceLog.method());
-			sysLog.setParameter(params);
+			sysLog.setModule(clazz.getAnnotation(ServiceLog.class).value());
+			sysLog.setMethod(serviceLog.value());
+			sysLog.setParameter(parameter);
 			sysLog.setIp(ip);
 			sysLog.setDetail(sb.toString());
 
@@ -158,5 +139,25 @@ public class OperationLogAspect {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * 获取方法参数
+	 * 
+	 * @param point
+	 * @return
+	 */
+	private String getParameter(JoinPoint point) {
+		StringBuilder sb = new StringBuilder();
+		if (point.getArgs() != null && point.getArgs().length > 0) {
+			for (int i = 0; i < point.getArgs().length; i++) {
+				Object arg = point.getArgs()[i];
+				if (arg instanceof ServletRequest || arg instanceof ServletResponse || arg instanceof MultipartFile) {
+					continue;
+				}
+				sb.append(JSON.toJSONString(arg) + ";");
+			}
+		}
+		return sb.toString();
 	}
 }

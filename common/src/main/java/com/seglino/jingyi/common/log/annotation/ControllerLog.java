@@ -10,17 +10,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface ControllerLog {
-	/**
-	 * 模块名称，用于类上
-	 * 
-	 * @return
-	 */
-	String module() default "";
-
-	/**
-	 * 方法名称，用户方法上
-	 * 
-	 * @return
-	 */
-	String method() default "";
+	String value() default "";
 }

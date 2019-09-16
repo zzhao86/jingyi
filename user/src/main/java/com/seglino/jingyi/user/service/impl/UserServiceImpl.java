@@ -25,7 +25,7 @@ import com.seglino.jingyi.user.service.UserService;
  *
  */
 @Service
-@ServiceLog(module = "用户服务")
+@ServiceLog("用户服务")
 public class UserServiceImpl extends BaseServiceImpl<UserDao, User> implements UserService {
 	@Autowired
 	private DeptService deptService;
@@ -75,7 +75,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserDao, User> implements U
 	 * @param keywords
 	 * @return
 	 */
-	@ServiceLog(method = "查询管理员列表")
+	@ServiceLog("查询管理员列表")
 	public List<UserListDto> adminList(String keywords) {
 
 		throw new IllegalArgumentException("错误测试");

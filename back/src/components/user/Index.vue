@@ -1,7 +1,7 @@
 <template>
   <div class="app-main">
     <div class="main-header">
-      <div class="title">用户管理</div>
+      <div class="title">通讯录管理</div>
       <div class="buttons">
         <el-button type="primary" size="small" @click="onSyncUserClick">从钉钉同步用户</el-button>
       </div>

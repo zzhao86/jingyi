@@ -5,20 +5,30 @@ import java.util.Date;
 import com.seglino.jingyi.common.core.vo.BaseVo;
 import com.seglino.jingyi.common.log.dto.SysLogEntryData;
 
+@SuppressWarnings("unused")
 public class SysLogListVo extends BaseVo {
-	private String type;
+	private int type;
+	private String typeName;
 	private String module;
 	private String method;
 	private String ip;
 	private Date date;
 	private String userName;
 
-	public String getType() {
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
+
+	public String getTypeName() {
 		return SysLogEntryData.getTypeName(type);
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setTypeName(String typeName) {
+		this.typeName = typeName;
 	}
 
 	public String getModule() {

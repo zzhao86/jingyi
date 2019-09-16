@@ -1,5 +1,7 @@
 package com.seglino.jingyi.common.log.service.impl;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.github.pagehelper.Page;
@@ -36,5 +38,13 @@ public class SysLogServiceImpl extends BaseServiceImpl<SysLogDao, SysLog> implem
 	@Override
 	public SysLogDetailDto detail(String id) {
 		return dao.detailForDto(id);
+	}
+	
+	/**
+	 * 日志模块列表
+	 * @return
+	 */
+	public List<String> moduleList(){
+		return dao.moduleList();
 	}
 }
