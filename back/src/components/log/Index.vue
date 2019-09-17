@@ -7,7 +7,7 @@
 
     <div class="main-container">
       <div class="main-table">
-        <index-search v-model="params.query"  @search="onSearchClick"></index-search>
+        <index-search v-model="params.query" @search="onSearchClick"></index-search>
         <el-table :data="tableData" ref="table" stripe v-auto-height :max-height="maxHeight">
           <el-table-column align="center" label="序号" width="50">
             <template slot-scope="scope">{{ scope.$index + (params.index - 1) * params.size + 1 }}</template>
@@ -144,11 +144,10 @@
         this.loadTableData();
       },
       // 搜索按钮点击事件
-      onSearchClick() {
-        console.log(this.params.query);
-
-        // this.params.index = 1;
-        // this.loadTableData();
+      onSearchClick(query) {
+        this.params.query = query;
+        this.params.index = 1;
+        this.loadTableData();
       },
       // 查看日志详情
       onViewClick(row) {

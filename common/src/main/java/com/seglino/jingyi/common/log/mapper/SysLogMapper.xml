@@ -26,9 +26,10 @@
 	<sql id="condition">
 		<if test="id != null"> and id = #{id}</if>
 		<if test="keywords != null and keywords != ''"> and (module like '%${keywords}%' or method like '%${keywords}%')</if>
-		<if test="ip != null"> and ip = #{ip}</if>
+		<if test="ip != null and ip != ''"> and ip = #{ip}</if>
 		<if test="userid != null"> and createUid = #{userid}</if>
 		<if test="type != null"> and type = #{type}</if>
+		<if test="module != null and module != ''"> and module = #{module}</if>
 		<if test="isDeleted != null"> and isDeleted = #{isDeleted}</if>
 	</sql>
 

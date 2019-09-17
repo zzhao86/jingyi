@@ -17,7 +17,7 @@
       </div>
     </div>
     <div class="main-table">
-      <index-search v-model="params.query.keywords" @search="onSearchClick"></index-search>
+      <index-search v-model="params.query" @search="onSearchClick"></index-search>
       <el-table :data="tableData" ref="table" stripe v-auto-height :max-height="maxHeight">
         <el-table-column align="center" label="序号" width="50">
           <template slot-scope="scope">{{ scope.$index + (params.index - 1) * params.size + 1 }}</template>
@@ -158,11 +158,6 @@
       // 显示高级查询窗口
       onShowAdvanceSearch() {
         this.$refs['advanceSearch'].open();
-      },
-      // 高级搜索按钮点击事件
-      onAdvanceSearchClick(query) {
-        this.params.query = query;
-        this.onSearchClick();
       },
       // 刷新主数据
       flushDataTable() {

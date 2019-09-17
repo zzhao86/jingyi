@@ -21,7 +21,17 @@
         <el-row :gutter="10">
           <el-col :span="24">
             <el-form-item label="日期">
-              <el-date-picker v-model="query.date" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" @change="onDateChange"> </el-date-picker>
+              <el-date-picker
+                v-model="query.date"
+                type="daterange"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                value-format="yyyy-MM-dd"
+                :picker-options="pickerOptions"
+                @change="onDateChange"
+              >
+              </el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
@@ -58,7 +68,37 @@
         tagText: {},
         tags: [],
         modules: [],
-        types: []
+        types: [],
+        pickerOptions: {
+          disabledDate(date) {
+            return date.getTime() > Date.now();
+          },
+          shortcuts: [{
+            text: '最近一周',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近一个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近三个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit('pick', [start, end]);
+            }
+          }]
+        }
       };
     },
     props: {},
@@ -105,7 +145,11 @@
       },
       // 日期选择框本文改变事件
       onDateChange(value) {
-        this.tagText['date'] = `${value[0].format('yyyy-MM-dd')}至${value[1].format('yyyy-MM-dd')}`;
+        if (value && value.length == 2) {
+          this.tagText['date'] = `${value[0].substring(0, 10)}至${value[1].substring(0, 10)}`;
+        } else {
+          this.tagText['date'] = '';
+        }
       }
     }
   };

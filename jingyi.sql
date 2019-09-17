@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : 本地MySQL
+ Source Server         : 本地
  Source Server Type    : MySQL
- Source Server Version : 50725
+ Source Server Version : 50718
  Source Host           : 127.0.0.1:3306
  Source Schema         : jingyi
 
  Target Server Type    : MySQL
- Target Server Version : 50725
+ Target Server Version : 50718
  File Encoding         : 65001
 
- Date: 15/09/2019 23:31:29
+ Date: 17/09/2019 17:39:09
 */
 
 SET NAMES utf8mb4;
@@ -382,25 +382,6 @@ INSERT INTO `tab_notice_attach` VALUES ('bc77589ea5fc4e5ea9edaf03bf077b6c', '276
 INSERT INTO `tab_notice_attach` VALUES ('f36fc786690b43c09bb506d45a8f60ec', 'e63bb95f8d9f11e9a79000ffeb657a63', '0b5637088c8d4c11904c2bf813309058', '微信常见错误代码.xlsx', '/upload/file/20190726/05c5783782402e86fb0b52688bf608e6.xlsx', '2019-07-31 09:29:54.000', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
 
 -- ----------------------------
--- Table structure for tab_notice_file
--- ----------------------------
-DROP TABLE IF EXISTS `tab_notice_file`;
-CREATE TABLE `tab_notice_file`  (
-  `id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '主键',
-  `noticeId` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '通知公告ID',
-  `fileName` varchar(300) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文件ID',
-  `fileUrl` varchar(300) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `createTime` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `createUid` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
-  `modifyTime` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
-  `modifyUid` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '修改人',
-  `deleteTime` datetime(0) NULL DEFAULT NULL COMMENT '删除时间',
-  `deleteUid` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '删除人',
-  `isDeleted` tinyint(4) NULL DEFAULT 0 COMMENT '是否删除',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '通知公告文件表' ROW_FORMAT = Dynamic;
-
--- ----------------------------
 -- Table structure for tab_notice_reply
 -- ----------------------------
 DROP TABLE IF EXISTS `tab_notice_reply`;
@@ -520,9 +501,9 @@ INSERT INTO `tab_notice_user` VALUES ('fcc7cc9a0df74aa6b16c2a438ebdc20b', '4e625
 DROP TABLE IF EXISTS `tab_sys_log`;
 CREATE TABLE `tab_sys_log`  (
   `Id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `type` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '日志类型',
-  `module` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '请求模块名称',
-  `method` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '请求方法名称',
+  `module` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '模块名称',
+  `method` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '方法名称',
+  `type` int(11) NULL DEFAULT NULL COMMENT '日志类型(1、操作日志，0、错误日志)',
   `parameter` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '方法参数JSON字符串',
   `ip` varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '客户端IP',
   `detail` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '日志详情',
@@ -539,34 +520,7 @@ CREATE TABLE `tab_sys_log`  (
 -- ----------------------------
 -- Records of tab_sys_log
 -- ----------------------------
-INSERT INTO `tab_sys_log` VALUES ('0b03622d7c2e4dc8b9b0b57d4b09c350', 'throwable', '用户服务', '查询管理员列表', '\"张志豪\";', '192.168.0.8', '操作用户：null\n操作方法：com.seglino.jingyi.user.service.impl.UserServiceImpl.adminList\n方法参数：\"张志豪\";\n操作时间：2019-09-15 17:03:49\n异常信息：java.lang.IllegalArgumentException: 错误测试\n', '2019-09-15 17:03:49.342', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `tab_sys_log` VALUES ('15332126404d41a9bde8e7540b62c083', 'operation', '测试', '测试日志', NULL, '192.168.0.8', '操作用户：null\n操作方法：com.seglino.jingyi.webapi.controller.TestController.index\n方法参数：\n操作时间：2019-09-15 17:03:49\n', '2019-09-15 17:03:49.339', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `tab_sys_log` VALUES ('1e1313101b774a789900b7ff9afc9bb7', 'operation', '测试', '测试日志', NULL, '192.168.0.8', '操作用户：null\n操作方法：com.seglino.jingyi.webapi.controller.TestController.index\n方法参数：\n操作时间：2019-09-15 17:03:48\n', '2019-09-15 17:03:48.990', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `tab_sys_log` VALUES ('1e4882d4e93f4ebf88be30431bd43cfb', 'operation', '测试', '测试日志', NULL, '192.168.0.8', '操作用户：null\n操作方法：com.seglino.jingyi.webapi.controller.TestController.index\n方法参数：\n操作时间：2019-09-15 17:03:49\n', '2019-09-15 17:03:49.706', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `tab_sys_log` VALUES ('3bb2360bad9649189386a47f99da8b20', 'throwable', '用户服务', '查询管理员列表', '\"张志豪\";', '192.168.0.8', '操作用户：null\n操作方法：com.seglino.jingyi.user.service.impl.UserServiceImpl.adminList\n方法参数：\"张志豪\";\n操作时间：2019-09-15 17:03:49\n异常信息：java.lang.IllegalArgumentException: 错误测试\n', '2019-09-15 17:03:49.887', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `tab_sys_log` VALUES ('41631155c7ed48a2b7dd692ffae72962', 'operation', '测试', '测试日志', NULL, '192.168.0.8', '操作用户：null\n操作方法：com.seglino.jingyi.webapi.controller.TestController.index\n方法参数：\n操作时间：2019-09-15 17:03:34\n', '2019-09-15 17:03:34.188', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `tab_sys_log` VALUES ('66e43e673a0f43ef92cec3ccb43444e6', 'throwable', '用户服务', '查询管理员列表', '\"张志豪\";', '192.168.0.8', '操作用户：null\n操作方法：com.seglino.jingyi.user.service.impl.UserServiceImpl.adminList\n方法参数：\"张志豪\";\n操作时间：2019-09-15 17:03:49\n异常信息：java.lang.IllegalArgumentException: 错误测试\n', '2019-09-15 17:03:49.710', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `tab_sys_log` VALUES ('6c6b1d1d11914aa39654ce41ce292db3', 'throwable', '用户服务', '查询管理员列表', '\"张志豪\";', '192.168.0.8', '操作用户：null\n操作方法：com.seglino.jingyi.user.service.impl.UserServiceImpl.adminList\n方法参数：\"张志豪\";\n操作时间：2019-09-15 17:03:48\n异常信息：java.lang.IllegalArgumentException: 错误测试\n', '2019-09-15 17:03:48.993', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `tab_sys_log` VALUES ('6feeb92cac2f4139ade8eab87dd5e784', 'operation', '测试', '测试日志', NULL, '192.168.0.8', '操作用户：null\n操作方法：com.seglino.jingyi.webapi.controller.TestController.index\n方法参数：\n操作时间：2019-09-15 17:03:34\n', '2019-09-15 17:03:34.994', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `tab_sys_log` VALUES ('844b5dc50dfd4978829eb5eab8448a8e', 'throwable', '用户服务', '查询管理员列表', '\"张志豪\";', '192.168.0.8', '操作用户：null\n操作方法：com.seglino.jingyi.user.service.impl.UserServiceImpl.adminList\n方法参数：\"张志豪\";\n操作时间：2019-09-15 17:03:34\n异常信息：java.lang.IllegalArgumentException: 错误测试\n', '2019-09-15 17:03:34.997', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `tab_sys_log` VALUES ('89c1b36391444803a724184f1a70ced7', 'throwable', '用户服务', '查询管理员列表', '\"张志豪\";', '192.168.0.8', '操作用户：null\n操作方法：com.seglino.jingyi.user.service.impl.UserServiceImpl.adminList\n方法参数：\"张志豪\";\n操作时间：2019-09-15 17:03:35\n异常信息：java.lang.IllegalArgumentException: 错误测试\n', '2019-09-15 17:03:35.176', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `tab_sys_log` VALUES ('9077aab63127483d9c992d7fb29a0b76', 'throwable', '用户服务', '查询管理员列表', '\"张志豪\";', '192.168.0.8', '操作用户：null\n操作方法：com.seglino.jingyi.user.service.impl.UserServiceImpl.adminList\n方法参数：\"张志豪\";\n操作时间：2019-09-15 17:03:34\n异常信息：java.lang.IllegalArgumentException: 错误测试\n', '2019-09-15 17:03:34.206', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `tab_sys_log` VALUES ('a577b6ae5ff84539bf40be21a1d28562', 'operation', '测试', '测试日志', NULL, '192.168.0.8', '操作用户：null\n操作方法：com.seglino.jingyi.webapi.controller.TestController.index\n方法参数：\n操作时间：2019-09-15 17:03:34\n', '2019-09-15 17:03:34.819', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `tab_sys_log` VALUES ('a925b6485a47415990c1fc02fe5385c8', 'operation', '测试', '测试日志', NULL, '192.168.0.8', '操作用户：null\n操作方法：com.seglino.jingyi.webapi.controller.TestController.index\n方法参数：\n操作时间：2019-09-15 17:03:49\n', '2019-09-15 17:03:49.526', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `tab_sys_log` VALUES ('a96a40deff4f43299eeea30b556c0103', 'operation', '测试', '测试日志', NULL, '192.168.0.8', '操作用户：null\n操作方法：com.seglino.jingyi.webapi.controller.TestController.index\n方法参数：\n操作时间：2019-09-15 17:02:50\n', '2019-09-15 17:02:50.133', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `tab_sys_log` VALUES ('ab2b50597c0a4791b62542fdfc82daa1', 'throwable', '用户服务', '查询管理员列表', '\"张志豪\";', '192.168.0.8', '操作用户：null\n操作方法：com.seglino.jingyi.user.service.impl.UserServiceImpl.adminList\n方法参数：\"张志豪\";\n操作时间：2019-09-15 17:02:50\n异常信息：java.lang.IllegalArgumentException: 错误测试\n', '2019-09-15 17:02:50.146', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `tab_sys_log` VALUES ('bb85aa163827423491fcb31adbdb5bcf', 'throwable', '用户服务', '查询管理员列表', '\"张志豪\";', '192.168.0.8', '操作用户：null\n操作方法：com.seglino.jingyi.user.service.impl.UserServiceImpl.adminList\n方法参数：\"张志豪\";\n操作时间：2019-09-15 17:03:48\n异常信息：java.lang.IllegalArgumentException: 错误测试\n', '2019-09-15 17:03:48.828', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `tab_sys_log` VALUES ('bf21f1d4953346128e6e0b76b3717383', 'throwable', '用户服务', '查询管理员列表', '\"张志豪\";', '192.168.0.8', '操作用户：null\n操作方法：com.seglino.jingyi.user.service.impl.UserServiceImpl.adminList\n方法参数：\"张志豪\";\n操作时间：2019-09-15 17:03:34\n异常信息：java.lang.IllegalArgumentException: 错误测试\n', '2019-09-15 17:03:34.619', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `tab_sys_log` VALUES ('c347a1a1611f4803a1563583f7ec10ec', 'operation', '测试', '测试日志', NULL, '192.168.0.8', '操作用户：null\n操作方法：com.seglino.jingyi.webapi.controller.TestController.index\n方法参数：\n操作时间：2019-09-15 17:03:49\n', '2019-09-15 17:03:49.165', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `tab_sys_log` VALUES ('c615bb1d050e404dac14e92cc572b91d', 'operation', '测试', '测试日志', NULL, '192.168.0.8', '操作用户：null\n操作方法：com.seglino.jingyi.webapi.controller.TestController.index\n方法参数：\n操作时间：2019-09-15 17:03:48\n', '2019-09-15 17:03:48.387', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `tab_sys_log` VALUES ('d6510843c01d43b6b397c71f6f7c432b', 'throwable', '用户服务', '查询管理员列表', '\"张志豪\";', '192.168.0.8', '操作用户：null\n操作方法：com.seglino.jingyi.user.service.impl.UserServiceImpl.adminList\n方法参数：\"张志豪\";\n操作时间：2019-09-15 17:03:49\n异常信息：java.lang.IllegalArgumentException: 错误测试\n', '2019-09-15 17:03:49.530', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `tab_sys_log` VALUES ('dba7042ad2134b279065ad719c34e45c', 'operation', '测试', '测试日志', NULL, '192.168.0.8', '操作用户：null\n操作方法：com.seglino.jingyi.webapi.controller.TestController.index\n方法参数：\n操作时间：2019-09-15 17:03:48\n', '2019-09-15 17:03:48.811', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `tab_sys_log` VALUES ('e3554d52cee24aebb17030204b39d686', 'throwable', '用户服务', '查询管理员列表', '\"张志豪\";', '192.168.0.8', '操作用户：null\n操作方法：com.seglino.jingyi.user.service.impl.UserServiceImpl.adminList\n方法参数：\"张志豪\";\n操作时间：2019-09-15 17:03:49\n异常信息：java.lang.IllegalArgumentException: 错误测试\n', '2019-09-15 17:03:49.169', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `tab_sys_log` VALUES ('e5240e563d964dcf8bf645fd5e9d7360', 'operation', '测试', '测试日志', NULL, '192.168.0.8', '操作用户：null\n操作方法：com.seglino.jingyi.webapi.controller.TestController.index\n方法参数：\n操作时间：2019-09-15 17:03:35\n', '2019-09-15 17:03:35.172', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `tab_sys_log` VALUES ('f2234e01fd9846ccb274a19337e20bb7', 'throwable', '用户服务', '查询管理员列表', '\"张志豪\";', '192.168.0.8', '操作用户：null\n操作方法：com.seglino.jingyi.user.service.impl.UserServiceImpl.adminList\n方法参数：\"张志豪\";\n操作时间：2019-09-15 17:03:48\n异常信息：java.lang.IllegalArgumentException: 错误测试\n', '2019-09-15 17:03:48.391', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `tab_sys_log` VALUES ('f2e8f7d70d0844f5af67e16806063a23', 'operation', '测试', '测试日志', NULL, '192.168.0.8', '操作用户：null\n操作方法：com.seglino.jingyi.webapi.controller.TestController.index\n方法参数：\n操作时间：2019-09-15 17:03:34\n', '2019-09-15 17:03:34.616', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `tab_sys_log` VALUES ('f717b24bd94745b5a2d08cc8f8d8f24c', 'throwable', '用户服务', '查询管理员列表', '\"张志豪\";', '192.168.0.8', '操作用户：null\n操作方法：com.seglino.jingyi.user.service.impl.UserServiceImpl.adminList\n方法参数：\"张志豪\";\n操作时间：2019-09-15 17:03:34\n异常信息：java.lang.IllegalArgumentException: 错误测试\n', '2019-09-15 17:03:34.823', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `tab_sys_log` VALUES ('faad95bc0dac4a55b49c27d8cda7b1d8', 'operation', '测试', '测试日志', NULL, '192.168.0.8', '操作用户：null\n操作方法：com.seglino.jingyi.webapi.controller.TestController.index\n方法参数：\n操作时间：2019-09-15 17:03:49\n', '2019-09-15 17:03:49.885', 'd8bdfb8204fc4499bf379026f6865999', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `tab_sys_log` VALUES ('8ecd74e6ace74a0e87a332107a8b171d', '测试日志', '测试日志', 1, '', '192.168.0.8', '操作用户：null\n操作方法：com.seglino.jingyi.webapi.controller.TestController.index\n方法参数：\n操作时间：2019-09-16 14:04:12\n', '2019-09-16 14:04:12.769', NULL, NULL, NULL, NULL, NULL, 0);
 
 -- ----------------------------
 -- Table structure for tab_sys_settings
