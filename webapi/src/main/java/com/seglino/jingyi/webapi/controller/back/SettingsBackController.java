@@ -12,12 +12,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.seglino.jingyi.common.log.annotation.ControllerLog;
 import com.seglino.jingyi.common.response.ApiResult;
 import com.seglino.jingyi.common.settings.pojo.Settings;
 import com.seglino.jingyi.common.settings.service.SettingsService;
 import com.seglino.jingyi.common.utils.AutoMapper;
 import com.seglino.jingyi.webapi.vo.back.settings.SettingsVo;
 
+@ControllerLog("设置管理")
 @RestController
 @RequestMapping("back/settings")
 public class SettingsBackController {
@@ -25,6 +27,7 @@ public class SettingsBackController {
 	@Autowired
 	private SettingsService settingsService;
 
+	@ControllerLog("查看系统设置")
 	@GetMapping("list")
 	public ApiResult list(String type) {
 		ApiResult aResult = new ApiResult();
@@ -41,6 +44,7 @@ public class SettingsBackController {
 		return aResult;
 	}
 
+	@ControllerLog("修改系统设置")
 	@PostMapping("save")
 	public ApiResult save(@RequestBody SettingsVo vo) {
 		ApiResult aResult = new ApiResult();

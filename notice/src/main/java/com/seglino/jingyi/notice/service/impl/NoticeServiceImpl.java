@@ -13,6 +13,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.seglino.jingyi.common.core.service.BaseServiceImpl;
+import com.seglino.jingyi.common.log.annotation.ServiceLog;
 import com.seglino.jingyi.common.request.RequestPageParams;
 import com.seglino.jingyi.common.utils.ApplicationUtils;
 import com.seglino.jingyi.common.utils.AutoMapper;
@@ -29,6 +30,7 @@ import com.seglino.jingyi.notice.service.NoticeUserService;
 import com.seglino.jingyi.user.pojo.User;
 import com.seglino.jingyi.user.service.UserService;
 
+@ServiceLog("公告服务")
 @Service
 public class NoticeServiceImpl extends BaseServiceImpl<NoticeDao, Notice> implements NoticeService {
 
@@ -42,6 +44,7 @@ public class NoticeServiceImpl extends BaseServiceImpl<NoticeDao, Notice> implem
 	/**
 	 * 获取公告详情，带附件列表
 	 */
+	@ServiceLog("查看公告详情")
 	@Override
 	public NoticeDetailDto detailDto(String id) {
 		Notice notice = this.detailById(id);
@@ -57,6 +60,7 @@ public class NoticeServiceImpl extends BaseServiceImpl<NoticeDao, Notice> implem
 	 * @param dto
 	 * @return
 	 */
+	@ServiceLog("保存公告")
 	public int save(NoticeDetailDto dto) {
 		if (null == dto) {
 			return 0;
@@ -141,6 +145,7 @@ public class NoticeServiceImpl extends BaseServiceImpl<NoticeDao, Notice> implem
 	 * @param userId
 	 * @return
 	 */
+	@ServiceLog("客户端公告接收人列表")
 	public List<Notice> listByClientHome(String userId) {
 		return dao.listByClientHome(userId);
 	}
@@ -151,6 +156,7 @@ public class NoticeServiceImpl extends BaseServiceImpl<NoticeDao, Notice> implem
 	 * @param params
 	 * @return
 	 */
+	@ServiceLog("查看客户端公告接收人列表")
 	public Page<Notice> listByUserClient(RequestPageParams params) {
 		PageHelper.startPage(params.getIndex(), params.getSize());
 		return dao.listByUserClient(params.getCondition());
@@ -163,6 +169,7 @@ public class NoticeServiceImpl extends BaseServiceImpl<NoticeDao, Notice> implem
 	 * @param userid 接收人ID
 	 * @return
 	 */
+	@ServiceLog("读取公告")
 	public int read(String id, String userid) {
 		Notice notice = detailById(id);
 		if (null == notice) {

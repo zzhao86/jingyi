@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dingtalk.api.response.OapiMessageCorpconversationAsyncsendV2Response;
 import com.github.pagehelper.Page;
+import com.seglino.jingyi.common.log.annotation.ControllerLog;
 import com.seglino.jingyi.common.request.RequestPageParams;
 import com.seglino.jingyi.common.response.ApiPageResult;
 import com.seglino.jingyi.common.response.ApiResult;
@@ -47,6 +48,7 @@ import com.seglino.jingyi.webapi.vo.back.notice.NoticeListVo;
 import com.seglino.jingyi.webapi.vo.back.notice.NoticeReplyListVo;
 import com.seglino.jingyi.webapi.vo.back.notice.NoticeUserListVo;
 
+@ControllerLog("公告管理")
 @RestController
 @RequestMapping("back/notice")
 public class NoticeBackController {
@@ -67,6 +69,7 @@ public class NoticeBackController {
 	 * @param params
 	 * @return
 	 */
+	@ControllerLog("查看公告列表")
 	@GetMapping("list")
 	public ApiPageResult list(RequestPageParams params) {
 		ApiPageResult aResult = new ApiPageResult();
@@ -87,6 +90,7 @@ public class NoticeBackController {
 	 * @param id
 	 * @return
 	 */
+	@ControllerLog("查看公告详情")
 	@GetMapping("detail")
 	public ApiResult detail(String id) {
 		ApiResult aResult = new ApiResult();
@@ -121,6 +125,7 @@ public class NoticeBackController {
 	 * @param vo
 	 * @return
 	 */
+	@ControllerLog("保存公告信息")
 	@PostMapping("save")
 	public ApiResult save(@RequestBody NoticeDetailVo vo) {
 		ApiResult aResult = new ApiResult();
@@ -182,6 +187,7 @@ public class NoticeBackController {
 	 * @param id
 	 * @return
 	 */
+	@ControllerLog("删除公告")
 	@GetMapping("delete")
 	public ApiResult delete(String id) {
 		ApiResult aResult = new ApiResult();
@@ -199,6 +205,7 @@ public class NoticeBackController {
 	 * @param ids
 	 * @return
 	 */
+	@ControllerLog("批量删除公告")
 	@PostMapping("delete_batch")
 	public ApiResult deleteBatch(@RequestBody List<Object> ids) {
 		ApiResult aResult = new ApiResult();
@@ -210,6 +217,7 @@ public class NoticeBackController {
 		return aResult;
 	}
 
+	@ControllerLog("查看公告回复列表")
 	@GetMapping("reply_list")
 	public ApiPageResult replyList(RequestPageParams params) {
 		ApiPageResult aResult = new ApiPageResult();
@@ -230,6 +238,7 @@ public class NoticeBackController {
 	 * @param id
 	 * @param response
 	 */
+	@ControllerLog("下载公告回复文件")
 	@GetMapping("download")
 	public void download(String id, HttpServletResponse response) {
 		if (StringUtils.isEmpty(id)) {
@@ -254,6 +263,7 @@ public class NoticeBackController {
 	 * @param id
 	 * @param response
 	 */
+	@ControllerLog("批量下载公告回复文件")
 	@GetMapping("downloads")
 	public void downloads(String ids, HttpServletResponse response) {
 		if (StringUtils.isEmpty(ids)) {
@@ -284,6 +294,7 @@ public class NoticeBackController {
 	 * 
 	 * @param id
 	 */
+	@ControllerLog("下载所有公告回复文件")
 	@GetMapping("download_all")
 	public void downloadAll(String id, HttpServletResponse response) {
 		try {
@@ -328,6 +339,7 @@ public class NoticeBackController {
 	 * @param path
 	 * @return
 	 */
+	@ControllerLog("在线预览文档")
 	@GetMapping("viewer")
 	public ApiResult viewer(String path) {
 		ApiResult aResult = new ApiResult();

@@ -17,6 +17,7 @@ import com.dingtalk.api.request.OapiDepartmentListRequest;
 import com.dingtalk.api.response.OapiDepartmentGetResponse;
 import com.dingtalk.api.response.OapiDepartmentListResponse;
 import com.dingtalk.api.response.OapiDepartmentListResponse.Department;
+import com.seglino.jingyi.common.log.annotation.ServiceLog;
 import com.seglino.jingyi.dingtalk.config.DingtalkConfig;
 import com.seglino.jingyi.dingtalk.service.DingtalkDeptService;
 import com.seglino.jingyi.dingtalk.utils.DingtalkGlobal;
@@ -24,6 +25,7 @@ import com.seglino.jingyi.user.pojo.Dept;
 import com.seglino.jingyi.user.service.DeptService;
 import com.taobao.api.ApiException;
 
+@ServiceLog("钉钉部门服务")
 @Service
 public class DingtalkDeptServiceImpl implements DingtalkDeptService {
 	private Logger logger = LoggerFactory.getLogger(DingtalkDeptServiceImpl.class);
@@ -38,6 +40,7 @@ public class DingtalkDeptServiceImpl implements DingtalkDeptService {
 	 * @param fetchChild 是否递归部门的全部子部门
 	 * @return
 	 */
+	@ServiceLog("获取部门列表")
 	@Override
 	public OapiDepartmentListResponse getDeptList(String pid, boolean fetchChild) {
 		DingTalkClient client = new DefaultDingTalkClient(DingtalkConfig.GetDeptList);
@@ -72,6 +75,7 @@ public class DingtalkDeptServiceImpl implements DingtalkDeptService {
 	 * @param id 钉钉部门ID
 	 * @return
 	 */
+	@ServiceLog("获取部门详情")
 	@Override
 	public OapiDepartmentGetResponse getDeptDetail(String id) {
 		DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/department/get");
@@ -94,6 +98,8 @@ public class DingtalkDeptServiceImpl implements DingtalkDeptService {
 	 * @param pid 系统父部门ID，默认一级部门为空
 	 * @param ddpid 钉钉父部门ID，默认一级部门为1
 	 */
+	@ServiceLog("同步钉钉部门数据")
+	@Override
 	public void initDeptData(String pid, String ddpid) {
 		if (StringUtils.isEmpty(pid) && (StringUtils.isEmpty(ddpid) || "1".equals(ddpid))) {
 			OapiDepartmentGetResponse response = getDeptDetail("1");

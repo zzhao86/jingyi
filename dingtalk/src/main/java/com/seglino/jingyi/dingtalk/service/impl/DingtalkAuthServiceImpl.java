@@ -22,11 +22,13 @@ import com.dingtalk.api.response.OapiSsoGettokenResponse;
 import com.dingtalk.api.response.OapiSsoGetuserinfoResponse;
 import com.dingtalk.api.response.OapiUserGetuserinfoResponse;
 import com.seglino.jingyi.common.encrypt.EncryptUtils;
+import com.seglino.jingyi.common.log.annotation.ServiceLog;
 import com.seglino.jingyi.dingtalk.config.DingtalkConfig;
 import com.seglino.jingyi.dingtalk.service.DingtalkAuthService;
 import com.seglino.jingyi.dingtalk.utils.DingtalkGlobal;
 import com.taobao.api.ApiException;
 
+@ServiceLog("钉钉认证授权服务")
 @Service
 public class DingtalkAuthServiceImpl implements DingtalkAuthService {
 	private Logger logger = LoggerFactory.getLogger(DingtalkAuthServiceImpl.class);
@@ -36,6 +38,7 @@ public class DingtalkAuthServiceImpl implements DingtalkAuthService {
 	 * 
 	 * @return
 	 */
+	@ServiceLog("获取钉钉业务接口凭证")
 	public OapiGettokenResponse getAccessToken() {
 		DingTalkClient client = new DefaultDingTalkClient(DingtalkConfig.GetAccessToken);
 		OapiGettokenRequest request = new OapiGettokenRequest();
@@ -60,6 +63,7 @@ public class DingtalkAuthServiceImpl implements DingtalkAuthService {
 	 * @param code
 	 * @return
 	 */
+	@ServiceLog("用免登码获取用户信息")
 	@Override
 	public OapiUserGetuserinfoResponse getUserDetailByCorp(String code) {
 		DingTalkClient client = new DefaultDingTalkClient(DingtalkConfig.GetUserDetailByCode);
@@ -81,6 +85,8 @@ public class DingtalkAuthServiceImpl implements DingtalkAuthService {
 	 * 
 	 * @return
 	 */
+	@ServiceLog("获取管理后台免登接口凭证")
+	@Override
 	public OapiSsoGettokenResponse getSsoAccessToken() {
 		DingTalkClient client = new DefaultDingTalkClient(DingtalkConfig.GetSsoAccessToken);
 		OapiSsoGettokenRequest request = new OapiSsoGettokenRequest();
@@ -103,6 +109,8 @@ public class DingtalkAuthServiceImpl implements DingtalkAuthService {
 	 * @param code
 	 * @return
 	 */
+	@ServiceLog("应用管理后台免登的管理员信息")
+	@Override
 	public OapiSsoGetuserinfoResponse getUserDetailBySso(String code) {
 		DingTalkClient client = new DefaultDingTalkClient(DingtalkConfig.GetUserDetailBySSO);
 		OapiSsoGetuserinfoRequest request = new OapiSsoGetuserinfoRequest();
@@ -127,6 +135,8 @@ public class DingtalkAuthServiceImpl implements DingtalkAuthService {
 	 * @param code
 	 * @return
 	 */
+	@ServiceLog("扫码登录获取用户信息")
+	@Override
 	public OapiSnsGetuserinfoBycodeResponse getUserDetailByQrCode(String code) {
 		DefaultDingTalkClient client = new DefaultDingTalkClient(DingtalkConfig.GetUserDetailByQrCode);
 		OapiSnsGetuserinfoBycodeRequest request = new OapiSnsGetuserinfoBycodeRequest();
@@ -147,6 +157,8 @@ public class DingtalkAuthServiceImpl implements DingtalkAuthService {
 	 * 
 	 * @return
 	 */
+	@ServiceLog("获取钉钉js鉴权票据")
+	@Override
 	public OapiGetJsapiTicketResponse getJsapiTicket() {
 		DefaultDingTalkClient client = new DefaultDingTalkClient(DingtalkConfig.GetJsapiTicket);
 		OapiGetJsapiTicketRequest request = new OapiGetJsapiTicketRequest();
@@ -167,6 +179,8 @@ public class DingtalkAuthServiceImpl implements DingtalkAuthService {
 	 * @param url 客户端请求URL
 	 * @return
 	 */
+	@ServiceLog("获取jsapi鉴权配置")
+	@Override
 	public Map<String, Object> getJsapiConfig(String url) {
 		// 随机字符串
 		String nonceStr = "hEM049VkzWiMZr2pKR7H69JQEErdImuv";

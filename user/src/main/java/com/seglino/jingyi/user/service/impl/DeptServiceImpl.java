@@ -7,11 +7,13 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import com.seglino.jingyi.common.core.service.BaseServiceImpl;
+import com.seglino.jingyi.common.log.annotation.ServiceLog;
 import com.seglino.jingyi.user.dao.DeptDao;
 import com.seglino.jingyi.user.dto.DeptTreeDto;
 import com.seglino.jingyi.user.pojo.Dept;
 import com.seglino.jingyi.user.service.DeptService;
 
+@ServiceLog("部门服务")
 @Service
 public class DeptServiceImpl extends BaseServiceImpl<DeptDao, Dept> implements DeptService {
 
@@ -20,6 +22,8 @@ public class DeptServiceImpl extends BaseServiceImpl<DeptDao, Dept> implements D
 	 * 
 	 * @return
 	 */
+
+	@ServiceLog("部门Tree数据")
 	@Override
 	public List<DeptTreeDto> tree() {
 		return this.tree("0");
@@ -31,7 +35,8 @@ public class DeptServiceImpl extends BaseServiceImpl<DeptDao, Dept> implements D
 		List<DeptTreeDto> list = dao.tree(param);
 		for (DeptTreeDto dept : list) {
 			if (dept.getChildCount() > 0) {
-				dept.setChildren(tree(dept.getId()));;
+				dept.setChildren(tree(dept.getId()));
+				;
 			}
 		}
 		return list;

@@ -21,6 +21,7 @@ import com.dingtalk.api.response.OapiUserGetAdminResponse;
 import com.dingtalk.api.response.OapiUserGetAdminResponse.AdminList;
 import com.dingtalk.api.response.OapiUserGetDeptMemberResponse;
 import com.dingtalk.api.response.OapiUserGetResponse;
+import com.seglino.jingyi.common.log.annotation.ServiceLog;
 import com.seglino.jingyi.dingtalk.config.DingtalkConfig;
 import com.seglino.jingyi.dingtalk.service.DingtalkDeptService;
 import com.seglino.jingyi.dingtalk.service.DingtalkUserService;
@@ -33,6 +34,7 @@ import com.seglino.jingyi.user.service.DeptUserService;
 import com.seglino.jingyi.user.service.UserService;
 import com.taobao.api.ApiException;
 
+@ServiceLog("钉钉用户服务")
 @Service
 public class DingtalkUserServiceImpl implements DingtalkUserService {
 	private Logger logger = LoggerFactory.getLogger(DingtalkUserServiceImpl.class);
@@ -55,6 +57,7 @@ public class DingtalkUserServiceImpl implements DingtalkUserService {
 	 * @param deptId 钉钉部门ID
 	 * @return
 	 */
+	@ServiceLog("获取部门用户userid列表")
 	@Override
 	public OapiUserGetDeptMemberResponse getUserIds(String deptId) {
 		DingTalkClient client = new DefaultDingTalkClient(DingtalkConfig.GetUserIds);
@@ -77,6 +80,7 @@ public class DingtalkUserServiceImpl implements DingtalkUserService {
 	 * @param userid 钉钉用户ID
 	 * @return
 	 */
+	@ServiceLog("获取用户详情")
 	@Override
 	public OapiUserGetResponse getUserDetail(String userid) {
 		DingTalkClient client = new DefaultDingTalkClient(DingtalkConfig.GetUserDetail);
@@ -98,6 +102,7 @@ public class DingtalkUserServiceImpl implements DingtalkUserService {
 	 * 
 	 * @return
 	 */
+	@ServiceLog("获取管理员列表")
 	@Override
 	public OapiUserGetAdminResponse getAdminList() {
 		DingTalkClient client = new DefaultDingTalkClient(DingtalkConfig.GetAdminList);
@@ -120,6 +125,7 @@ public class DingtalkUserServiceImpl implements DingtalkUserService {
 	 * @param userid 钉钉用户ID
 	 * @return
 	 */
+	@ServiceLog("同步钉钉管理员")
 	@Override
 	public int initAdmin() {
 		try {
@@ -154,6 +160,7 @@ public class DingtalkUserServiceImpl implements DingtalkUserService {
 	 * @param deptId 钉钉部门ID
 	 * @return
 	 */
+	@ServiceLog("同步钉钉用户数据")
 	@Override
 	public int initUserData(String deptId) {
 		int count = 0;

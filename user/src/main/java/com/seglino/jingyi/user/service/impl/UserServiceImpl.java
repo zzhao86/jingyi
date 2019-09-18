@@ -24,8 +24,8 @@ import com.seglino.jingyi.user.service.UserService;
  * @author ZZH
  *
  */
-@Service
 @ServiceLog("用户服务")
+@Service
 public class UserServiceImpl extends BaseServiceImpl<UserDao, User> implements UserService {
 	@Autowired
 	private DeptService deptService;
@@ -36,6 +36,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserDao, User> implements U
 	 * @param param
 	 * @return
 	 */
+	@ServiceLog("查询用户详情")
 	@Override
 	public UserDetailDto detailForDept(Map<String, Object> param) {
 		return dao.detailForDept(param);
@@ -48,6 +49,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserDao, User> implements U
 	 * @param fetchChild 是否递归获取所有子部门下的用户
 	 * @return
 	 */
+	@ServiceLog("查询用户列表")
 	@Override
 	public List<User> listByDept(String deptId, boolean fetchChild) {
 		List<User> result = new ArrayList<User>();

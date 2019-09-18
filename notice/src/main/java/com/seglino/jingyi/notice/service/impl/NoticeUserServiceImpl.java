@@ -8,12 +8,14 @@ import org.springframework.stereotype.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.seglino.jingyi.common.core.service.BaseServiceImpl;
+import com.seglino.jingyi.common.log.annotation.ServiceLog;
 import com.seglino.jingyi.common.request.RequestPageParams;
 import com.seglino.jingyi.notice.dao.NoticeUserDao;
 import com.seglino.jingyi.notice.dto.NoticeUserDto;
 import com.seglino.jingyi.notice.pojo.NoticeUser;
 import com.seglino.jingyi.notice.service.NoticeUserService;
 
+@ServiceLog("公告接收人服务")
 @Service
 public class NoticeUserServiceImpl extends BaseServiceImpl<NoticeUserDao, NoticeUser> implements NoticeUserService {
 
@@ -36,6 +38,7 @@ public class NoticeUserServiceImpl extends BaseServiceImpl<NoticeUserDao, Notice
 	 * @param params
 	 * @return
 	 */
+	@ServiceLog("查看公告接收人列表")
 	public Page<NoticeUserDto> listForUser(RequestPageParams params) {
 		PageHelper.startPage(params.getIndex(), params.getSize());
 		Map<String, Object> param = params.getCondition();
@@ -48,6 +51,7 @@ public class NoticeUserServiceImpl extends BaseServiceImpl<NoticeUserDao, Notice
 	 * @param noticeId 公告ID
 	 * @return
 	 */
+	@ServiceLog("删除公告中所有接收人")
 	@Override
 	public int deleteByNoticeId(String noticeId) {
 		return dao.deleteByNoticeId(noticeId);

@@ -28,6 +28,7 @@ import com.seglino.jingyi.assets.pojo.AssetsPosition;
 import com.seglino.jingyi.assets.service.AssetsCategoryService;
 import com.seglino.jingyi.assets.service.AssetsPositionService;
 import com.seglino.jingyi.assets.service.AssetsService;
+import com.seglino.jingyi.common.log.annotation.ControllerLog;
 import com.seglino.jingyi.common.request.RequestPageParams;
 import com.seglino.jingyi.common.response.ApiPageResult;
 import com.seglino.jingyi.common.response.ApiResult;
@@ -42,6 +43,7 @@ import com.seglino.jingyi.webapi.vo.back.assets.AssetsListVo;
 import com.seglino.jingyi.webapi.vo.back.assets.AssetsPositionListVo;
 import com.seglino.jingyi.webapi.vo.back.assets.AssetsPositionTreeVo;
 
+@ControllerLog("资产管理")
 @RestController
 @RequestMapping("back/assets")
 public class AssetsBackController {
@@ -60,6 +62,7 @@ public class AssetsBackController {
 	 * @param params
 	 * @return
 	 */
+	@ControllerLog("查看资产列表")
 	@GetMapping("list")
 	public ApiPageResult list(RequestPageParams params) {
 		ApiPageResult aResult = new ApiPageResult();
@@ -80,6 +83,7 @@ public class AssetsBackController {
 	 * @param params
 	 * @return
 	 */
+	@ControllerLog("查看资产详情")
 	@GetMapping("detail")
 	public ApiResult detail(String id) {
 		ApiResult aResult = new ApiResult();
@@ -99,6 +103,7 @@ public class AssetsBackController {
 	 * @param id
 	 * @return
 	 */
+	@ControllerLog("删除资产")
 	@GetMapping("delete")
 	public ApiResult delete(String id) {
 		ApiResult aResult = new ApiResult();
@@ -113,6 +118,7 @@ public class AssetsBackController {
 	/**
 	 * 下载资产信息导入模板
 	 */
+	@ControllerLog("下载资产导入模板")
 	@GetMapping("template/download")
 	public void templateDownload(HttpServletResponse response) {
 		String url = "/static/ExcelTemplate/资产信息导入模板.xlsx";
@@ -125,6 +131,7 @@ public class AssetsBackController {
 	 * @param file
 	 * @return
 	 */
+	@ControllerLog("导入资产数据")
 	@PostMapping("import")
 	public ApiResult importExcel(@RequestParam MultipartFile file) {
 		ApiResult aResult = new ApiResult();
@@ -195,6 +202,7 @@ public class AssetsBackController {
 	 * @param assets
 	 * @return
 	 */
+	@ControllerLog("保存资产信息")
 	@PostMapping("save")
 	public ApiResult save(@RequestBody Assets assets) {
 		ApiResult aResult = new ApiResult();
@@ -210,6 +218,7 @@ public class AssetsBackController {
 		return aResult;
 	}
 
+	@ControllerLog("导出资产查询结果")
 	@GetMapping("export")
 	public void exportExcel(@RequestParam Map<String, Object> param, HttpServletResponse response) {
 		try {
@@ -219,6 +228,7 @@ public class AssetsBackController {
 		}
 	}
 
+	@ControllerLog("导出全部资产数据")
 	@GetMapping("export_all")
 	public void exportExcelAll(HttpServletResponse response) {
 		try {
@@ -234,6 +244,7 @@ public class AssetsBackController {
 	 * @param params
 	 * @return
 	 */
+	@ControllerLog("查询资产分类列表")
 	@GetMapping("category/list")
 	public ApiPageResult categoryList(RequestPageParams params) {
 		ApiPageResult aResult = new ApiPageResult();
@@ -270,6 +281,7 @@ public class AssetsBackController {
 	 * @param category
 	 * @return
 	 */
+	@ControllerLog("保存资产分类")
 	@PostMapping("category/save")
 	public ApiResult categorySave(@RequestBody AssetsCategory category) {
 		ApiResult aResult = new ApiResult();
@@ -291,6 +303,7 @@ public class AssetsBackController {
 	 * @param id
 	 * @return
 	 */
+	@ControllerLog("删除资产分类")
 	@GetMapping("category/delete")
 	public ApiResult categoryDelete(String id) {
 		ApiResult aResult = new ApiResult();
@@ -311,6 +324,7 @@ public class AssetsBackController {
 	/**
 	 * 下载资产分类导入模板
 	 */
+	@ControllerLog("下载资产分类导入模板")
 	@GetMapping("category/template/download")
 	public void categoryTemplateDownload(HttpServletResponse response) {
 		String url = "/static/ExcelTemplate/资产分类导入模板.xlsx";
@@ -323,6 +337,7 @@ public class AssetsBackController {
 	 * @param file
 	 * @return
 	 */
+	@ControllerLog("导入资产分类数据")
 	@PostMapping("category/import")
 	public ApiResult categoryImportExcel(@RequestParam MultipartFile file) {
 		ApiResult aResult = new ApiResult();
@@ -340,6 +355,7 @@ public class AssetsBackController {
 	 * @param params
 	 * @return
 	 */
+	@ControllerLog("查看资产位置列表")
 	@GetMapping("position/list")
 	public ApiPageResult positionList(RequestPageParams params) {
 		ApiPageResult aResult = new ApiPageResult();
@@ -376,6 +392,7 @@ public class AssetsBackController {
 	 * @param position
 	 * @return
 	 */
+	@ControllerLog("保存资产位置")
 	@PostMapping("position/save")
 	public ApiResult positionSave(@RequestBody AssetsPosition position) {
 		ApiResult aResult = new ApiResult();
@@ -397,6 +414,7 @@ public class AssetsBackController {
 	 * @param id
 	 * @return
 	 */
+	@ControllerLog("删除资产位置")
 	@GetMapping("position/delete")
 	public ApiResult positionDelete(String id) {
 		ApiResult aResult = new ApiResult();
@@ -417,6 +435,7 @@ public class AssetsBackController {
 	/**
 	 * 下载资产位置导入模板
 	 */
+	@ControllerLog("下载资产位置导入模板")
 	@GetMapping("position/template/download")
 	public void positionTemplateDownload(HttpServletResponse response) {
 		String url = "/static/ExcelTemplate/资产位置导入模板.xlsx";
@@ -429,6 +448,7 @@ public class AssetsBackController {
 	 * @param file
 	 * @return
 	 */
+	@ControllerLog("导入资产位置数据")
 	@PostMapping("position/import")
 	public ApiResult positionImportExcel(@RequestParam MultipartFile file) {
 		ApiResult aResult = new ApiResult();

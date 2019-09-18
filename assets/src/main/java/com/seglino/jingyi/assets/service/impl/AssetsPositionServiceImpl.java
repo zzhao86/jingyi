@@ -21,8 +21,10 @@ import com.seglino.jingyi.assets.service.AssetsPositionService;
 import com.seglino.jingyi.assets.service.AssetsService;
 import com.seglino.jingyi.common.core.service.BaseServiceImpl;
 import com.seglino.jingyi.common.excel.ImportExcel;
+import com.seglino.jingyi.common.log.annotation.ServiceLog;
 import com.seglino.jingyi.common.request.RequestPageParams;
 
+@ServiceLog("资产位置服务")
 @Service
 public class AssetsPositionServiceImpl extends BaseServiceImpl<AssetsPositionDao, AssetsPosition> implements AssetsPositionService {
 
@@ -35,6 +37,7 @@ public class AssetsPositionServiceImpl extends BaseServiceImpl<AssetsPositionDao
 	 * @param params
 	 * @return
 	 */
+	@ServiceLog("查看资产位置分页数据")
 	public Page<AssetsPositionListDto> pageByIndex(RequestPageParams params) {
 		PageHelper.startPage(params.getIndex(), params.getSize());
 		return dao.pageByIndex(params.getCondition());
@@ -45,6 +48,7 @@ public class AssetsPositionServiceImpl extends BaseServiceImpl<AssetsPositionDao
 	 * 
 	 * @return
 	 */
+	@ServiceLog("获取资产位置Tree数据")
 	public List<AssetsPositionTreeDto> treeData(String parentId) {
 		List<AssetsPositionTreeDto> list = dao.tree(parentId);
 		if (null != list && list.size() > 0) {
@@ -64,11 +68,13 @@ public class AssetsPositionServiceImpl extends BaseServiceImpl<AssetsPositionDao
 	 * @param parentId
 	 * @return
 	 */
+	@ServiceLog("判断同级资产位置中是否重名")
 	public boolean existsByName(String name, String parentId) {
 		int count = dao.existsByName(name, parentId);
 		return count > 0;
 	}
 
+	@ServiceLog("删除资产位置")
 	@Override
 	public int deletePhysical(Object id) {
 		int result = 1;
@@ -117,6 +123,7 @@ public class AssetsPositionServiceImpl extends BaseServiceImpl<AssetsPositionDao
 	 * @param file 上传的Excel文件
 	 * @throws IOException
 	 */
+	@ServiceLog("导入资产位置数据")
 	public void importExcel(MultipartFile file) throws IOException {
 		ImportExcel<AssetsPositionImportDto> ie = new ImportExcel<>();
 		List<AssetsPositionImportDto> list = ie.importExcel(file, 0, AssetsPositionImportDto.class);

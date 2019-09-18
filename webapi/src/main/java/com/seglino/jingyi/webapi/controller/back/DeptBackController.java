@@ -12,12 +12,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.seglino.jingyi.common.log.annotation.ControllerLog;
 import com.seglino.jingyi.common.response.ApiResult;
 import com.seglino.jingyi.dingtalk.service.DingtalkDeptService;
 import com.seglino.jingyi.user.dto.DeptTreeDto;
 import com.seglino.jingyi.user.pojo.Dept;
 import com.seglino.jingyi.user.service.DeptService;
 
+@ControllerLog("部门管理")
 @RestController
 @RequestMapping("back/dept")
 public class DeptBackController {
@@ -28,6 +30,7 @@ public class DeptBackController {
 	@Autowired
 	private DingtalkDeptService dingtalkDeptService;
 
+	@ControllerLog("查看部门列表")
 	@GetMapping("list")
 	public ApiResult list(@RequestParam Map<String, Object> param) {
 		ApiResult aResult = new ApiResult();
@@ -39,7 +42,7 @@ public class DeptBackController {
 		}
 		return aResult;
 	}
-	
+
 	@GetMapping("root")
 	public ApiResult rootDept() {
 		ApiResult aResult = new ApiResult();
@@ -65,19 +68,19 @@ public class DeptBackController {
 		}
 		return aResult;
 	}
-	
+
 	@GetMapping("parent_list")
 	public ApiResult parentsDept(String id) {
-		ApiResult aResult =new ApiResult();
+		ApiResult aResult = new ApiResult();
 		try {
 			List<Dept> list = new ArrayList<Dept>();
 			Dept dept = deptService.detailById(id);
 			list.add(dept);
-			while(!"0".equals(dept.getParentId())) {
+			while (!"0".equals(dept.getParentId())) {
 				dept = deptService.detailById(dept.getParentId());
 				list.add(dept);
 			}
-			Collections.reverse(list);			
+			Collections.reverse(list);
 			aResult.setData(list);
 		} catch (Exception e) {
 			aResult.addError(e);
@@ -85,6 +88,7 @@ public class DeptBackController {
 		return aResult;
 	}
 
+	@ControllerLog("同步钉钉部门数据")
 	@GetMapping("init_dd")
 	public ApiResult initFromDingtalk(String id) {
 		ApiResult aResult = new ApiResult();

@@ -58,7 +58,7 @@ public class SysLogAspect {
 			ControllerLog operationLog = getMethod(point).getAnnotation(ControllerLog.class);
 			String parameter = getParameter(point);
 			StringBuilder sb = new StringBuilder();
-			sb.append("操作用户：" + ApplicationUtils.getUserId() + "\n");
+			sb.append("操作人ID：" + ApplicationUtils.getUserId() + "\n");
 			sb.append("操作方法：" + methodFullName + "\n");
 			sb.append("方法参数：" + parameter + "\n");
 			sb.append("操作时间：" + DateUtils.getNowString("yyyy-MM-dd HH:mm:ss") + "\n");

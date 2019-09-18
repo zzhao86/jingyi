@@ -21,8 +21,10 @@ import com.seglino.jingyi.assets.service.AssetsCategoryService;
 import com.seglino.jingyi.assets.service.AssetsService;
 import com.seglino.jingyi.common.core.service.BaseServiceImpl;
 import com.seglino.jingyi.common.excel.ImportExcel;
+import com.seglino.jingyi.common.log.annotation.ServiceLog;
 import com.seglino.jingyi.common.request.RequestPageParams;
 
+@ServiceLog("资产分类服务")
 @Service
 public class AssetsCategoryServiceImpl extends BaseServiceImpl<AssetsCategoryDao, AssetsCategory> implements AssetsCategoryService {
 
@@ -35,6 +37,7 @@ public class AssetsCategoryServiceImpl extends BaseServiceImpl<AssetsCategoryDao
 	 * @param params
 	 * @return
 	 */
+	@ServiceLog("查看资产分类分页数据")
 	public Page<AssetsCategoryListDto> pageByIndex(RequestPageParams params) {
 		PageHelper.startPage(params.getIndex(), params.getSize());
 		return dao.pageByIndex(params.getCondition());
@@ -45,6 +48,7 @@ public class AssetsCategoryServiceImpl extends BaseServiceImpl<AssetsCategoryDao
 	 * 
 	 * @return
 	 */
+	@ServiceLog("获取资产分类Tree数据")
 	public List<AssetsCategoryTreeDto> treeData(String parentId) {
 		List<AssetsCategoryTreeDto> list = dao.tree(parentId);
 		if (null != list && list.size() > 0) {
@@ -64,11 +68,13 @@ public class AssetsCategoryServiceImpl extends BaseServiceImpl<AssetsCategoryDao
 	 * @param parentId
 	 * @return
 	 */
+	@ServiceLog("判断同级分类中是否有重名分类")
 	public boolean existsByName(String name, String parentId) {
 		int count = dao.existsByName(name, parentId);
 		return count > 0;
 	}
 
+	@ServiceLog("删除资产分类")
 	@Override
 	public int deletePhysical(Object id) {
 		int result = 1;
@@ -117,6 +123,7 @@ public class AssetsCategoryServiceImpl extends BaseServiceImpl<AssetsCategoryDao
 	 * @param file 上传的Excel文件
 	 * @throws IOException
 	 */
+	@ServiceLog("导入资产分类数据")
 	public void importExcel(MultipartFile file) throws IOException {
 		ImportExcel<AssetsCategoryImportDto> ie = new ImportExcel<>();
 		List<AssetsCategoryImportDto> list = ie.importExcel(file, 0, AssetsCategoryImportDto.class);

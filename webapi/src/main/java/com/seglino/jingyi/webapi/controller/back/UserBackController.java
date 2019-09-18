@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pagehelper.Page;
+import com.seglino.jingyi.common.log.annotation.ControllerLog;
 import com.seglino.jingyi.common.request.RequestPageParams;
 import com.seglino.jingyi.common.response.ApiPageResult;
 import com.seglino.jingyi.common.response.ApiResult;
@@ -27,6 +28,7 @@ import com.seglino.jingyi.webapi.vo.back.user.UserDetailVo;
 import com.seglino.jingyi.webapi.vo.back.user.UserListVo;
 import com.seglino.jingyi.webapi.vo.back.user.UserChooseVo;
 
+@ControllerLog("用户管理")
 @RestController
 @RequestMapping("back/user")
 public class UserBackController {
@@ -43,6 +45,7 @@ public class UserBackController {
 	 * @param params
 	 * @return
 	 */
+	@ControllerLog("查看用户列表")
 	@GetMapping("list")
 	public ApiPageResult list(RequestPageParams params) {
 		ApiPageResult aResult = new ApiPageResult();
@@ -62,6 +65,7 @@ public class UserBackController {
 	 * @param id
 	 * @return
 	 */
+	@ControllerLog("查看用户详情")
 	@GetMapping("detail")
 	public ApiResult detail(String id) {
 		ApiResult aResult = new ApiResult();
@@ -142,6 +146,7 @@ public class UserBackController {
 	 * @param deptId 钉钉部门ID
 	 * @return
 	 */
+	@ControllerLog("同步钉钉用户数据")
 	@GetMapping("init_dd")
 	public ApiResult initUserData(String deptId) {
 		ApiResult aResult = new ApiResult();

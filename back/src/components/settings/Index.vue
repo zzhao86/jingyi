@@ -41,7 +41,10 @@
       return {
         tabsDefaultName: '',
         settings: [],
-        tabs: [{ label: '钉钉配置', name: 'DINGTALK' }, { label: '系统配置', name: 'SYSTEM' }],
+        tabs: [
+          { label: '钉钉配置', name: 'DINGTALK' }
+          // { label: '系统配置', name: 'SYSTEM' }
+        ],
         formItemTemp: null
       };
     },

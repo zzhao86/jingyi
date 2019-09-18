@@ -7,12 +7,14 @@ import org.springframework.stereotype.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.seglino.jingyi.common.core.service.BaseServiceImpl;
+import com.seglino.jingyi.common.log.annotation.ServiceLog;
 import com.seglino.jingyi.common.request.RequestPageParams;
 import com.seglino.jingyi.notice.dao.NoticeReplyDao;
 import com.seglino.jingyi.notice.dto.NoticeReplyDto;
 import com.seglino.jingyi.notice.pojo.NoticeReply;
 import com.seglino.jingyi.notice.service.NoticeReplyService;
 
+@ServiceLog("公告回复服务")
 @Service
 public class NoticeReplyServiceImpl extends BaseServiceImpl<NoticeReplyDao, NoticeReply> implements NoticeReplyService {
 
@@ -23,6 +25,7 @@ public class NoticeReplyServiceImpl extends BaseServiceImpl<NoticeReplyDao, Noti
 	 * @return
 	 * @throws Exception
 	 */
+	@ServiceLog("查看回复列表")
 	@Override
 	public Page<NoticeReplyDto> listForPage(RequestPageParams params) throws Exception {
 		PageHelper.startPage(params.getIndex(), params.getSize());

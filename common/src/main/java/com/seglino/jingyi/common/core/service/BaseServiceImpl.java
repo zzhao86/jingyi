@@ -12,6 +12,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.seglino.jingyi.common.core.dao.BaseDao;
 import com.seglino.jingyi.common.core.po.BaseEntity;
+import com.seglino.jingyi.common.log.annotation.ServiceLog;
 import com.seglino.jingyi.common.request.RequestPageParams;
 import com.seglino.jingyi.common.utils.ApplicationUtils;
 import com.seglino.jingyi.common.utils.DateUtils;
@@ -28,6 +29,7 @@ public abstract class BaseServiceImpl<D extends BaseDao<T>, T extends BaseEntity
 	 * @param entity
 	 * @return
 	 */
+	@ServiceLog("插入")
 	@Override
 	public int insert(T entity) {
 		if (null != entity) {
@@ -44,6 +46,7 @@ public abstract class BaseServiceImpl<D extends BaseDao<T>, T extends BaseEntity
 	 * @param list
 	 * @return
 	 */
+	@ServiceLog("批量插入")
 	@Override
 	public int insertBatch(List<T> list) {
 		return dao.insertBatch(list);
@@ -55,6 +58,7 @@ public abstract class BaseServiceImpl<D extends BaseDao<T>, T extends BaseEntity
 	 * @param entity
 	 * @return
 	 */
+	@ServiceLog("编辑")
 	@Override
 	public int update(T entity) {
 		if (null != entity) {
@@ -70,6 +74,7 @@ public abstract class BaseServiceImpl<D extends BaseDao<T>, T extends BaseEntity
 	 * @param id
 	 * @return
 	 */
+	@ServiceLog("删除")
 	@Override
 	public int delete(Object id) {
 		T entity = detailById(id);		
@@ -86,6 +91,7 @@ public abstract class BaseServiceImpl<D extends BaseDao<T>, T extends BaseEntity
 	 * @param ids
 	 * @return
 	 */
+	@ServiceLog("批量删除")
 	public int deleteBatch(List<Object> ids) {
 		int count = 0;
 		for (Object id : ids) {
@@ -100,6 +106,7 @@ public abstract class BaseServiceImpl<D extends BaseDao<T>, T extends BaseEntity
 	 * @param id
 	 * @return
 	 */
+	@ServiceLog("还原")
 	@Override
 	public int restore(Object id) {
 		T entity = detailById(id);		
@@ -116,6 +123,7 @@ public abstract class BaseServiceImpl<D extends BaseDao<T>, T extends BaseEntity
 	 * @param id
 	 * @return
 	 */
+	@ServiceLog("彻底删除")
 	@Override
 	public int deletePhysical(Object id) {
 		return dao.delete(id);
@@ -127,6 +135,7 @@ public abstract class BaseServiceImpl<D extends BaseDao<T>, T extends BaseEntity
 	 * @param param
 	 * @return
 	 */
+	@ServiceLog("查看列表")
 	@Override
 	public List<T> list(Map<String, Object> param) {
 		return dao.list(param);
@@ -138,6 +147,7 @@ public abstract class BaseServiceImpl<D extends BaseDao<T>, T extends BaseEntity
 	 * @param param
 	 * @return
 	 */
+	@ServiceLog("查看详情")
 	@Override
 	public T detail(Map<String, Object> param) {
 		return dao.detail(param);
@@ -153,7 +163,7 @@ public abstract class BaseServiceImpl<D extends BaseDao<T>, T extends BaseEntity
 	public T detailById(Object id) {
 		Map<String, Object> param = new HashMap<String, Object>();
 		param.put("id", id);
-		return dao.detail(param);
+		return detail(param);
 	}
 
 	/**
@@ -162,6 +172,7 @@ public abstract class BaseServiceImpl<D extends BaseDao<T>, T extends BaseEntity
 	 * @param param
 	 * @return
 	 */
+	@ServiceLog("查询数据总数")
 	@Override
 	public int count(Map<String, Object> param) {
 		return dao.count(param);
@@ -173,6 +184,7 @@ public abstract class BaseServiceImpl<D extends BaseDao<T>, T extends BaseEntity
 	 * @param params 列表请求参数
 	 * @return
 	 */
+	@ServiceLog("查询分页")
 	@Override
 	public Page<T> page(RequestPageParams params) {
 		PageHelper.startPage(params.getIndex(), params.getSize());

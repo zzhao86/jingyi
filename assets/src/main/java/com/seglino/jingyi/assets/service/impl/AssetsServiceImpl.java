@@ -31,9 +31,11 @@ import com.seglino.jingyi.assets.service.AssetsService;
 import com.seglino.jingyi.common.core.service.BaseServiceImpl;
 import com.seglino.jingyi.common.excel.ExportExcel;
 import com.seglino.jingyi.common.excel.ImportExcel;
+import com.seglino.jingyi.common.log.annotation.ServiceLog;
 import com.seglino.jingyi.common.request.RequestPageParams;
 import com.seglino.jingyi.common.utils.DateUtils;
 
+@ServiceLog("资产服务")
 @Service
 public class AssetsServiceImpl extends BaseServiceImpl<AssetsDao, Assets> implements AssetsService {
 
@@ -48,11 +50,13 @@ public class AssetsServiceImpl extends BaseServiceImpl<AssetsDao, Assets> implem
 	 * @param params
 	 * @return
 	 */
+	@ServiceLog("查看资产分页数据")
 	public Page<AssetsListDto> pageByIndex(RequestPageParams params) {
 		PageHelper.startPage(params.getIndex(), params.getSize());
 		return dao.pageByIndex(params.getCondition());
 	}
 
+	@ServiceLog("新建资产")
 	@Override
 	public int insert(Assets entity) {
 		Long maxCode = dao.maxCode();
@@ -65,6 +69,7 @@ public class AssetsServiceImpl extends BaseServiceImpl<AssetsDao, Assets> implem
 	 * 
 	 * @param file
 	 */
+	@ServiceLog("导入资产数据")
 	public void importExcel(MultipartFile file) throws Exception {
 		ImportExcel<AssetsImportDto> ie = new ImportExcel<AssetsImportDto>();
 		List<AssetsImportDto> list = ie.importExcel(file, 0, AssetsImportDto.class);
@@ -169,6 +174,7 @@ public class AssetsServiceImpl extends BaseServiceImpl<AssetsDao, Assets> implem
 	 * @param response
 	 * @throws IOException
 	 */
+	@ServiceLog("导出资产数据")
 	public void exportExcel(Map<String, Object> param, HttpServletResponse response) throws IOException {
 		LinkedHashMap<String, String> headMap = new LinkedHashMap<String, String>();
 		headMap.put("codeLabel", "资产编码");

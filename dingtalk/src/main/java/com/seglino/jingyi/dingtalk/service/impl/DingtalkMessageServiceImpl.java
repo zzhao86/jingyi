@@ -9,6 +9,7 @@ import com.dingtalk.api.DefaultDingTalkClient;
 import com.dingtalk.api.DingTalkClient;
 import com.dingtalk.api.request.OapiMessageCorpconversationAsyncsendV2Request;
 import com.dingtalk.api.response.OapiMessageCorpconversationAsyncsendV2Response;
+import com.seglino.jingyi.common.log.annotation.ServiceLog;
 import com.seglino.jingyi.dingtalk.config.DingtalkConfig;
 import com.seglino.jingyi.dingtalk.dto.DingtalkWorkMessageDto;
 import com.seglino.jingyi.dingtalk.dto.DingtalkWorkMessageDto.BtnJsonList;
@@ -17,6 +18,7 @@ import com.seglino.jingyi.dingtalk.service.DingtalkMessageService;
 import com.seglino.jingyi.dingtalk.utils.DingtalkGlobal;
 import com.taobao.api.ApiException;
 
+@ServiceLog("钉钉消息服务")
 @Service
 public class DingtalkMessageServiceImpl implements DingtalkMessageService {
 	/**
@@ -25,6 +27,7 @@ public class DingtalkMessageServiceImpl implements DingtalkMessageService {
 	 * @param workMsg 消息参数和内容
 	 * @return
 	 */
+	@ServiceLog("发送工作通知")
 	@Override
 	public OapiMessageCorpconversationAsyncsendV2Response sendWorkMessage(DingtalkWorkMessageDto workMsg) {
 		DingTalkClient client = new DefaultDingTalkClient(DingtalkConfig.SendWorkMessage);
