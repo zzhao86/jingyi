@@ -22,19 +22,45 @@
         <el-table-column align="center" label="序号" width="50">
           <template slot-scope="scope">{{ scope.$index + (params.index - 1) * params.size + 1 }}</template>
         </el-table-column>
-        <el-table-column prop="positionName" label="位置" width="100" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="floorName" label="楼号" width="100" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="name" label="资源名称" min-width="200" show-overflow-tooltip>
+        <el-table-column prop="statusName" label="资产状态" width="120">
+          <template slot-scope="scope">
+            <el-tag effect="light" size="mini" v-if="scope.row.status == 100">{{ scope.row.statusName }}</el-tag>
+            <el-tag effect="dark" size="mini" type="warning" v-else-if="scope.row.status == 200">{{ scope.row.statusName }}</el-tag>
+            <el-tag effect="dark" size="mini" type="success" v-else-if="scope.row.status == 300">{{ scope.row.statusName }}</el-tag>
+            <el-tag effect="dark" size="mini" type="warning" v-else-if="scope.row.status == 400">{{ scope.row.statusName }}</el-tag>
+            <el-tag effect="dark" size="mini" type="warning" v-else-if="scope.row.status == 500">{{ scope.row.statusName }}</el-tag>
+            <el-tag effect="dark" size="mini" type="success" v-else-if="scope.row.status == 600">{{ scope.row.statusName }}</el-tag>
+            <el-tag effect="dark" size="mini" type="warning" v-else-if="scope.row.status == 700">{{ scope.row.statusName }}</el-tag>
+            <el-tag effect="dark" size="mini" type="success" v-else-if="scope.row.status == 800">{{ scope.row.statusName }}</el-tag>
+            <el-tag effect="dark" size="mini" type="warning" v-else-if="scope.row.status == 900">{{ scope.row.statusName }}</el-tag>
+            <el-tag effect="dark" size="mini" type="warning" v-else-if="scope.row.status == 1000">{{ scope.row.statusName }}</el-tag>
+            <el-tag effect="dark" size="mini" type="warning" v-else-if="scope.row.status == 1100">{{ scope.row.statusName }}</el-tag>
+            <el-tag effect="dark" size="mini" type="warning" v-else-if="scope.row.status == 1200">{{ scope.row.statusName }}</el-tag>
+            <el-tag size="mini" type="warning" v-else>未知</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column prop="code" label="资产编码" width="100">
+          <template slot-scope="scope">
+            <el-link type="primary" @click="onViewClick(scope.row)">{{ scope.row.code }}</el-link>
+          </template>
+        </el-table-column>
+        <el-table-column prop="name" label="资产名称" show-overflow-tooltip>
           <template slot-scope="scope">
             <el-link type="primary" @click="onViewClick(scope.row)">{{ scope.row.name }}</el-link>
           </template>
         </el-table-column>
-        <el-table-column prop="leaseArea" label="租赁面积（㎡）" width="120"></el-table-column>
-        <el-table-column prop="tenantCompany" label="承租单位" width="200"></el-table-column>
-        <el-table-column prop="roomNo" label="房间号" width="100"></el-table-column>
-        <el-table-column prop="startDate" label="租赁合同起始时间" width="150" :formatter="dateFormatter"></el-table-column>
-        <el-table-column prop="endDate" label="租赁合同截止时间" width="150" :formatter="dateFormatter"></el-table-column>
-        <el-table-column prop="leaseTerm" label="租赁年限" width="100"></el-table-column>
+        <el-table-column prop="categoryName" label="分类" width="150" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="positionName" label="位置" width="100"></el-table-column>
+        <el-table-column prop="brand" label="品牌" width="100"></el-table-column>
+        <el-table-column prop="model" label="型号" width="100"></el-table-column>
+        <el-table-column prop="useStatusName" label="使用状态" width="100"></el-table-column>
+        <el-table-column prop="adminName" label="管理员" width="100"></el-table-column>
+        <el-table-column prop="purchasingMethodName" label="购置方式" width="100"></el-table-column>
+        <el-table-column prop="startDate" label="购置/起租日期" width="150">
+          <template slot-scope="scope">
+            <span>{{ scope.row.startDate ? scope.row.startDate.substring(0, 10) : '' }}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" width="100" fixed="right">
           <template slot-scope="scope">
             <div class="options-buttons">
@@ -87,7 +113,6 @@
       IndexSearch
     },
     created() {
-      console.log(this.$route)
       this.loadTableData();
     },
     data() {
@@ -209,13 +234,6 @@
             open(`${this.$global.baseUrl}back/assets/export_all`);
             break;
         }
-      },
-      dateFormatter(row, column, cellValue, index) {
-        var result = '';
-        if (cellValue) {
-          result = cellValue.substr(0, 10);
-        }
-        return result;
       }
     }
   };

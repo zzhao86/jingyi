@@ -151,22 +151,6 @@
 				<version>1.2.12</version>
 			</dependency>
 
-			<!-- 钉钉SDK -->
-			<dependency>
-				<groupId>com.taobao</groupId>
-				<artifactId>dingtalk-sdk</artifactId>
-				<version>1.0.0</version>
-				<scope>system</scope>
-				<systemPath>${project.basedir}/lib/taobao-sdk-java-auto.jar</systemPath>
-			</dependency>
-			<dependency>
-				<groupId>com.taobao</groupId>
-				<artifactId>lippi-oapi-encrpt</artifactId>
-				<version>1.0.0</version>
-				<scope>system</scope>
-				<systemPath>${project.basedir}/lib/lippi-oapi-encrpt.jar</systemPath>
-			</dependency>
-
 			<!-- 上传组件 -->
 			<dependency>
 				<groupId>commons-fileupload</groupId>
@@ -194,13 +178,4 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
 </project>

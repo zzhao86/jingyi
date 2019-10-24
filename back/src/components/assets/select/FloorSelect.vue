@@ -5,7 +5,7 @@
   </template>
   <script>
     export default {
-      name: 'PositionSelect',
+      name: 'FloorSelect',
       created() {
         this.value = this.modelValue;
         this.loadSelectData();
@@ -60,13 +60,13 @@
       },
       methods: {
         loadSelectData() {
-          this.$get('back/assets/position/select').then(res => {
+          this.$get('back/assets/floor/select').then(res => {
             if (res.isSuccess) {
               this.options = res.data;
               if (this.defaultOption) {
                 if (this.defaultOption === true) {
                   this.options.unshift({
-                    name: '请选择位置',
+                    name: '请选择楼号',
                     id: ''
                   });
                 } else {

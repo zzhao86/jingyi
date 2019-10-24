@@ -3,7 +3,7 @@
     <div class="login-bg"></div>
     <div class="login-container">
       <div class="login-tip-wrapper">
-        <div class="login-tip">京仪物业系统管理后台</div>
+        <div class="login-tip">西什库31号物业系统管理后台</div>
       </div>
       <div class="login-wrapper">
         <div class="title">扫码登录</div>
@@ -28,12 +28,12 @@
       return {};
     },
     methods: {
-      onLogin() {
-        var appid = 'dingoahwjazjqdmlt2gs5k';
+      onLogin() {        
+        var appid = 'dingoahwjazjqdmlt2gs5k';//开发        
+        // var appid = 'dingoamhqztjyrjwtx7ekp';// 正式
         var redirect = encodeURIComponent(this.$global.baseUrl + 'account/login/dingtalk_qrcode?redirect=' + this.$global.redirect);
         var url = 'https://oapi.dingtalk.com/connect/oauth2/sns_authorize?appid=' + appid + '&response_type=code&scope=snsapi_login&state=STATE&redirect_uri=';
         var goto = encodeURIComponent(url + redirect);
-        console.log(goto)
         this.$nextTick(function() {
           var obj = DDLogin({
             id: 'loginContainer',

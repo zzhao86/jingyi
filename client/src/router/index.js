@@ -8,6 +8,8 @@ import NoticeIndex from '@/components/notice/Index';
 import NoticeDetail from '@/components/notice/Detail';
 import NoticeReadList from '@/components/notice/ReadList';
 import NoticeReply from '@/components/notice/Reply';
+import AssetsIndex from '@/components/assets/Index';
+import AssetsDetail from '@/components/assets/Detail'
 
 Vue.use(Router);
 
@@ -31,6 +33,7 @@ const router = new Router({
       name: 'NoticeIndex',
       component: NoticeIndex,
       meta: {
+        title:'公告列表',
         requireAuth: true
       }
     },
@@ -39,6 +42,7 @@ const router = new Router({
       name: 'NoticeDetail',
       component: NoticeDetail,
       meta: {
+        title:'公告详情',
         requireAuth: true
       }
     },
@@ -47,6 +51,7 @@ const router = new Router({
       name: 'NoticeReadList',
       component: NoticeReadList,
       meta: {
+        title:'公告读取列表',
         requireAuth: true
       }
     },
@@ -55,6 +60,25 @@ const router = new Router({
       name: 'NoticeReply',
       component: NoticeReply,
       meta: {
+        title:'公告回复',
+        requireAuth: true
+      }
+    },
+    {
+      path: '/assets',
+      name: 'AssetsIndex',
+      component: AssetsIndex,
+      meta: {
+        title:'资源管理',
+        requireAuth: true
+      }
+    },
+    {
+      path: '/assets/detail',
+      name: 'AssetsDetail',
+      component: AssetsDetail,
+      meta: {
+        title:'资源详情',
         requireAuth: true
       }
     }

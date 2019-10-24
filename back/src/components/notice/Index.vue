@@ -7,7 +7,7 @@
         <el-button type="danger" size="small" :disabled="!tableSelected || tableSelected.length == 0" @click="onDeleteBatchClick">删除</el-button>
       </div>
     </div>
-    <div class="main-container">
+    <div class="main-table">
       <el-table :data="tableData" ref="table" stripe v-auto-height :max-height="maxHeight" @selection-change="onTableSelectionChange">
         <el-table-column type="selection" align="center" width="30"> </el-table-column>
         <el-table-column align="center" label="序号" width="50">

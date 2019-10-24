@@ -1,5 +1,5 @@
 <template>
-  <div class="readlist-container">
+  <div class="container">
     <mt-navbar v-model="activeTab">
       <mt-tab-item v-for="(tab, index) in tabs" :key="index" :id="tab.id">{{ tab.label }}（{{ count[tab.id] }}）</mt-tab-item>
     </mt-navbar>
@@ -127,17 +127,8 @@
     }
   };
 </script>
-<style scoped>
-  .readlist-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .readlist-container .mint-navbar .mint-tab-item.is-selected {
+<style scoped>  
+  .container .mint-navbar .mint-tab-item.is-selected {
     z-index: 1;
   }
 

@@ -4,6 +4,7 @@
 		<groupId>com.seglino</groupId>
 		<artifactId>jingyi</artifactId>
 		<version>1.0.0</version>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>dingtalk</artifactId>
 
@@ -21,10 +22,16 @@
 		<dependency>
 			<groupId>com.taobao</groupId>
 			<artifactId>dingtalk-sdk</artifactId>
+			<version>1.0.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/taobao-sdk-java-auto.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>com.taobao</groupId>
 			<artifactId>lippi-oapi-encrpt</artifactId>
+			<version>1.0.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/lippi-oapi-encrpt.jar</systemPath>
 		</dependency>
 	</dependencies>
 </project>

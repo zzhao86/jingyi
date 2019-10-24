@@ -54,12 +54,17 @@
       <div class="header">{{ current.module.name }}</div>
       <div class="item-box clearfix">
         <button class="item" v-for="(item, index) in current.items" :key="index" @click="onOpenAppClick(item)">
-          <div class="icon" v-bind:style="{backgroundImage: 'url(' + $global.baseUrl + item.icon + ')'}"></div>
-          <div class="name">{{ item.name }}</div>
+          <div class="item-wrapper">
+            <div class="icon">
+              <img :src="$global.baseUrl + item.icon" />
+            </div>
+            <div class="name">{{ item.name }}</div>
+          </div>
         </button>
       </div>
     </div>
     <!-- item end -->
+    <div class="main-bg"></div>
   </div>
 </template>
 <script>
@@ -110,7 +115,12 @@
             slideChange: function() {
               var index = this.realIndex;
               vue.current.module = vue.modules[index];
-              vue.current.items = vue.items.filter(item => item.module == vue.current.module.id);
+              var userType = vue.$global.user.type;
+              if (vue.items && vue.items.length > 0) {
+                vue.current.items = vue.items.filter(item => {
+                  return item.module == vue.current.module.id && item.permission.indexOf(userType) >= 0;
+                });
+              }
             }
           }
         });
@@ -170,30 +180,19 @@
         // 获取Item列表数据
         vue.$get('static/data/items.json').then(res => {
           vue.items = res.data;
+          var userType = vue.$global.user.type;
           if (vue.items && vue.items.length > 0) {
-            vue.current.items = vue.items.filter(item => item.module == vue.current.module.id);
+            vue.current.items = vue.items.filter(item => {
+              return item.module == vue.current.module.id && item.permission.indexOf(userType) >= 0;
+            });
           }
         });
       },
       onOpenNoticeListClick: function() {
         this.$router.push('/notice');
-        // if (this.$dd.ios || this.$dd.android) {
-        //   this.$dd.biz.util.openLink({
-        //     url: 'https://app.dingtalk.com/blackboard/noticeList.html?showmenu=false&dd_progress=false&dd_share=false&corpid=' + this.$global.corpId
-        //   });
-        // } else {
-        //   location.href = 'https://app.dingtalk.com/index.html?corpId=' + this.$global.corpId;
-        // }
       },
       onOpenNoticeClick: function(item) {
         this.$router.push(`/notice/detail?id=${item.id}`);
-        // if (this.$dd.ios || this.$dd.android) {
-        //   this.$dd.biz.util.openLink({
-        //     url: item.url
-        //   });
-        // } else {
-        //   location.href = item.url;
-        // }
       },
       onOpenAppClick: function(item) {
         const vue = this;
@@ -208,9 +207,13 @@
               agentId: item.agentId
             });
           } else if (item.homepageLink) {
-            vue.$dd.biz.util.openLink({
-              url: item.homepageLink
-            });
+            if (item.isSelf) {
+              vue.$router.push(item.homepageLink);
+            } else {
+              vue.$dd.biz.util.openLink({
+                url: item.homepageLink
+              });
+            }
           } else {
             vue.$dd.device.notification.toast({
               icon: 'error',
@@ -230,11 +233,20 @@
     right: 0;
     bottom: 0;
     left: 0;
+  }
+  .main-bg {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
     overflow-y: auto;
     background: #d8e6e9 url('../../static/images/main-bg.jpg') no-repeat;
     background-position-y: bottom;
     background-size: 100%;
     padding-bottom: 50px;
+    opacity: 0.5;
   }
 
   .banner {
@@ -251,10 +263,16 @@
       height: calc(175 * (100vw / 375));
     }
   }
+  .banner .swiper-pagination-bullet {
+    background-color: rgba(255, 255, 255, 0.5) !important;
+  }
+  .banner .swiper-pagination-bullet-active {
+    background-color: #fff !important;
+  }
 
   .notice-box {
     margin-top: -4px;
-    background-color: #5ca8f3;
+    background-color: #4b2937;
     position: relative;
     color: #fff;
   }
@@ -299,7 +317,7 @@
     margin: 10px 5px;
     height: 90px;
     background-color: #fff;
-    background-size: 100%;
+    background-size: 100% 90px;
     text-align: center;
     position: relative;
   }
@@ -356,17 +374,8 @@
     top: 50%;
     transform: translateY(-50%);
     height: 16px;
-    border-left: solid 3px #2660ff;
+    border-left: solid 3px #9c5271;
   }
-
-  /* .item-container .header::after {
-    content: '';
-    position: absolute;
-    left: 20px;
-    bottom: -5px;
-    width: 100px;
-    border: solid 1px #2660ff;
-  } */
 
   .item-container .item-box {
     width: 100%;
@@ -386,16 +395,35 @@
     background-color: transparent;
   }
 
+  .item-container .item-wrapper {
+    margin: auto;
+    display: inline-block;
+    width: 75px;
+    height: 75px;
+    border: solid 1px #ccb6bf;
+    border-radius: 50%;
+  }
+
   .item-container .icon {
     margin: auto;
-    width: 50px;
-    height: 50px;
-    background-size: 50px;
-    background-repeat: no-repeat;
-    background-position: center;
+    margin-top: 15px;
+    width: 26px;
+    height: 26px;
+    text-align: center;
+    position: relative;
+  }
+
+  .item-container .icon img {
+    max-width: 26px;
+    max-height: 26px;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
   }
 
   .item-container .name {
+    margin-top: 3px;
     color: #666;
     font-size: 13px;
     text-align: center;

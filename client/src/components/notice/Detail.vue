@@ -109,13 +109,6 @@
   };
 </script>
 <style scoped>
-  .container {
-    padding: 0 10px;
-    height: 100vh;
-    overflow-x: hidden;
-    overflow-y: scroll;
-    -webkit-overflow-scrolling: touch;
-  }
   .title {
     color: #333;
     margin: 10px 0;

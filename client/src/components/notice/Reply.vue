@@ -64,10 +64,6 @@
   };
 </script>
 <style scoped>
-  .container {
-    padding: 0px 10px;
-  }
-
   .container input[type='file'] {
     display: none;
   }

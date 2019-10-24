@@ -67,6 +67,9 @@ fieldset legend {
   margin-top: 3px;
   margin-bottom: 15px;
 }
+.el-date-editor .el-range-separator {
+  width: auto;
+}
 
 .app-container {
   position: fixed;
@@ -86,7 +89,7 @@ fieldset legend {
   color: rgba(255, 255, 255, 0.9);
 }
 .app-container .app-header .app-name {
-  width: 200px;
+  width: 300px;
   height: 60px;
   line-height: 60px;
   font-size: 20px;
@@ -242,7 +245,7 @@ fieldset legend {
 .app-content .search-bar .tag-wrapper {
   flex: 1;
 }
-.app-content .search-bar .tag-wrapper .search-tag{
+.app-content .search-bar .tag-wrapper .search-tag {
   margin-right: 10px;
 }
 .app-content .search-bar .el-input-group {

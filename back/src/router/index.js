@@ -8,8 +8,8 @@ import NoticeReply from '@/components/notice/Reply';
 import NoticeReplyViewer from '@/components/notice/Viewer';
 import AssetsIndex from '@/components/assets/Index';
 import AssetsDetail from '@/components/assets/Detail';
-import AssetsCategory from '@/components/assets/Category';
 import AssetsPosition from '@/components/assets/Position';
+import AssetsFloor from '@/components/assets/Floor';
 import SettingsIndex from '@/components/settings/Index';
 import UserIndex from '@/components/user/Index';
 import UserDetail from '@/components/user/Detail';
@@ -66,14 +66,14 @@ const router = new Router({
       component: AssetsDetail
     },
     {
-      path: '/assets/category',
-      name: 'AssetsCategory',
-      component: AssetsCategory
-    },
-    {
       path: '/assets/position',
       name: 'AssetsPosition',
       component: AssetsPosition
+    },
+    {
+      path: '/assets/floor',
+      name: 'AssetsFloor',
+      component: AssetsFloor
     },
     {
       path: '/settings',

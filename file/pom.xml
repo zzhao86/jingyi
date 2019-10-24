@@ -4,6 +4,7 @@
 		<groupId>com.seglino</groupId>
 		<artifactId>jingyi</artifactId>
 		<version>1.0.0</version>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>file</artifactId>
 

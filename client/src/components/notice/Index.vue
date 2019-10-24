@@ -1,9 +1,13 @@
 <template>
-  <div class="notice-container" v-infinite-scroll="loadMoreData" infinite-scroll-distance="100" infinite-scroll-disabled="loading">
-    <div class="notice-wrapper" v-for="(item, index) in listData" :key="index" @click="onViewClick(item.id)">
+  <div class="list-container" v-infinite-scroll="loadMoreData" infinite-scroll-distance="100" infinite-scroll-disabled="loading">
+    <div class="no-data" v-if="listData.length == 0">
+      <span>暂无公告</span>
+    </div>
+    <div class="list-item" v-for="(item, index) in listData" :key="index" @click="onViewClick(item.id)" v-else>
       <div class="notice-info">
         <div class="notice-title">{{ item.title }}</div>
-        <div class="notice-count">已读{{ item.readCount }}，未读{{ item.totalCount - item.readCount }}</div>
+        <div class="notice-count" v-if="item.totalCount == item.readCount">全部已读</div>
+        <div class="notice-count" v-else>已读{{ item.readCount }}，未读{{ item.totalCount - item.readCount }}</div>
         <div class="notice-ext">
           <div class="notice-author">{{ item.author }}</div>
           <div class="notice-date">{{ item.publishTime }}</div>
@@ -80,26 +84,6 @@
   };
 </script>
 <style scoped>
-  body {
-    background-color: #f3f3f3;
-  }
-  .notice-container {
-    overflow-y: auto;
-    overflow-x: hidden;
-    height: 100vh;
-    background-color: #f3f3f3;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .notice-wrapper {
-    width: 100vw;
-    padding: 10px 0;
-    background-color: #fff;
-    margin-top: 10px;
-    overflow: hidden;
-    clear: both;
-  }
-
   .notice-info {
     float: left;
     height: 100%;

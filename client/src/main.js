@@ -68,7 +68,6 @@ const vue = new Vue({
     Vue.prototype.$post = axios.post;
     Vue.prototype.$global = Global;
     Vue.prototype.$dd = dd;
-    vue.$global.corpId = null;
 
     // 钉钉鉴权
     vue
@@ -79,10 +78,9 @@ const vue = new Vue({
       })
       .then(res => {
         let data = res.data;
-        vue.$global.corpId = data.corpId;
         dd.config({
           agentId: data.agentId, // 必填，微应用ID
-          corpId: data.corpId, //必填，企业ID
+          corpId: Global.corpId, //必填，企业ID
           timeStamp: data.timeStamp, // 必填，生成签名的时间戳
           nonceStr: data.nonceStr, // 必填，生成签名的随机串
           signature: data.signature, // 必填，签名
