@@ -1,10 +1,10 @@
 <script>
   // 接口基础地址
-  // const baseUrl = 'http://123.56.179.69:5050/';
-  const baseUrl = 'http://192.168.0.8:5050/';
+  const baseUrl = 'http://123.56.179.69:5050/';
+  // const baseUrl = 'http://192.168.0.8:5050/';
   // 钉钉CorpId
-  // const corpId = 'ding4be6acd37500e84335c2f4657eb6378f';//生产
-  const corpId = 'ding88b58049aa34141835c2f4657eb6378f'; //开发
+  const corpId = 'ding4be6acd37500e84335c2f4657eb6378f';//生产
+  // const corpId = 'ding88b58049aa34141835c2f4657eb6378f'; //开发
 
   // 应用标题localStorage的key
   const titleSessionKey = 'JINGYI_CLIENT_TITLE';

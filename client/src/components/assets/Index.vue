@@ -3,7 +3,7 @@
     <div class="search-bar">
       <div class="search-wrapper">
         <i class="fa fa-search"></i>
-        <input class="search-text" type="text" v-model="params.query.keywords" placeholder="请输入搜索内容" />
+        <input class="search-text" type="text" v-model="params.query.tenantCompany" placeholder="请输入承租单位名称" />
       </div>
       <a class="search-button" href="javascript:void(0);" @click="onKeywordsSearchClick">搜索</a>
     </div>
@@ -104,7 +104,7 @@
           index: 1,
           size: 10,
           query: {
-            keywords: '',
+            tenantCompany: '',
             position: '',
             floor: ''
           }
@@ -134,11 +134,9 @@
     },
     methods: {
       loadListData() {
-        alert(1);
         this.$get('client/assets/list', {
           params: this.params
         }).then(res => {
-          alert(JSON.stringify(res.data));
           this.loading = false;
           if (res.isSuccess) {
             for (let i = 0; i < res.data.length; i++) {
@@ -184,6 +182,7 @@
         }, 1000);
       },
       onKeywordsSearchClick() {
+        this.listData = new Array();
         this.params.index = 1;
         this.loadListData();
       },
