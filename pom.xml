@@ -17,7 +17,7 @@
 
 	<properties>
 		<app.version>1.0.0</app.version>
-		<boot.version>2.1.5.RELEASE</boot.version>
+		<boot.version>2.5.12</boot.version>
 		<poi.version>4.1.0</poi.version>
 	</properties>
 
